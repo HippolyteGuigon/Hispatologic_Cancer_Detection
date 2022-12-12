@@ -1,4 +1,4 @@
-# Implementation of a KMeans algorithm in Python 
+# Hispathologic cancer detection competition in Kaggle 
 
 
 ## Build Status
