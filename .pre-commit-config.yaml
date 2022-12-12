@@ -1,0 +1,19 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+    - id: black
+      language_version: python3.9
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.7.9
+    hooks:
+    - id: flake8
+      args: # arguments to configure flake8
+        # making isort line length compatible with black
+        - "--max-line-length=88"
+        - "--ignore=W503,E402,E722"
+
+
+
+#NB: To skip a test, you need to enter in the commit SKIP=flake8 git commit -m "foo"
+#git commit -m "Some comments" --no-verify
