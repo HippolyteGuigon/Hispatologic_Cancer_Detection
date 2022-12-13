@@ -1,5 +1,6 @@
 # Hispathologic cancer detection competition in Kaggle 
 
+The goal of this repository is to participate to the Hispathologic cancer detection competition in Kaggle (https://www.kaggle.com/competitions/histopathologic-cancer-detection). The goal of this competition is to develop a Machine Learning algorithm that can detect metastatic cancer in small image patches taken from larger digital pathology scans. 
 
 ## Build Status
 
@@ -17,5 +18,8 @@ The all project was coded under PEP-8 (https://peps.python.org/pep-0008/) and fl
 
 ## Screenshot 
 
+![alt text](https://github.com/HippolyteGuigon/Hispatologic_Cancer_Detection/blob/main/ressources/metastatic-breast-cancer.jpeg)
+
+Image of metastatic breast cancer cell.
 
 ## How to use ? 
