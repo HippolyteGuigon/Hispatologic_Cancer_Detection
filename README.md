@@ -18,7 +18,7 @@ The all project was coded under PEP-8 (https://peps.python.org/pep-0008/) and fl
 
 ## Screenshot 
 
-![ScreenShot](https://github.com/HippolyteGuigon/Hispatologic_Cancer_Detection/blob/master/ressources/metastatic-breast-cancer.jpeg)
+![alt text](https://github.com/HippolyteGuigon/Hispatologic_Cancer_Detection/blob/master/ressources/metastatic-breast-cancer.jpeg)
 
 Image of metastatic breast cancer cell.
 
