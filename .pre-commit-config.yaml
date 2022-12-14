@@ -10,9 +10,9 @@ repos:
     - id: flake8
       args: # arguments to configure flake8
         # making isort line length compatible with black
+        - "python3 -m  pipreqs.pipreqs"
         - "--max-line-length=88"
         - "--ignore=W503,E402,E722"
-
 
 
 #NB: To skip a test, you need to enter in the commit SKIP=flake8 git commit -m "foo"
