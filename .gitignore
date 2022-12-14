@@ -8,6 +8,8 @@
 *.log
 *.npy
 *.icloud
+train/ 
+test/ 
 
 #Except these files
 
