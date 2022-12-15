@@ -11,4 +11,4 @@ repos:
       args: # arguments to configure flake8
         # making isort line length compatible with black
         - "--max-line-length=88"
-        - "--ignore=W503,E402,E722"
+        - "--ignore=W503,E402,E722,F403,F405, E302"
