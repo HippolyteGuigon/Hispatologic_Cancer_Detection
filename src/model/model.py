@@ -2,11 +2,13 @@ import torch
 import torch.nn as nn 
 import torchvision 
 import torchvision.transforms as transforms
+import random
+from torch.utils.data import Dataset, DataLoader, random_split, SubsetRandomSampler, WeightedRandomSampler
 
 batch_size=64
 num_classes=2
 learning_rate=10e-3
-num_epochs=20
+num_epochs=5
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -18,10 +20,11 @@ all_transforms = transforms.Compose([transforms.Resize((32,32)),
 
 data=torchvision.datasets.ImageFolder(root="train",transform=all_transforms)
 
-n = len(data)  # total number of examples
-n_test = int(0.95 * n)  # take ~10% for test
-test_set = torch.utils.data.Subset(data, range(n_test))  # take first 10%
-train_set = torch.utils.data.Subset(data, range(n_test, n))  # take the rest   
+n=len(data)
+p=0.7
+train_set, test_set = random_split(data, (int(p*len(data)), len(data)-int(p*len(data))))
+
+
 
 train_loader = torch.utils.data.DataLoader(train_set,
                                           batch_size=batch_size,
@@ -29,7 +32,6 @@ train_loader = torch.utils.data.DataLoader(train_set,
 test_loader = torch.utils.data.DataLoader(test_set,
                                           batch_size=batch_size,
                                           shuffle=True)
-
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
