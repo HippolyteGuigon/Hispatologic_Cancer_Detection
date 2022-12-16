@@ -15,6 +15,7 @@ test/
 #Except these files
 
 !requirements.txt
+!train/non_cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
