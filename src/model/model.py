@@ -7,8 +7,10 @@ import sys
 import os
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
 
 from confs import *
+from model_save_load import *
 
 main_params = load_conf("configs/main.yml", include=True)
 batch_size = main_params["cnn_params"]["batch_size"]
@@ -22,7 +24,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Use transforms.compose method to reformat images for modeling,
 # and save to variable all_transforms for later use
 all_transforms = transforms.Compose(
-    [transforms.Resize((32, 32)), transforms.ToTensor()]
+    [transforms.ToTensor()]
 )
 
 data = torchvision.datasets.ImageFolder(root="train", transform=all_transforms)
@@ -57,7 +59,7 @@ class ConvNeuralNet(nn.Module):
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2),
             nn.Flatten(),
-            nn.Linear(4608, 1024),
+            nn.Linear(61952, 1024),
             nn.ReLU(),
             nn.Linear(1024, 512),
             nn.ReLU(),
@@ -102,6 +104,7 @@ for epoch in range(num_epochs):
 
     print("Epoch [{}/{}], Loss: {:.4f}".format(epoch + 1, num_epochs, loss.item()))
 
+save_model(model)
 
 with torch.no_grad():
     correct = 0

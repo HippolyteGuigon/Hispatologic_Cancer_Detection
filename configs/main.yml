@@ -1,1 +1,3 @@
+
+model_chosen: cnn
 cnn_params: !include cnn_params.yml

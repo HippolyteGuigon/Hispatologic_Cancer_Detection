@@ -1,4 +1,4 @@
-train_size: 0.80
+train_size: 0.001
 
 batch_size: 64
 
