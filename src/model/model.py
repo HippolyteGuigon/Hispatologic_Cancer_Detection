@@ -64,9 +64,8 @@ class ConvNeuralNet(nn.Module):
         out = self.conv_layer3(out)
         out = self.conv_layer4(out)
         out = self.max_pool2(out)
-
         out = out.reshape(out.size(0), -1)
-
+        
         out = self.fc1(out)
         out = self.relu1(out)
         out = self.fc2(out)
