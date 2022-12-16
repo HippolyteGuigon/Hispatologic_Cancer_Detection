@@ -15,6 +15,7 @@ batch_size = main_params["cnn_params"]["batch_size"]
 num_classes = main_params["cnn_params"]["num_classes"]
 learning_rate = main_params["cnn_params"]["learning_rate"]
 num_epochs = main_params["cnn_params"]["num_epochs"]
+dropout = main_params["cnn_params"]["dropout"]
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -43,33 +44,29 @@ class ConvNeuralNet(nn.Module):
     #  Determine what layers and their order in CNN object
     def __init__(self, num_classes):
         super(ConvNeuralNet, self).__init__()
-        self.conv_layer1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3)
-        self.conv_layer2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3)
-        self.max_pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-
-        self.conv_layer3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3)
-        self.conv_layer4 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3)
-        self.max_pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-
-        self.fc1 = nn.Linear(1600, 128)
-        self.relu1 = nn.ReLU()
-        self.fc2 = nn.Linear(128, num_classes)
+        self.network = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=(1, 1)),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=(1, 1)),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.MaxPool2d(2, 2),
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=(1, 1)),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.MaxPool2d(2, 2),
+            nn.Flatten(),
+            nn.Linear(4608, 1024),
+            nn.ReLU(),
+            nn.Linear(1024, 512),
+            nn.ReLU(),
+            nn.Linear(512, num_classes),
+        )
 
     # Progresses data across layers
     def forward(self, x):
-        out = self.conv_layer1(x)
-        out = self.conv_layer2(out)
-        out = self.max_pool1(out)
-
-        out = self.conv_layer3(out)
-        out = self.conv_layer4(out)
-        out = self.max_pool2(out)
-        out = out.reshape(out.size(0), -1)
-        
-        out = self.fc1(out)
-        out = self.relu1(out)
-        out = self.fc2(out)
-        return out
+        return self.network(x)
 
 
 model = ConvNeuralNet(num_classes)
