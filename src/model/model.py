@@ -1,16 +1,16 @@
 import torch
 import torch.nn as nn
 import torchvision
-import torchvision.transforms as transforms
 from torch.utils.data import random_split
 import sys
 import os
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
-
+sys.path.insert(0,os.path.join(os.getcwd(),"src/transforms"))
 from confs import *
 from model_save_load import *
+from transform import transform
 
 main_params = load_conf("configs/main.yml", include=True)
 batch_size = main_params["cnn_params"]["batch_size"]
@@ -23,9 +23,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Use transforms.compose method to reformat images for modeling,
 # and save to variable all_transforms for later use
-all_transforms = transforms.Compose(
-    [transforms.ToTensor()]
-)
+all_transforms = transform()
 
 data = torchvision.datasets.ImageFolder(root="train", transform=all_transforms)
 

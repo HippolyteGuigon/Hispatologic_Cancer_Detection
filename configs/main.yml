@@ -1,3 +1,4 @@
 
 model_chosen: cnn
 cnn_params: !include cnn_params.yml
+pipeline_params: !include pipeline_params.yml
