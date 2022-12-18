@@ -85,6 +85,3 @@ def class_visualisation() -> None:
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
-
-class_visualisation()
