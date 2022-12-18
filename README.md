@@ -15,6 +15,10 @@ The all project was coded under PEP-8 (https://peps.python.org/pep-0008/) and fl
 
 ## Installation
 
+* This project uses a specific conda environment, to get it, run the following command: ```conda env create -f environment_droplet.yml``` 
+
+* To install all necessary libraries, run the following code: ```pip install -r requirements.txt```
+
 
 ## Screenshot 
 

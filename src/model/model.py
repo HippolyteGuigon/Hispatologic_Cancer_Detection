@@ -75,7 +75,9 @@ model = ConvNeuralNet(num_classes)
 criterion = nn.CrossEntropyLoss()
 
 # Set optimizer with optimizer
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=0.005)
+optimizer = torch.optim.Adagrad(
+    model.parameters(), lr=learning_rate, weight_decay=0.005
+)
 
 total_step = len(train_loader)
 
