@@ -7,7 +7,7 @@ import os
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
-sys.path.insert(0,os.path.join(os.getcwd(),"src/transforms"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
 from confs import *
 from model_save_load import *
 from transform import transform
@@ -57,7 +57,7 @@ class ConvNeuralNet(nn.Module):
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2),
             nn.Flatten(),
-            nn.Linear(61952, 1024),
+            nn.Linear(4608, 1024),
             nn.ReLU(),
             nn.Linear(1024, 512),
             nn.ReLU(),
@@ -75,9 +75,7 @@ model = ConvNeuralNet(num_classes)
 criterion = nn.CrossEntropyLoss()
 
 # Set optimizer with optimizer
-optimizer = torch.optim.SGD(
-    model.parameters(), lr=learning_rate, weight_decay=0.005, momentum=0.9
-)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=0.005)
 
 total_step = len(train_loader)
 
