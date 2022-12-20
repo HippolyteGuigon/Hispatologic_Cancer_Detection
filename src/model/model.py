@@ -57,7 +57,7 @@ class ConvNeuralNet(nn.Module):
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2),
             nn.Flatten(),
-            nn.Linear(4608, 1024),
+            nn.Linear(128, 1024),
             nn.ReLU(),
             nn.Linear(1024, 512),
             nn.ReLU(),
@@ -75,9 +75,7 @@ model = ConvNeuralNet(num_classes)
 criterion = nn.CrossEntropyLoss()
 
 # Set optimizer with optimizer
-optimizer = torch.optim.Adagrad(
-    model.parameters(), lr=learning_rate, weight_decay=0.005
-)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay=0.005)
 
 total_step = len(train_loader)
 
