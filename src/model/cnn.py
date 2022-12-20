@@ -26,19 +26,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # and save to variable all_transforms for later use
 all_transforms = transform()
 
-data = torchvision.datasets.ImageFolder(root="train", transform=all_transforms)
 
-n = len(data)
-p = main_params["pipeline_params"]["train_size"]
-train_set, test_set = random_split(
-    data, (int(p * len(data)), len(data) - int(p * len(data)))
-)
-
-
-train_loader = torch.utils.data.DataLoader(
-    train_set, batch_size=batch_size, shuffle=True
-)
-test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size, shuffle=True)
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
@@ -107,6 +95,20 @@ class ConvNeuralNet(nn.Module):
             None
         """
 
+        data = torchvision.datasets.ImageFolder(root="train", transform=all_transforms)
+
+        n = len(data)
+        p = main_params["pipeline_params"]["train_size"]
+        train_set, test_set = random_split(
+            data, (int(p * len(data)), len(data) - int(p * len(data)))
+        )
+
+
+        train_loader = torch.utils.data.DataLoader(
+            train_set, batch_size=batch_size, shuffle=True
+        )
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size, shuffle=True)
+        
         self.model = ConvNeuralNet(num_classes)
 
         # Set Loss function with criterion
