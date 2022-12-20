@@ -9,29 +9,15 @@
 *.npy
 *.icloud
 *.pt
-train/
-test/ 
+train/*
+!train/non_cancerous
+train/non_cancerous/*
+!train/non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif
+test/* 
 
 #Except these files
 
 !requirements.txt
-!*/train/non_cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif
-!train/non_cancerous/ffb7f7bdec331c7d8312df53cf8266b89ad500bf.tif
-!train/non_cancerous/ffb830dba241a2e9e70d7374590c73926d44b8d1.tif
-!train/non_cancerous/ffb8a5f6a6bccbf92834f5e30ca292c800f58b6a.tif
-!train/non_cancerous/ffb8dea6e6f6ff353961dcbf1a265b69056144ed.tif
-!train/non_cancerous/ffb9ffcd0b59033ad797f359054ea2d6e3a8c793.tif
-!train/non_cancerous/ffba1e07d2623a9d7d555708257ff17ee7d50f4a.tif
-!train/non_cancerous/ffbb38b5834d486f44d9521e58b6607cb5d8789f.tif
-!train/non_cancerous/ffbb491134aee46442d36133ceefe59314ac9227.tif
-!train/non_cancerous/ffbb8c370c646701648fc12d799d7ecd2b224fb4.tif
-!train/non_cancerous/ffbbf2de1594cc0788316662ffd2e99672684dbe.tif
-!train/non_cancerous/ffbde60662a5ac2ac11fefc88441bc12f3d9ff13.tif
-!train/non_cancerous/ffbdff63e947de83f4b7ddd6734c308f966b0feb.tif
-!train/non_cancerous/ffbe5a97a4a65a4f5c718a3ee3ab869a2b8ddc68.tif
-!train/non_cancerous/ffbec7f01b26b5bad6c7e7c8285ea7c716e6ebbf.tif
-!train/non_cancerous/ffbedd53916f5dadf31587dcb62d8d304b749803.tif
-!train/non_cancerous/ffbf1c85e22bb33c69f361f3f5e598ed8aea02f8.tif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
