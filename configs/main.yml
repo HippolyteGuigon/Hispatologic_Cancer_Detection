@@ -1,4 +1,4 @@
-
 model_chosen: cnn
+num_classes: 2
 cnn_params: !include cnn_params.yml
 pipeline_params: !include pipeline_params.yml
