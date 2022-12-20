@@ -18,6 +18,25 @@ test/*
 #Except these files
 
 !requirements.txt
+!train/non_cancerous/c7cf86c53ef00698e1e46f430e8527b534bd0368.tif
+!train/non_cancerous/fa806bcfba66f3bb4a0b12c17712c73cf7e77c13.tif
+!train/non_cancerous/f7d0c81604f942756bf9326fc00ca210cbb205fa.tif
+!train/non_cancerous/f683eb1dbac270cdb404dbe67adecde6eb765c26.tif
+!train/non_cancerous/db6ce9d760533f13edf75cd5f675adf33e041ef9.tif
+!train/non_cancerous/aaaa3b6f964ee648322397dafc2d330168b49510.tif
+!train/non_cancerous/a71e4d1c7ef9f59b6ffbf2acda98d17914b8ae4c.tif
+!train/non_cancerous/b58cd33048df20efdef34be0837c5f03c87d1696.tif
+!train/non_cancerous/a964be267dfdd38c73b1f1ce131e74c7d9ba13f3.tif
+!train/non_cancerous/c2fae180d51ee49429ef30bdbfb50069970547ab.tif
+!train/non_cancerous/aeef2b250d2db7560fb05401166fd854a01e4751.tif
+!train/non_cancerous/d76ca8abd6d258b599bd03ebff28c407e0c2b0db.tif
+!train/non_cancerous/f8eb322056c7ce6d86c7ef3580c358eb7eea5a52.tif
+!train/non_cancerous/d43c4caeae52b6b41457c970a9cd443e75c51a60.tif
+!train/non_cancerous/dc033e1665eaa32d1556e0e61828c2adcb94887f.tif
+!train/non_cancerous/e1d0920a488f56715d6c1e29e69e661ca030ddf0.tif
+!train/non_cancerous/ba66b45569f59b16e21e3373837861ad35243fc8.tif
+!train/non_cancerous/e4c82bbcbcc61cc3cbfb224c70e797a35094caa0.tif
+!train/non_cancerous/ae5e7ffbfcd0c66cdec0af0f776fe9ed996fce58.tif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
