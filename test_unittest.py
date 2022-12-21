@@ -48,6 +48,23 @@ class Test(unittest.TestCase):
         except:
             self.fail("Error: There has been a problem in training the pipeline")
 
+    def testing_main(self) -> bool:
+        """
+        The goal of this self function is to check if the
+        main.py file works when called
+
+        Arguments:
+            None
+
+        Returns:
+            None
+        """
+
+        try:
+            os.system("python main.py Hippolyte")
+        except:
+            self.fail("Error, failed to achieve the main pipeline ")
+
 
 if __name__ == "__main__":
     unittest.main()
