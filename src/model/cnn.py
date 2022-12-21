@@ -27,7 +27,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 all_transforms = transform()
 
 
-
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
     """
@@ -35,7 +34,7 @@ class ConvNeuralNet(nn.Module):
     for the classification of images
     """
 
-    def __init__(self, num_classes):
+    def __init__(self, num_classes: int):
         """
         The goal of this function is initialisation of
         the arguments that will be used inside this class
@@ -103,12 +102,13 @@ class ConvNeuralNet(nn.Module):
             data, (int(p * len(data)), len(data) - int(p * len(data)))
         )
 
-
         train_loader = torch.utils.data.DataLoader(
             train_set, batch_size=batch_size, shuffle=True
         )
-        test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size, shuffle=True)
-        
+        test_loader = torch.utils.data.DataLoader(
+            test_set, batch_size=batch_size, shuffle=True
+        )
+
         self.model = ConvNeuralNet(num_classes)
 
         # Set Loss function with criterion

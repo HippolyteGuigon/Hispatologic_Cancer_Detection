@@ -22,6 +22,18 @@ args = parser.parse_args()
 
 
 def launch_pipeline() -> None:
+    """
+    The goal of this function is to launch the model
+    global pipeline with the logs accorded to the commands
+    entered by the user
+
+    Arguments:
+        None
+
+    Returns:
+        None
+    """
+
     chosen_model = main_params["model_chosen"]
     logging.info(f"You launched the model iteration {args.Name}")
     logging.info(f"You have chosen the model {chosen_model} {args.Name}")
