@@ -27,3 +27,10 @@ The all project was coded under PEP-8 (https://peps.python.org/pep-0008/) and fl
 Image of metastatic breast cancer cell.
 
 ## How to use ? 
+
+There are two steps to launch the model: 
+
+* To run the model, first change the parameters and the configurations you wish to apply in the following path: 
+```configs/```
+
+* Then, run the following command: ```python main.py user_name``` user_name being your own name that will then be printed in the logs

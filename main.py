@@ -7,6 +7,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
+main_params = load_conf("configs/main.yml", include=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -19,13 +20,15 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-def launch_pipeline()->None:
-    chosen_model=model_params=load_conf("configs/main.yml")
+
+def launch_pipeline() -> None:
+    chosen_model = main_params["model_chosen"]
     logging.info(f"You launched the model iteration {args.Name}")
     logging.info(f"You have chosen the model {chosen_model} {args.Name}")
     launch_model()
     logging.warning(f"The model has finished training {args.Name}")
-    
-if __name__=="main":
+
+
+if __name__ == "__main__":
     main()
     launch_pipeline()
