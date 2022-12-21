@@ -3,7 +3,8 @@ repos:
   hooks:
     - id: update_requirements
       name: updating_requirements.txt
-      entry: bash -c "python3 -m  pipreqs.pipreqs ."
+      entry: bash -c "python3 -m  pipreqs.pipreqs . --force"
+
       language: system
       types: [python]
       pass_filenames: false
