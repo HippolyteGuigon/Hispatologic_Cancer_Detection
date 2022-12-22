@@ -3,19 +3,21 @@ import os
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
 from confs import *
 from cnn import *
 
 main_params = load_conf("configs/main.yml", include=True)
 
-def launch_model()->None:
+
+def launch_model() -> None:
     """
-    The goal of this function is to launch the model 
-    chosen by the user 
-    
+    The goal of this function is to launch the model
+    chosen by the user
+
     Arguments:
-        None 
-        
+        None
+
     Returns:
         None
     """
@@ -24,6 +26,8 @@ def launch_model()->None:
         model = ConvNeuralNet(main_params["num_classes"])
         model.fit()
         model.save()
+        model.evaluate()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     launch_model()

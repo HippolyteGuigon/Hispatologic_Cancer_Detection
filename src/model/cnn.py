@@ -4,6 +4,7 @@ import torchvision
 from torch.utils.data import random_split
 import sys
 import os
+from PIL import Image
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
@@ -46,6 +47,11 @@ class ConvNeuralNet(nn.Module):
         Returns:
             None
         """
+
+        self.data = torchvision.datasets.ImageFolder(
+            root="train", transform=all_transforms
+        )
+        self.n = len(self.data)
 
         super(ConvNeuralNet, self).__init__()
         self.network = nn.Sequential(
@@ -94,18 +100,16 @@ class ConvNeuralNet(nn.Module):
             None
         """
 
-        data = torchvision.datasets.ImageFolder(root="train", transform=all_transforms)
-
-        n = len(data)
         p = main_params["pipeline_params"]["train_size"]
         train_set, test_set = random_split(
-            data, (int(p * len(data)), len(data) - int(p * len(data)))
+            self.data,
+            (int(p * len(self.data)), len(self.data) - int(p * len(self.data))),
         )
 
-        train_loader = torch.utils.data.DataLoader(
+        self.train_loader = torch.utils.data.DataLoader(
             train_set, batch_size=batch_size, shuffle=True
         )
-        test_loader = torch.utils.data.DataLoader(
+        self.test_loader = torch.utils.data.DataLoader(
             test_set, batch_size=batch_size, shuffle=True
         )
 
@@ -123,11 +127,10 @@ class ConvNeuralNet(nn.Module):
         # determine how many iterations to train the network on
         for epoch in range(num_epochs):
             # Load in the data in batches using the train_loader object
-            for i, (images, labels) in enumerate(train_loader):
+            for i, (images, labels) in enumerate(self.train_loader):
                 # Move tensors to the configured device
                 images = images.to(device)
                 labels = labels.to(device)
-
                 # Forward pass
                 outputs = self.model(images)
                 loss = criterion(outputs, labels)
@@ -171,16 +174,46 @@ class ConvNeuralNet(nn.Module):
         with torch.no_grad():
             correct = 0
             total = 0
-            for images, labels in train_loader:
+            for images, labels in self.train_loader:
                 images = images.to(device)
                 labels = labels.to(device)
-                outputs = model(images)
+                outputs = self.model(images)
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
             print(
                 "Accuracy of the network on the {} train images: {} %".format(
-                    n, 100 * correct / total
+                    self.n, 100 * correct / total
                 )
             )
+
+    def predict(self, image_path: str) -> int:
+        """
+        The goal of this function is, after having received an image,
+        to predict the associated label
+
+        Arguments:
+            -image_path: str: The path of the
+            image which label has to be predicted
+
+        Returns:
+            -label: int: The predicted label of the image
+        """
+
+        model = load_model()
+        transformer = transform()
+        image = Image.open(image_path)
+        input = transformer(image)
+        input = input.view(1, 3, 32, 32)
+        output = model(input)
+        _, predicted = torch.max(output.data, 1)
+        print(predicted)
+        return predicted
+
+
+if __name__ == "__main__":
+    test = ConvNeuralNet(2)
+    liste = os.listdir("train/non_cancerous")[:10] + os.listdir("train/cancerous")[:10]
+    for image in liste:
+        test.predict("train/non_cancerous/" + image)
