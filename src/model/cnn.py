@@ -5,6 +5,10 @@ from torch.utils.data import random_split
 import sys
 import os
 from PIL import Image
+from tqdm import tqdm
+import random
+import pandas as pd
+import numpy as np
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
@@ -12,6 +16,8 @@ sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
 from confs import *
 from model_save_load import *
 from transform import transform
+
+tqdm.pandas()
 
 main_params = load_conf("configs/main.yml", include=True)
 batch_size = main_params["cnn_params"]["batch_size"]
@@ -68,10 +74,11 @@ class ConvNeuralNet(nn.Module):
             nn.MaxPool2d(2, 2),
             nn.Flatten(),
             nn.Linear(4608, 1024),
-            nn.ReLU(),
+            nn.Sigmoid(),
             nn.Linear(1024, 512),
-            nn.ReLU(),
+            nn.Tanh(),
             nn.Linear(512, num_classes),
+            nn.LogSoftmax(dim=1),
         )
 
     # Progresses data across layers
@@ -144,6 +151,21 @@ class ConvNeuralNet(nn.Module):
                 "Epoch [{}/{}], Loss: {:.4f}".format(epoch + 1, num_epochs, loss.item())
             )
 
+    def get_train_test_loader(self) -> torch:
+        """
+        The goal of this function is to return the
+        train and test loader when they've been built
+
+        Arguments:
+            None
+
+        Returns:
+            -train_loader: torch: The train set
+            -test_loader: torch: The test set
+        """
+
+        return self.train_loader, self.test_loader
+
     def save(self):
         """
         The goal of this function is, once the
@@ -208,12 +230,50 @@ class ConvNeuralNet(nn.Module):
         input = input.view(1, 3, 32, 32)
         output = model(input)
         _, predicted = torch.max(output.data, 1)
-        print(predicted)
         return predicted
+
+    def global_predict(self, df=pd.read_csv("train_labels.csv")) -> np.array:
+        """
+        The goal of this function is, given a global
+        DataFrame, to predict the labels for each image
+        and to return an array with the predictions
+
+        Arguments:
+            df: pd.DataFrame: The DataFrame with images
+            to be predicted
+
+        Returns:
+            y_pred: np.array: The array with the predicted
+            labels
+        """
+
+        df = df.loc[:50, :]
+        df["id"] = df["id"].apply(lambda x: x + str(".tif"))
+
+        def predict_label(image_name: str) -> str:
+            if os.path.exists(os.path.join("train/cancerous", image_name)):
+                path = os.path.join("train/cancerous", image_name)
+            elif os.path.exists(os.path.join("train/non_cancerous", image_name)):
+                path = os.path.join("train/non_cancerous", image_name)
+            else:
+                path = os.path.join("test", image_name)
+            try:
+                label = self.predict(path)
+            except:
+                label = "Unknown"
+
+            return label
+
+        df["prediction"] = df["id"].progress_apply(
+            lambda image: predict_label(image).item()
+        )
+        y_pred = np.array(df["prediction"])
+        y_pred = y_pred[y_pred != "Unknown"]
+        np.save("lets_check.npy", y_pred)
+        print(np.mean(y_pred))
+        return y_pred
 
 
 if __name__ == "__main__":
-    test = ConvNeuralNet(2)
-    liste = os.listdir("train/non_cancerous")[:10] + os.listdir("train/cancerous")[:10]
-    for image in liste:
-        test.predict("train/non_cancerous/" + image)
+    model = ConvNeuralNet(2)
+    model.global_predict()
