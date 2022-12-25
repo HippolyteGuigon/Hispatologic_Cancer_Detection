@@ -1,6 +1,6 @@
 batch_size: 64
 
-learning_rate: 1
+learning_rate: 0.1
 
 num_epochs: 2
 

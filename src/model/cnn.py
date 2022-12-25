@@ -60,25 +60,34 @@ class ConvNeuralNet(nn.Module):
         self.n = len(self.data)
 
         super(ConvNeuralNet, self).__init__()
-        self.network = nn.Sequential(
+        self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=(1, 1)),
             nn.ReLU(),
             nn.Dropout(dropout),
+            nn.MaxPool2d(2, 2)
+        )
+        self.conv2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=(1, 1)),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2, 2),
+            nn.MaxPool2d(2, 2)
+        )
+
+        self.conv3 = nn.Sequential(
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=(1, 1)),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2, 2),
-            nn.Flatten(),
-            nn.Linear(4608, 1024),
-            nn.Sigmoid(),
+            nn.MaxPool2d(2, 2)
+        )
+
+        self.fc = nn.Sequential(
+             nn.Flatten(),
+            nn.Linear(512, 1024),
+            nn.ReLU(),
             nn.Linear(1024, 512),
-            nn.Tanh(),
+            nn.ReLU(),
             nn.Linear(512, num_classes),
-            nn.LogSoftmax(dim=1),
+            nn.Sigmoid()
         )
 
     # Progresses data across layers
@@ -93,7 +102,11 @@ class ConvNeuralNet(nn.Module):
         Returns:
             -network: The neural network feeded with the image
         """
-        return self.network(x)
+        x=self.conv1(x)
+        x=self.conv2(x)
+        x=self.conv3(x)
+        x=self.fc(x)
+        return x
 
     def fit(self):
         """
@@ -192,15 +205,15 @@ class ConvNeuralNet(nn.Module):
         Returns:
             None
         """
-
         with torch.no_grad():
             correct = 0
             total = 0
-            for images, labels in self.train_loader:
+            for images, labels in self.test_loader:
                 images = images.to(device)
                 labels = labels.to(device)
                 outputs = self.model(images)
                 _, predicted = torch.max(outputs.data, 1)
+                print(predicted)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
@@ -272,7 +285,6 @@ class ConvNeuralNet(nn.Module):
         np.save("lets_check.npy", y_pred)
         print(np.mean(y_pred))
         return y_pred
-
 
 if __name__ == "__main__":
     model = ConvNeuralNet(2)

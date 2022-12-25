@@ -23,5 +23,6 @@ def transform(size=main_params["pipeline_params"]["resize"]):
         -transformer: torch: The transformer
     """
 
-    transformer = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
+    transformer = transforms.Compose([transforms.Resize(size),
+    transforms.ToTensor()])
     return transformer
