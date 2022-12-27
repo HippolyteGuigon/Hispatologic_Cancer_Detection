@@ -33,4 +33,4 @@ There are two steps to launch the model:
 * To run the model, first change the parameters and the configurations you wish to apply in the following path: 
 ```configs/```
 
-* Then, run the following command: ```python main.py user_name``` user_name being your own name that will then be printed in the logs
+* Then, run the following command: ```python main.py user_name model_train predict``` with user_name being your own name that will then be printed in the logs

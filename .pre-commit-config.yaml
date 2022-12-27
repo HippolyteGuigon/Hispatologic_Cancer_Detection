@@ -4,7 +4,7 @@ repos:
     - id: update_requirements
       name: updating_requirements.txt
       entry: bash -c "python3 -m  pipreqs.pipreqs . --force"
-
+             #- bash -c "sed -i -e 's/torchvision==0.14.0/torchvision==0.13.1/g' /requirements.txt"
       language: system
       types: [python]
       pass_filenames: false

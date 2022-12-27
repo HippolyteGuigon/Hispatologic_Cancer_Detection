@@ -1,8 +1,8 @@
 batch_size: 100
 
-learning_rate: 0.1
+learning_rate: 0.01
 
-num_epochs: 1
+num_epochs: 10
 
 dropout: 0.3
 

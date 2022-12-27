@@ -89,7 +89,9 @@ class ConvNeuralNet(nn.Module):
              nn.Flatten(),
             nn.Linear(512, 256),
             nn.ReLU(),
-            nn.Linear(256, num_classes),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128,num_classes),
             nn.Softmax()
         )
 
@@ -153,7 +155,6 @@ class ConvNeuralNet(nn.Module):
                 labels = labels.to(device)
                 # Forward pass
                 outputs = self.model(images)
-                print(outputs)
                 loss = criterion(outputs, labels)
 
                 # Backward and optimize
@@ -209,13 +210,12 @@ class ConvNeuralNet(nn.Module):
                 labels = labels.to(device)
                 outputs = self.model(images)
                 _, predicted = torch.max(outputs.data, 1)
-                print(predicted)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
             print(
                 "Accuracy of the network on the {} train images: {} %".format(
-                    self.n, 100 * correct / total
+                    len(self.test_loader), 100 * correct / total
                 )
             )
 
