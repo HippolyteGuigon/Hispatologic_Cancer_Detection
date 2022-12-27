@@ -9,6 +9,7 @@
 *.npy
 *.icloud
 *.pt
+*.zip
 train/*
 !train/non_cancerous
 train/non_cancerous/*

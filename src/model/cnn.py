@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision
-from torch.utils.data import random_split
+from torch.utils.data import random_split, WeightedRandomSampler
 import sys
 import os
 from PIL import Image
@@ -13,9 +13,11 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/metrics"))
 from confs import *
 from model_save_load import *
 from transform import transform
+from metrics import *
 
 tqdm.pandas()
 
@@ -33,6 +35,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # and save to variable all_transforms for later use
 all_transforms = transform()
 
+def mean_std(loader):
+  images, lebels = next(iter(loader))
+  # shape of images = [b,c,w,h]
+  mean, std = images.mean([0,2,3]), images.std([0,2,3])
+  return mean, std
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
@@ -45,11 +52,9 @@ class ConvNeuralNet(nn.Module):
         """
         The goal of this function is initialisation of
         the arguments that will be used inside this class
-
         Arguments:
             -num_classes: The number of classes in the
             classification problem. In this problem, 2
-
         Returns:
             None
         """
@@ -62,7 +67,7 @@ class ConvNeuralNet(nn.Module):
         super(ConvNeuralNet, self).__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=(1, 1)),
-            nn.ReLU(),
+            nn.Tanh(),
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2)
         )
@@ -82,12 +87,10 @@ class ConvNeuralNet(nn.Module):
 
         self.fc = nn.Sequential(
              nn.Flatten(),
-            nn.Linear(512, 1024),
+            nn.Linear(512, 256),
             nn.ReLU(),
-            nn.Linear(1024, 512),
-            nn.ReLU(),
-            nn.Linear(512, num_classes),
-            nn.Sigmoid()
+            nn.Linear(256, num_classes),
+            nn.Softmax()
         )
 
     # Progresses data across layers
@@ -95,10 +98,8 @@ class ConvNeuralNet(nn.Module):
         """
         The goal of this function is passing on a given image
         throughout the neural network
-
         Arguments:
             -x: The image to be given to the neural network
-
         Returns:
             -network: The neural network feeded with the image
         """
@@ -112,10 +113,8 @@ class ConvNeuralNet(nn.Module):
         """
         The goal of this function is to launch the
         training of the neural network.
-
         Arguments:
             None
-
         Returns:
             None
         """
@@ -125,12 +124,13 @@ class ConvNeuralNet(nn.Module):
             self.data,
             (int(p * len(self.data)), len(self.data) - int(p * len(self.data))),
         )
-
         self.train_loader = torch.utils.data.DataLoader(
-            train_set, batch_size=batch_size, shuffle=True
+            train_set, batch_size=batch_size, shuffle=False
         )
+        mean, std = mean_std(self.train_loader)
+        
         self.test_loader = torch.utils.data.DataLoader(
-            test_set, batch_size=batch_size, shuffle=True
+            test_set, batch_size=batch_size, shuffle=False
         )
 
         self.model = ConvNeuralNet(num_classes)
@@ -153,6 +153,7 @@ class ConvNeuralNet(nn.Module):
                 labels = labels.to(device)
                 # Forward pass
                 outputs = self.model(images)
+                print(outputs)
                 loss = criterion(outputs, labels)
 
                 # Backward and optimize
@@ -168,10 +169,8 @@ class ConvNeuralNet(nn.Module):
         """
         The goal of this function is to return the
         train and test loader when they've been built
-
         Arguments:
             None
-
         Returns:
             -train_loader: torch: The train set
             -test_loader: torch: The test set
@@ -183,10 +182,8 @@ class ConvNeuralNet(nn.Module):
         """
         The goal of this function is, once the
         model has been trained, to save it
-
         Arguments:
             None
-
         Returns:
             None
         """
@@ -198,13 +195,12 @@ class ConvNeuralNet(nn.Module):
         The goal of this function is, once the model has
         been trained, to evaluate it by printing its
         accuracy
-
         Arguments:
             None
-
         Returns:
             None
         """
+        self.model=load_model()
         with torch.no_grad():
             correct = 0
             total = 0
@@ -227,11 +223,9 @@ class ConvNeuralNet(nn.Module):
         """
         The goal of this function is, after having received an image,
         to predict the associated label
-
         Arguments:
             -image_path: str: The path of the
             image which label has to be predicted
-
         Returns:
             -label: int: The predicted label of the image
         """
@@ -250,17 +244,16 @@ class ConvNeuralNet(nn.Module):
         The goal of this function is, given a global
         DataFrame, to predict the labels for each image
         and to return an array with the predictions
-
         Arguments:
-            df: pd.DataFrame: The DataFrame with images
+            -df: pd.DataFrame: The DataFrame with images
             to be predicted
-
         Returns:
-            y_pred: np.array: The array with the predicted
+            -y_pred: np.array: The array with the predicted
             labels
+            -y_true: np.array: The array with the real labels
         """
 
-        df = df.loc[:50, :]
+        df = df.loc[:500, :]
         df["id"] = df["id"].apply(lambda x: x + str(".tif"))
 
         def predict_label(image_name: str) -> str:
@@ -281,11 +274,11 @@ class ConvNeuralNet(nn.Module):
             lambda image: predict_label(image).item()
         )
         y_pred = np.array(df["prediction"])
-        y_pred = y_pred[y_pred != "Unknown"]
-        np.save("lets_check.npy", y_pred)
-        print(np.mean(y_pred))
-        return y_pred
+        y_true=np.array(df["label"])
+        return y_pred, y_true
 
 if __name__ == "__main__":
     model = ConvNeuralNet(2)
-    model.global_predict()
+    y_pred,y_true=model.global_predict()
+    met=metrics(y_true,y_pred)
+    print(f"The accuracy is of {met.accuracy()}")

@@ -24,5 +24,8 @@ def transform(size=main_params["pipeline_params"]["resize"]):
     """
 
     transformer = transforms.Compose([transforms.Resize(size),
-    transforms.ToTensor()])
+    transforms.CenterCrop(size),
+    transforms.ToTensor(),
+    transforms.Normalize(mean = [0.4296, 0.1155, 0.4047],
+                         std= [0.4639, 0.5511, 0.4269])])
     return transformer
