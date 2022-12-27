@@ -81,6 +81,7 @@ def predict_test_file()->None:
     df_test["label"] = df_test["id"].progress_apply(
             lambda image: predictor.predict("test/"+image).item()
         )
+    df_test["id"]=df_test["id"].apply(lambda x: x.replace(".tif",""))
     df_test.to_csv("sample_submission.csv",index=False)
 
 
