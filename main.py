@@ -64,9 +64,10 @@ def launch_pipeline() -> None:
     launch_model()
     logging.warning(f"The model has finished training {args.Name}")
 
-def predict_test_file()->None:
+
+def predict_test_file() -> None:
     """
-    The goal of this function is to fulfill the test 
+    The goal of this function is to fulfill the test
     file that will be used for Kaggle competition
 
     Arguments:
@@ -75,21 +76,20 @@ def predict_test_file()->None:
     Returns:
         None
     """
-    df_test=pd.read_csv("sample_submission.csv")
+    df_test = pd.read_csv("sample_submission.csv")
     df_test["id"] = df_test["id"].apply(lambda x: x + str(".tif"))
-    predictor=ConvNeuralNet(2)
+    predictor = ConvNeuralNet(2)
     df_test["label"] = df_test["id"].progress_apply(
-            lambda image: predictor.predict("test/"+image).item()
-        )
-    df_test["id"]=df_test["id"].apply(lambda x: x.replace(".tif",""))
-    df_test.to_csv("sample_submission.csv",index=False)
+        lambda image: predictor.predict("test/" + image).item()
+    )
+    df_test["id"] = df_test["id"].apply(lambda x: x.replace(".tif", ""))
+    df_test.to_csv("sample_submission.csv", index=False)
 
 
 if __name__ == "__main__":
     main()
-    if args.Model=="model_train":
+    if args.Model == "model_train":
         launch_pipeline()
-    model=load_model()
-    if args.Test_predict=="predict":
+    model = load_model()
+    if args.Test_predict == "predict":
         predict_test_file()
-

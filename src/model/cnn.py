@@ -35,12 +35,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # and save to variable all_transforms for later use
 all_transforms = transform()
 
-def mean_std(loader):
-  images, lebels = next(iter(loader))
-  # shape of images = [b,c,w,h]
-  mean, std = images.mean([0,2,3]), images.std([0,2,3])
-  return mean, std
-
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
     """
@@ -69,30 +63,30 @@ class ConvNeuralNet(nn.Module):
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=(1, 1)),
             nn.Tanh(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2, 2)
+            nn.MaxPool2d(2, 2),
         )
         self.conv2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=(1, 1)),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2, 2)
+            nn.MaxPool2d(2, 2),
         )
 
         self.conv3 = nn.Sequential(
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=(1, 1)),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.MaxPool2d(2, 2)
+            nn.MaxPool2d(2, 2),
         )
 
         self.fc = nn.Sequential(
-             nn.Flatten(),
+            nn.Flatten(),
             nn.Linear(512, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(128,num_classes),
-            nn.Softmax()
+            nn.Linear(128, num_classes),
+            nn.Softmax(),
         )
 
     # Progresses data across layers
@@ -105,10 +99,10 @@ class ConvNeuralNet(nn.Module):
         Returns:
             -network: The neural network feeded with the image
         """
-        x=self.conv1(x)
-        x=self.conv2(x)
-        x=self.conv3(x)
-        x=self.fc(x)
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.fc(x)
         return x
 
     def fit(self):
@@ -129,8 +123,7 @@ class ConvNeuralNet(nn.Module):
         self.train_loader = torch.utils.data.DataLoader(
             train_set, batch_size=batch_size, shuffle=False
         )
-        mean, std = mean_std(self.train_loader)
-        
+
         self.test_loader = torch.utils.data.DataLoader(
             test_set, batch_size=batch_size, shuffle=False
         )
@@ -141,7 +134,7 @@ class ConvNeuralNet(nn.Module):
         criterion = nn.CrossEntropyLoss()
 
         # Set optimizer with optimizer
-        optimizer = torch.optim.SGD(
+        optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate, weight_decay=weight_decay
         )
 
@@ -201,7 +194,7 @@ class ConvNeuralNet(nn.Module):
         Returns:
             None
         """
-        self.model=load_model()
+        self.model = load_model()
         with torch.no_grad():
             correct = 0
             total = 0
@@ -274,11 +267,12 @@ class ConvNeuralNet(nn.Module):
             lambda image: predict_label(image).item()
         )
         y_pred = np.array(df["prediction"])
-        y_true=np.array(df["label"])
+        y_true = np.array(df["label"])
         return y_pred, y_true
 
+
 if __name__ == "__main__":
-    model = ConvNeuralNet(2)
-    y_pred,y_true=model.global_predict()
-    met=metrics(y_true,y_pred)
+    model = ConvNeuralNet(num_classes)
+    y_pred, y_true = model.global_predict()
+    met = metrics(y_true, y_pred)
     print(f"The accuracy is of {met.accuracy()}")
