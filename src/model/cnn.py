@@ -22,12 +22,13 @@ from metrics import *
 tqdm.pandas()
 
 main_params = load_conf("configs/main.yml", include=True)
-batch_size = main_params["cnn_params"]["batch_size"]
+main_params = clean_params(main_params)
+batch_size = main_params["batch_size"]
 num_classes = main_params["num_classes"]
-learning_rate = main_params["cnn_params"]["learning_rate"]
-num_epochs = main_params["cnn_params"]["num_epochs"]
-dropout = main_params["cnn_params"]["dropout"]
-weight_decay = main_params["cnn_params"]["weight_decay"]
+learning_rate = main_params["learning_rate"]
+num_epochs = main_params["num_epochs"]
+dropout = main_params["dropout"]
+weight_decay = main_params["weight_decay"]
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -42,16 +43,24 @@ class ConvNeuralNet(nn.Module):
     for the classification of images
     """
 
-    def __init__(self, num_classes: int):
+    def __init__(self, num_classes: int, **kwargs):
         """
         The goal of this function is initialisation of
         the arguments that will be used inside this class
         Arguments:
-            -num_classes: The number of classes in the
+            -num_classes: int: The number of classes in the
             classification problem. In this problem, 2
+            -kwargs: The different parameters the user can enter. If he
+            doesn't, they will be taken in the configs file
         Returns:
             None
         """
+
+        for param, value in kwargs.items():
+            if param not in main_params.keys():
+                raise AttributeError(f"The CNN model has no attribute {param}")
+            else:
+                main_params[param] = value
 
         self.data = torchvision.datasets.ImageFolder(
             root="train", transform=all_transforms
@@ -81,7 +90,7 @@ class ConvNeuralNet(nn.Module):
 
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(512, 256),
+            nn.Linear(12800, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
@@ -115,7 +124,7 @@ class ConvNeuralNet(nn.Module):
             None
         """
 
-        p = main_params["pipeline_params"]["train_size"]
+        p = main_params["train_size"]
         train_set, test_set = random_split(
             self.data,
             (int(p * len(self.data)), len(self.data) - int(p * len(self.data))),

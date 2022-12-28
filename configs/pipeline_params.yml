@@ -1,5 +1,5 @@
-train_size: 0.75
+train_size: 0.99999
 
-resize: 32
+resize: 96
 
 test_image_path: "train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif"
