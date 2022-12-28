@@ -61,7 +61,6 @@ class ConvNeuralNet(nn.Module):
                 raise AttributeError(f"The CNN model has no attribute {param}")
             else:
                 main_params[param] = value
-
         self.data = torchvision.datasets.ImageFolder(
             root="train", transform=all_transforms
         )

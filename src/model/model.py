@@ -10,7 +10,7 @@ from cnn import *
 main_params = load_conf("configs/main.yml", include=True)
 
 
-def launch_model() -> None:
+def launch_model(**kwargs) -> None:
     """
     The goal of this function is to launch the model
     chosen by the user
@@ -23,7 +23,7 @@ def launch_model() -> None:
     """
     model_chosen = main_params["model_chosen"]
     if model_chosen == "cnn":
-        model = ConvNeuralNet(main_params["num_classes"])
+        model = ConvNeuralNet(main_params["num_classes"],**kwargs)
         model.fit()
         model.save()
         model.evaluate()
