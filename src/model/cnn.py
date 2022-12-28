@@ -250,10 +250,10 @@ class ConvNeuralNet(nn.Module):
         df["id"] = df["id"].apply(lambda x: x + str(".tif"))
 
         def predict_label(image_name: str) -> str:
-            if os.path.exists(os.path.join("train/cancerous", image_name)):
-                path = os.path.join("train/cancerous", image_name)
-            elif os.path.exists(os.path.join("train/non_cancerous", image_name)):
-                path = os.path.join("train/non_cancerous", image_name)
+            if os.path.exists(os.path.join("train/1. cancerous", image_name)):
+                path = os.path.join("train/1. cancerous", image_name)
+            elif os.path.exists(os.path.join("train/0. non_cancerous", image_name)):
+                path = os.path.join("train/0. non_cancerous", image_name)
             else:
                 path = os.path.join("test", image_name)
             try:

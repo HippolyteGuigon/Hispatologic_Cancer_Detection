@@ -21,10 +21,10 @@ def image_visualisation(
         None
     """
 
-    if os.path.exists(os.path.join("train/non_cancerous", image)):
-        path = os.path.join("train/cancerous", image)
-    elif os.path.exists(os.path.join("train/non_cancerous", image)):
-        path = os.path.join("train/non_cancerous", image)
+    if os.path.exists(os.path.join("train/1. cancerous", image)):
+        path = os.path.join("train/1. cancerous", image)
+    elif os.path.exists(os.path.join("train/0. non_cancerous", image)):
+        path = os.path.join("train/0. non_cancerous", image)
     else:
         path = os.path.join("test", image)
 
@@ -49,27 +49,35 @@ def class_visualisation() -> None:
         None
     """
 
-    cancerous_images_list = os.listdir("train/cancerous")
-    non_cancerous_images_list = os.listdir("train/non_cancerous")
+    cancerous_images_list = os.listdir("train/1. cancerous")
+    non_cancerous_images_list = os.listdir("train/0. non_cancerous")
     cancerous_image_choice = random.choices(cancerous_images_list, k=4)
     non_cancerous_image_choice = random.choices(non_cancerous_images_list, k=4)
 
-    img1_canc = cv2.imread(os.path.join("train/cancerous", cancerous_image_choice[0]))
-    img2_canc = cv2.imread(os.path.join("train/cancerous", cancerous_image_choice[1]))
-    img3_canc = cv2.imread(os.path.join("train/cancerous", cancerous_image_choice[2]))
-    img4_canc = cv2.imread(os.path.join("train/cancerous", cancerous_image_choice[3]))
+    img1_canc = cv2.imread(
+        os.path.join("train/1. cancerous", cancerous_image_choice[0])
+    )
+    img2_canc = cv2.imread(
+        os.path.join("train/1. cancerous", cancerous_image_choice[1])
+    )
+    img3_canc = cv2.imread(
+        os.path.join("train/1. cancerous", cancerous_image_choice[2])
+    )
+    img4_canc = cv2.imread(
+        os.path.join("train/1. cancerous", cancerous_image_choice[3])
+    )
 
     img_1_ncanc = cv2.imread(
-        os.path.join("train/non_cancerous", non_cancerous_image_choice[0])
+        os.path.join("train/0. non_cancerous", non_cancerous_image_choice[0])
     )
     img_2_ncanc = cv2.imread(
-        os.path.join("train/non_cancerous", non_cancerous_image_choice[1])
+        os.path.join("train/0. non_cancerous", non_cancerous_image_choice[1])
     )
     img_3_ncanc = cv2.imread(
-        os.path.join("train/non_cancerous", non_cancerous_image_choice[2])
+        os.path.join("train/0. non_cancerous", non_cancerous_image_choice[2])
     )
     img_4_ncanc = cv2.imread(
-        os.path.join("train/non_cancerous", non_cancerous_image_choice[3])
+        os.path.join("train/0. non_cancerous", non_cancerous_image_choice[3])
     )
 
     # concatenate image Horizontally
