@@ -11,57 +11,57 @@
 *.pt
 *.zip
 train/*
-!train/non_cancerous
-train/non_cancerous/*
+!train/0. non_cancerous
+train/0. non_cancerous/*
 test/*
-!train/cancerous
-train/cancerous/*
+!train/1. cancerous
+train/1. cancerous/*
 
 #Except these files
 
 !requirements.txt
 
 #Pushing sample of images to perform tests
-!train/non_cancerous/c7cf86c53ef00698e1e46f430e8527b534bd0368.tif
-!train/non_cancerous/fa806bcfba66f3bb4a0b12c17712c73cf7e77c13.tif
-!train/non_cancerous/f7d0c81604f942756bf9326fc00ca210cbb205fa.tif
-!train/non_cancerous/f683eb1dbac270cdb404dbe67adecde6eb765c26.tif
-!train/non_cancerous/db6ce9d760533f13edf75cd5f675adf33e041ef9.tif
-!train/non_cancerous/aaaa3b6f964ee648322397dafc2d330168b49510.tif
-!train/non_cancerous/a71e4d1c7ef9f59b6ffbf2acda98d17914b8ae4c.tif
-!train/non_cancerous/b58cd33048df20efdef34be0837c5f03c87d1696.tif
-!train/non_cancerous/a964be267dfdd38c73b1f1ce131e74c7d9ba13f3.tif
-!train/non_cancerous/c2fae180d51ee49429ef30bdbfb50069970547ab.tif
-!train/non_cancerous/aeef2b250d2db7560fb05401166fd854a01e4751.tif
-!train/non_cancerous/d76ca8abd6d258b599bd03ebff28c407e0c2b0db.tif
-!train/non_cancerous/f8eb322056c7ce6d86c7ef3580c358eb7eea5a52.tif
-!train/non_cancerous/d43c4caeae52b6b41457c970a9cd443e75c51a60.tif
-!train/non_cancerous/dc033e1665eaa32d1556e0e61828c2adcb94887f.tif
-!train/non_cancerous/e1d0920a488f56715d6c1e29e69e661ca030ddf0.tif
-!train/non_cancerous/ba66b45569f59b16e21e3373837861ad35243fc8.tif
-!train/non_cancerous/e4c82bbcbcc61cc3cbfb224c70e797a35094caa0.tif
-!train/non_cancerous/ae5e7ffbfcd0c66cdec0af0f776fe9ed996fce58.tif
-!train/non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif
-!train/cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif
-!train/cancerous/99ef485f205645918613cd04281098daa7c17819.tif
-!train/cancerous/e2612e173abd0e8bb54a3c3db3f264b63d80bffb.tif
-!train/cancerous/6d1bb57c0606f05dbd75f90a8d9e21a57e1267e0.tif
-!train/cancerous/9c043ab2adadfeb758c71d21432fccd3e43565c0.tif
-!train/cancerous/9cc775713dd09351172a350871a547346af08027.tif
-!train/cancerous/1996c210f020134e986823ca7d4df0a70a799c34.tif
-!train/cancerous/270d16e6b9d88f09f3cc2e538f23091b186a33e5.tif
-!train/cancerous/731fe361f4af33b5e4f11d74b2bc7508171904e6.tif
-!train/cancerous/215aa53e2d70b0e800bde59737676c7ff6e50d6e.tif
-!train/cancerous/1c1b9b8dc88097d7df41ca9a24111359fd44a57d.tif
-!train/cancerous/7598927e0d335414501b010a61b23af67ab87a82.tif
-!train/cancerous/ca3308d0bf06d6eb323b268fb9aa6acb0defe52a.tif
-!train/cancerous/7e45df9e3833b03a4491ef04de755bb04623ab6d.tif
-!train/cancerous/68a36318a39cd5b08b4df526006ad923a8c67bdf.tif
-!train/cancerous/0c5c327d301c8117f4bfad434075d5966ebb5a14.tif
-!train/cancerous/1f153d055917f1a0357dfd45d02c619ec93470b3.tif
-!train/cancerous/8743179fa8d2930b1a09f506da4ea0871f415609.tif
-!train/cancerous/1d367646e5f8437f7880ae9248509b5e38cd0776.tif
-!train/cancerous/9782d64d3f75a497fe4bbbe4851536998c3a398d.tif
+!train/0. non_cancerous/c7cf86c53ef00698e1e46f430e8527b534bd0368.tif
+!train/0. non_cancerous/fa806bcfba66f3bb4a0b12c17712c73cf7e77c13.tif
+!train/0. non_cancerous/f7d0c81604f942756bf9326fc00ca210cbb205fa.tif
+!train/0. non_cancerous/f683eb1dbac270cdb404dbe67adecde6eb765c26.tif
+!train/0. non_cancerous/db6ce9d760533f13edf75cd5f675adf33e041ef9.tif
+!train/0. non_cancerous/aaaa3b6f964ee648322397dafc2d330168b49510.tif
+!train/0. non_cancerous/a71e4d1c7ef9f59b6ffbf2acda98d17914b8ae4c.tif
+!train/0. non_cancerous/b58cd33048df20efdef34be0837c5f03c87d1696.tif
+!train/0. non_cancerous/a964be267dfdd38c73b1f1ce131e74c7d9ba13f3.tif
+!train/0. non_cancerous/c2fae180d51ee49429ef30bdbfb50069970547ab.tif
+!train/0. non_cancerous/aeef2b250d2db7560fb05401166fd854a01e4751.tif
+!train/0. non_cancerous/d76ca8abd6d258b599bd03ebff28c407e0c2b0db.tif
+!train/0. non_cancerous/f8eb322056c7ce6d86c7ef3580c358eb7eea5a52.tif
+!train/0. non_cancerous/d43c4caeae52b6b41457c970a9cd443e75c51a60.tif
+!train/0. non_cancerous/dc033e1665eaa32d1556e0e61828c2adcb94887f.tif
+!train/0. non_cancerous/e1d0920a488f56715d6c1e29e69e661ca030ddf0.tif
+!train/0. non_cancerous/ba66b45569f59b16e21e3373837861ad35243fc8.tif
+!train/0. non_cancerous/e4c82bbcbcc61cc3cbfb224c70e797a35094caa0.tif
+!train/0. non_cancerous/ae5e7ffbfcd0c66cdec0af0f776fe9ed996fce58.tif
+!train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif
+!train/1. cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif
+!train/1. cancerous/99ef485f205645918613cd04281098daa7c17819.tif
+!train/1. cancerous/e2612e173abd0e8bb54a3c3db3f264b63d80bffb.tif
+!train/1. cancerous/6d1bb57c0606f05dbd75f90a8d9e21a57e1267e0.tif
+!train/1. cancerous/9c043ab2adadfeb758c71d21432fccd3e43565c0.tif
+!train/1. cancerous/9cc775713dd09351172a350871a547346af08027.tif
+!train/1. cancerous/1996c210f020134e986823ca7d4df0a70a799c34.tif
+!train/1. cancerous/270d16e6b9d88f09f3cc2e538f23091b186a33e5.tif
+!train/1. cancerous/731fe361f4af33b5e4f11d74b2bc7508171904e6.tif
+!train/1. cancerous/215aa53e2d70b0e800bde59737676c7ff6e50d6e.tif
+!train/1. cancerous/1c1b9b8dc88097d7df41ca9a24111359fd44a57d.tif
+!train/1. cancerous/7598927e0d335414501b010a61b23af67ab87a82.tif
+!train/1. cancerous/ca3308d0bf06d6eb323b268fb9aa6acb0defe52a.tif
+!train/1. cancerous/7e45df9e3833b03a4491ef04de755bb04623ab6d.tif
+!train/1. cancerous/68a36318a39cd5b08b4df526006ad923a8c67bdf.tif
+!train/1. cancerous/0c5c327d301c8117f4bfad434075d5966ebb5a14.tif
+!train/1. cancerous/1f153d055917f1a0357dfd45d02c619ec93470b3.tif
+!train/1. cancerous/8743179fa8d2930b1a09f506da4ea0871f415609.tif
+!train/1. cancerous/1d367646e5f8437f7880ae9248509b5e38cd0776.tif
+!train/1. cancerous/9782d64d3f75a497fe4bbbe4851536998c3a398d.tif
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

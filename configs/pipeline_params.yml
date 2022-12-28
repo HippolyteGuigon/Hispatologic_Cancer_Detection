@@ -2,4 +2,4 @@ train_size: 0.75
 
 resize: 32
 
-test_image_path: "train/non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif"
+test_image_path: "train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif"
