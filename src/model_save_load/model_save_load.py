@@ -23,7 +23,7 @@ def load_model(path="src/model_save_load/model_save.pt") -> torch:
     The goal of this function is to load the saved model
 
     Arguments:
-        -path: The path of the trained model
+        -path: str: The path of the trained model
 
     Returns:
         -model: torch: The saved model
