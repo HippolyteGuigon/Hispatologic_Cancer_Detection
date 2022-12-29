@@ -69,7 +69,7 @@ class ConvNeuralNet(nn.Module):
         super(ConvNeuralNet, self).__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=(1, 1)),
-            nn.Tanh(),
+            nn.ReLU(),
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2),
         )
@@ -89,7 +89,7 @@ class ConvNeuralNet(nn.Module):
 
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(12800, 256),
+            nn.Linear(512, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
