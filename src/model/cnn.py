@@ -124,9 +124,9 @@ class ConvNeuralNet(nn.Module):
         """
 
         p = main_params["train_size"]
-        train_set, test_set = random_split(
+        train_set, test_set, evaluation_set = random_split(
             self.data,
-            (int(p * len(self.data)), len(self.data) - int(p * len(self.data))),
+            (int(p * len(self.data)), int(((1-p)/2) * len(self.data)),len(self.data)-int(((1-p)/2) * len(self.data))-int(p * len(self.data))),
         )
         self.train_loader = torch.utils.data.DataLoader(
             train_set, batch_size=batch_size, shuffle=False
@@ -136,13 +136,17 @@ class ConvNeuralNet(nn.Module):
             test_set, batch_size=batch_size, shuffle=False
         )
 
+        self.evaluation_loader = torch.utils.data.DataLoader(
+            evaluation_set, batch_size=batch_size, shuffle=False
+        )
+
         self.model = ConvNeuralNet(num_classes)
 
         # Set Loss function with criterion
         criterion = nn.CrossEntropyLoss()
 
         # Set optimizer with optimizer
-        optimizer = torch.optim.Adam(
+        optimizer = torch.optim.SGD(
             self.model.parameters(), lr=learning_rate, weight_decay=weight_decay
         )
 
@@ -163,10 +167,33 @@ class ConvNeuralNet(nn.Module):
                 loss.backward()
                 optimizer.step()
 
-            print(
-                "Epoch [{}/{}], Loss: {:.4f}".format(epoch + 1, num_epochs, loss.item())
-            )
+            
 
+            with torch.no_grad():
+                correct_test = 0
+                total_test = 0
+                for images, labels in self.test_loader:
+                    images = images.to(device)
+                    labels = labels.to(device)
+                    outputs = self.model(images)
+                    _, predicted = torch.max(outputs.data, 1)
+                    total_test += labels.size(0)
+                    correct_test += (predicted == labels).sum().item()
+
+            with torch.no_grad():
+                correct_eval = 0
+                total_eval = 0
+                for images, labels in self.evaluation_loader:
+                    images = images.to(device)
+                    labels = labels.to(device)
+                    outputs = self.model(images)
+                    _, predicted = torch.max(outputs.data, 1)
+                    total_eval += labels.size(0)
+                    correct_eval += (predicted == labels).sum().item()
+
+                print(
+                f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}. Accuracy of the network on the evaluation set: {100 * correct_eval / total_eval} %. Accuracy of the network on the test set: {100 * correct_test / total_test} %"
+            )
     def get_train_test_loader(self) -> torch:
         """
         The goal of this function is to return the
@@ -215,7 +242,7 @@ class ConvNeuralNet(nn.Module):
                 correct += (predicted == labels).sum().item()
 
             print(
-                "Accuracy of the network on the {} train images: {} %".format(
+                "Accuracy of the network on the {} test images: {} %".format(
                     len(self.test_loader), 100 * correct / total
                 )
             )

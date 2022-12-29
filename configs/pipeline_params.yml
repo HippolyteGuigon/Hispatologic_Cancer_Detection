@@ -1,4 +1,4 @@
-train_size: 0.99999
+train_size: 0.70
 
 resize: 32
 
