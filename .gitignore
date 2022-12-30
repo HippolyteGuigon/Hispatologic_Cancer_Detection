@@ -15,7 +15,8 @@ train/0. non_cancerous/*
 test/*
 !train/1. cancerous
 train/1. cancerous/*
-
+!src/logs
+!src/logs/logs.log
 #Except these files
 
 !requirements.txt
