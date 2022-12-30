@@ -9,15 +9,23 @@ from tqdm import tqdm
 import random
 import pandas as pd
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/metrics"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
 from confs import *
 from model_save_load import *
 from transform import transform
 from metrics import *
+from logs import *
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
 tqdm.pandas()
 
@@ -66,10 +74,23 @@ class ConvNeuralNet(nn.Module):
         )
         self.n = len(self.data)
 
+        p = main_params["train_size"]
+        train_set, test_set= random_split(
+            self.data,
+            (int(p * len(self.data)), len(self.data)-int(p * len(self.data)))
+        )
+        self.train_loader = torch.utils.data.DataLoader(
+            train_set, batch_size=batch_size, shuffle=False
+        )
+
+        self.test_loader = torch.utils.data.DataLoader(
+            test_set, batch_size=batch_size, shuffle=False
+        )
+
         super(ConvNeuralNet, self).__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=(1, 1)),
-            nn.ReLU(),
+            nn.Tanh(),
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2),
         )
@@ -123,22 +144,7 @@ class ConvNeuralNet(nn.Module):
             None
         """
 
-        p = main_params["train_size"]
-        train_set, test_set, evaluation_set = random_split(
-            self.data,
-            (int(p * len(self.data)), int(((1-p)/2) * len(self.data)),len(self.data)-int(((1-p)/2) * len(self.data))-int(p * len(self.data))),
-        )
-        self.train_loader = torch.utils.data.DataLoader(
-            train_set, batch_size=batch_size, shuffle=False
-        )
-
-        self.test_loader = torch.utils.data.DataLoader(
-            test_set, batch_size=batch_size, shuffle=False
-        )
-
-        self.evaluation_loader = torch.utils.data.DataLoader(
-            evaluation_set, batch_size=batch_size, shuffle=False
-        )
+        
 
         self.model = ConvNeuralNet(num_classes)
 
@@ -146,7 +152,7 @@ class ConvNeuralNet(nn.Module):
         criterion = nn.CrossEntropyLoss()
 
         # Set optimizer with optimizer
-        optimizer = torch.optim.SGD(
+        optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate, weight_decay=weight_decay
         )
 
@@ -161,7 +167,6 @@ class ConvNeuralNet(nn.Module):
                 # Forward pass
                 outputs = self.model(images)
                 loss = criterion(outputs, labels)
-
                 # Backward and optimize
                 optimizer.zero_grad()
                 loss.backward()
@@ -180,20 +185,13 @@ class ConvNeuralNet(nn.Module):
                     total_test += labels.size(0)
                     correct_test += (predicted == labels).sum().item()
 
-            with torch.no_grad():
-                correct_eval = 0
-                total_eval = 0
-                for images, labels in self.evaluation_loader:
-                    images = images.to(device)
-                    labels = labels.to(device)
-                    outputs = self.model(images)
-                    _, predicted = torch.max(outputs.data, 1)
-                    total_eval += labels.size(0)
-                    correct_eval += (predicted == labels).sum().item()
 
                 print(
-                f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}. Accuracy of the network on the evaluation set: {100 * correct_eval / total_eval} %. Accuracy of the network on the test set: {100 * correct_test / total_test} %"
+                f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}. Accuracy of the network on the test set: {100 * correct_test / total_test} %"
             )
+
+                logging.info(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %")
+
     def get_train_test_loader(self) -> torch:
         """
         The goal of this function is to return the
@@ -247,6 +245,7 @@ class ConvNeuralNet(nn.Module):
                 )
             )
 
+
     def predict(self, image_path: str) -> int:
         """
         The goal of this function is, after having received an image,
@@ -266,6 +265,34 @@ class ConvNeuralNet(nn.Module):
         output = model(input)
         _, predicted = torch.max(output.data, 1)
         return predicted
+
+    def get_pred(self)->np.array:
+        """
+        The goal of this function is to get the predictions 
+        and the actual labels 
+
+        Arguments:
+            None 
+
+        Returns:
+            -y_true: np.array: The actual labels 
+            -y_pred: np.array: The predicted labels
+        """
+
+        model = load_model()
+
+        with torch.no_grad():
+            y_true = np.array([])
+            y_pred=np.array([])
+            for images, labels in self.test_loader:
+                images = images.to(device)
+                labels = labels.to(device)
+                outputs = model(images)
+                _, predicted = torch.max(outputs.data, 1)
+                y_true=np.hstack((y_true,np.array(labels)))
+                y_pred=np.hstack((y_pred,np.array(predicted)))
+
+        return y_true,y_pred
 
     def global_predict(self, df=pd.read_csv("train_labels.csv")) -> np.array:
         """
@@ -308,6 +335,4 @@ class ConvNeuralNet(nn.Module):
 
 if __name__ == "__main__":
     model = ConvNeuralNet(num_classes)
-    y_pred, y_true = model.global_predict()
-    met = metrics(y_true, y_pred)
-    print(f"The accuracy is of {met.accuracy()}")
+    model.get_pred()

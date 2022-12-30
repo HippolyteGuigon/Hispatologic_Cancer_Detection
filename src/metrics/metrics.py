@@ -1,6 +1,8 @@
 # To do: Créer une fonction accuracy qui prend en entrée y_true, y_pred et renvoie l'accuracy d'un modèle
 import numpy as np
-
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+from sklearn import metrics
 
 class metrics:
     """
@@ -45,5 +47,31 @@ class metrics:
     def auc_score(self) -> float:
         pass
 
-    def confusion_matrix(self):
-        pass
+    def confusion_matrix(self)->np.array:
+        """
+        The goal of this function is to compute the confusion
+        matrix 
+        
+        Arguments:
+            None
+            
+        Returns:
+            None
+        """
+        cm = confusion_matrix(self.y_true,self.y_pred)
+        return cm
+
+    def plot_confusion_matrix(self):
+        """
+        The goal of this function is to plot the confusion 
+        matrix and to save it once
+        
+        Arguments:
+            None 
+            
+        Returns:
+            None
+        """
+        confusion_matrix = metrics.confusion_matrix(self.y_true, self.y_pred)
+        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = [False, True])
+
