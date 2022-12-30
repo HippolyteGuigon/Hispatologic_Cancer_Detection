@@ -185,11 +185,6 @@ class ConvNeuralNet(nn.Module):
                     total_test += labels.size(0)
                     correct_test += (predicted == labels).sum().item()
 
-
-                print(
-                f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}. Accuracy of the network on the test set: {100 * correct_test / total_test} %"
-            )
-
                 logging.info(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %")
 
     def get_train_test_loader(self) -> torch:
