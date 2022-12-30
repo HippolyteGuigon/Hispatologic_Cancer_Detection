@@ -5,7 +5,6 @@
 *.json
 *.txt
 *.npy
-*.log
 *.npy
 *.icloud
 *.pt
