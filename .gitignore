@@ -15,11 +15,11 @@ train/0. non_cancerous/*
 test/*
 !train/1. cancerous
 train/1. cancerous/*
-!src/logs
-!src/logs/logs.log
+
 #Except these files
 
 !requirements.txt
+!logs.log
 
 #Pushing sample of images to perform tests
 !train/0. non_cancerous/c7cf86c53ef00698e1e46f430e8527b534bd0368.tif
