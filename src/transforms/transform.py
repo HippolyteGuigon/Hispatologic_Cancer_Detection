@@ -26,10 +26,10 @@ def transform(size=main_params["pipeline_params"]["resize"]):
     transformer = transforms.Compose(
         [
             transforms.Resize(size),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomRotation(25),
-    transforms.GaussianBlur((7,13)),
-    transforms.ToTensor()
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(25),
+            transforms.GaussianBlur((7, 13)),
+            transforms.ToTensor(),
         ]
     )
     return transformer
