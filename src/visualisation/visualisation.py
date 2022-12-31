@@ -3,12 +3,11 @@ import os
 import random
 import numpy as np
 from PIL import Image
-import sys
+import sys 
 
-sys.path.insert(0, "src/transforms")
+sys.path.insert(0,"src/transforms")
 
 from transform import *
-
 
 def image_visualisation(
     image="a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif", flag=-1, keep=True
@@ -41,17 +40,14 @@ def image_visualisation(
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-
 def visualize_transformation(image: str, keep=True) -> None:
     """
     The goal of this function is to visualize the trasformations
     applied to the image before it is feeded to the model by plotting
     the image after
-
     Arguments:
         -path: str: The The name of the image on which the transformation
         will apply
-
     Returns:
         None
     """
