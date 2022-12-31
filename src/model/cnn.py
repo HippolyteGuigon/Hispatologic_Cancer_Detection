@@ -1,15 +1,15 @@
 import torch
 import torch.nn as nn
 import torchvision
-from torch.utils.data import random_split, WeightedRandomSampler
+from torch.utils.data import random_split
 import sys
 import os
 from PIL import Image
 from tqdm import tqdm
-import random
 import pandas as pd
 import numpy as np
 import warnings
+
 warnings.filterwarnings("ignore")
 
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
@@ -75,9 +75,9 @@ class ConvNeuralNet(nn.Module):
         self.n = len(self.data)
 
         p = main_params["train_size"]
-        train_set, test_set= random_split(
+        train_set, test_set = random_split(
             self.data,
-            (int(p * len(self.data)), len(self.data)-int(p * len(self.data)))
+            (int(p * len(self.data)), len(self.data) - int(p * len(self.data))),
         )
         self.train_loader = torch.utils.data.DataLoader(
             train_set, batch_size=batch_size, shuffle=False
@@ -144,8 +144,6 @@ class ConvNeuralNet(nn.Module):
             None
         """
 
-        
-
         self.model = ConvNeuralNet(num_classes)
 
         # Set Loss function with criterion
@@ -172,8 +170,6 @@ class ConvNeuralNet(nn.Module):
                 loss.backward()
                 optimizer.step()
 
-            
-
             with torch.no_grad():
                 correct_test = 0
                 total_test = 0
@@ -185,7 +181,9 @@ class ConvNeuralNet(nn.Module):
                     total_test += labels.size(0)
                     correct_test += (predicted == labels).sum().item()
 
-                logging.info(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %")
+                logging.info(
+                    f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %"
+                )
 
     def get_train_test_loader(self) -> torch:
         """
@@ -240,7 +238,6 @@ class ConvNeuralNet(nn.Module):
                 )
             )
 
-
     def predict(self, image_path: str) -> int:
         """
         The goal of this function is, after having received an image,
@@ -261,16 +258,16 @@ class ConvNeuralNet(nn.Module):
         _, predicted = torch.max(output.data, 1)
         return predicted
 
-    def get_pred(self)->np.array:
+    def get_pred(self) -> np.array:
         """
-        The goal of this function is to get the predictions 
-        and the actual labels 
+        The goal of this function is to get the predictions
+        and the actual labels
 
         Arguments:
-            None 
+            None
 
         Returns:
-            -y_true: np.array: The actual labels 
+            -y_true: np.array: The actual labels
             -y_pred: np.array: The predicted labels
         """
 
@@ -278,16 +275,18 @@ class ConvNeuralNet(nn.Module):
 
         with torch.no_grad():
             y_true = np.array([])
-            y_pred=np.array([])
+            y_pred = np.array([])
             for images, labels in self.test_loader:
                 images = images.to(device)
                 labels = labels.to(device)
                 outputs = model(images)
                 _, predicted = torch.max(outputs.data, 1)
-                y_true=np.hstack((y_true,np.array(labels)))
-                y_pred=np.hstack((y_pred,np.array(predicted)))
+                y_true = np.hstack((y_true, np.array(labels)))
+                y_pred = np.hstack((y_pred, np.array(predicted)))
+        np.save("y_pred.npy", y_pred)
+        np.save("y_true.npy", y_true)
 
-        return y_true,y_pred
+        return y_true, y_pred
 
     def global_predict(self, df=pd.read_csv("train_labels.csv")) -> np.array:
         """

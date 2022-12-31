@@ -2,6 +2,12 @@ import cv2
 import os
 import random
 import numpy as np
+from PIL import Image
+import sys
+
+sys.path.insert(0, "src/transforms")
+
+from transform import *
 
 
 def image_visualisation(
@@ -31,6 +37,39 @@ def image_visualisation(
     img = cv2.imread(path, flag)
     imS = cv2.resize(img, (400, 200))
     cv2.imshow("image", imS)
+    if keep:
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+
+def visualize_transformation(image: str, keep=True) -> None:
+    """
+    The goal of this function is to visualize the trasformations
+    applied to the image before it is feeded to the model by plotting
+    the image after
+
+    Arguments:
+        -path: str: The The name of the image on which the transformation
+        will apply
+
+    Returns:
+        None
+    """
+
+    if os.path.exists(os.path.join("train/1. cancerous", image)):
+        path = os.path.join("train/1. cancerous", image)
+    elif os.path.exists(os.path.join("train/0. non_cancerous", image)):
+        path = os.path.join("train/0. non_cancerous", image)
+    else:
+        path = os.path.join("test", image)
+
+    img = Image.open(path)
+
+    transformer = transform()
+
+    img = transformer(img)
+
+    cv2.imshow("transformed_image", np.array(img.permute(1, 2, 0)))
     if keep:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
