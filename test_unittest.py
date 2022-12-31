@@ -32,15 +32,6 @@ class Test(unittest.TestCase):
         self.assertEqual(x.shape[-1], main_params["pipeline_params"]["resize"])
         self.assertEqual(x.shape[-2], main_params["pipeline_params"]["resize"])
 
-    def test_image_transform_plot(self):
-        liste_choice=os.listdir("train/0. non_cancerous") + os.listdir("train/1. cancerous")
-        image_chosen=random.choice(liste_choice)
-
-        try:
-            visualize_transformation(image_chosen,keep=False)
-        except:
-            self.fail("Error, this plot function does not work")
-
     def test_model_pipeline(self) -> bool:
         """
         The goal of this function is to check the model
