@@ -17,11 +17,14 @@ sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/metrics"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/early_stopping"))
+
 from confs import *
 from model_save_load import *
 from transform import transform
 from metrics import *
 from logs import *
+from early_stopping import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -37,12 +40,14 @@ learning_rate = main_params["learning_rate"]
 num_epochs = main_params["num_epochs"]
 dropout = main_params["dropout"]
 weight_decay = main_params["weight_decay"]
+early_stopping = main_params["early_stopping"]
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Use transforms.compose method to reformat images for modeling,
 # and save to variable all_transforms for later use
 all_transforms = transform()
+early_stopping_model = EarlyStopper()
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
@@ -150,7 +155,7 @@ class ConvNeuralNet(nn.Module):
         criterion = nn.CrossEntropyLoss()
 
         # Set optimizer with optimizer
-        optimizer = torch.optim.Adam(
+        optimizer = torch.optim.SGD(
             self.model.parameters(), lr=learning_rate, weight_decay=weight_decay
         )
 
@@ -177,6 +182,7 @@ class ConvNeuralNet(nn.Module):
                     images = images.to(device)
                     labels = labels.to(device)
                     outputs = self.model(images)
+                    test_loss = criterion(outputs, labels)
                     _, predicted = torch.max(outputs.data, 1)
                     total_test += labels.size(0)
                     correct_test += (predicted == labels).sum().item()
@@ -184,6 +190,11 @@ class ConvNeuralNet(nn.Module):
                 logging.info(
                     f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %"
                 )
+            if early_stopping and early_stopping_model.early_stop(test_loss):
+                logging.warning(
+                    f"The model training has stopped at epoch {epoch + 1} due to the early stopping criterion"
+                )
+                break
 
     def get_train_test_loader(self) -> torch:
         """

@@ -7,3 +7,5 @@ num_epochs: 10
 dropout: 0.25
 
 weight_decay: 0.005
+
+early_stopping: True
