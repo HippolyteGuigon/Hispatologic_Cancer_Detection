@@ -47,7 +47,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Use transforms.compose method to reformat images for modeling,
 # and save to variable all_transforms for later use
 all_transforms = transform()
-early_stopping_model = EarlyStopper()
+early_stopping_model = EarlyStopper(patience=3)
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
@@ -68,6 +68,7 @@ class ConvNeuralNet(nn.Module):
         Returns:
             None
         """
+        logging.info("Model parameters initialization has begun")
 
         for param, value in kwargs.items():
             if param not in main_params.keys():
@@ -155,12 +156,13 @@ class ConvNeuralNet(nn.Module):
         criterion = nn.CrossEntropyLoss()
 
         # Set optimizer with optimizer
-        optimizer = torch.optim.SGD(
+        optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate, weight_decay=weight_decay
         )
 
         # We use the pre-defined number of epochs to
         # determine how many iterations to train the network on
+        logging.warning(f"Fitting of the model has begun, the params are :{main_params.items()}")
         for epoch in range(num_epochs):
             # Load in the data in batches using the train_loader object
             for i, (images, labels) in enumerate(self.train_loader):
@@ -221,7 +223,7 @@ class ConvNeuralNet(nn.Module):
 
         save_model(self.model)
 
-    def evaluate(self):
+    def evaluate(self)->float:
         """
         The goal of this function is, once the model has
         been trained, to evaluate it by printing its
@@ -229,7 +231,8 @@ class ConvNeuralNet(nn.Module):
         Arguments:
             None
         Returns:
-            None
+            -accuracy: float: The accuracy of the model 
+            computed
         """
         self.model = load_model()
         with torch.no_grad():
@@ -243,11 +246,14 @@ class ConvNeuralNet(nn.Module):
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
-            print(
+            logging.info(
                 "Accuracy of the network on the {} test images: {} %".format(
                     len(self.test_loader), 100 * correct / total
                 )
             )
+
+        accuracy=100 * correct / total
+        return accuracy
 
     def predict(self, image_path: str) -> int:
         """
