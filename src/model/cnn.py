@@ -17,11 +17,14 @@ sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/metrics"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/early_stopping"))
+
 from confs import *
 from model_save_load import *
 from transform import transform
 from metrics import *
 from logs import *
+from early_stopping import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -37,12 +40,14 @@ learning_rate = main_params["learning_rate"]
 num_epochs = main_params["num_epochs"]
 dropout = main_params["dropout"]
 weight_decay = main_params["weight_decay"]
+early_stopping = main_params["early_stopping"]
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Use transforms.compose method to reformat images for modeling,
 # and save to variable all_transforms for later use
 all_transforms = transform()
+early_stopping_model = EarlyStopper(patience=3)
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
@@ -63,6 +68,7 @@ class ConvNeuralNet(nn.Module):
         Returns:
             None
         """
+        logging.info("Model parameters initialization has begun")
 
         for param, value in kwargs.items():
             if param not in main_params.keys():
@@ -156,6 +162,7 @@ class ConvNeuralNet(nn.Module):
 
         # We use the pre-defined number of epochs to
         # determine how many iterations to train the network on
+        logging.warning(f"Fitting of the model has begun, the params are :{main_params.items()}")
         for epoch in range(num_epochs):
             # Load in the data in batches using the train_loader object
             for i, (images, labels) in enumerate(self.train_loader):
@@ -177,6 +184,7 @@ class ConvNeuralNet(nn.Module):
                     images = images.to(device)
                     labels = labels.to(device)
                     outputs = self.model(images)
+                    test_loss = criterion(outputs, labels)
                     _, predicted = torch.max(outputs.data, 1)
                     total_test += labels.size(0)
                     correct_test += (predicted == labels).sum().item()
@@ -184,6 +192,11 @@ class ConvNeuralNet(nn.Module):
                 logging.info(
                     f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %"
                 )
+            if early_stopping and early_stopping_model.early_stop(test_loss):
+                logging.warning(
+                    f"The model training has stopped at epoch {epoch + 1} due to the early stopping criterion"
+                )
+                break
 
     def get_train_test_loader(self) -> torch:
         """
@@ -210,7 +223,7 @@ class ConvNeuralNet(nn.Module):
 
         save_model(self.model)
 
-    def evaluate(self):
+    def evaluate(self)->float:
         """
         The goal of this function is, once the model has
         been trained, to evaluate it by printing its
@@ -218,7 +231,8 @@ class ConvNeuralNet(nn.Module):
         Arguments:
             None
         Returns:
-            None
+            -accuracy: float: The accuracy of the model 
+            computed
         """
         self.model = load_model()
         with torch.no_grad():
@@ -232,11 +246,14 @@ class ConvNeuralNet(nn.Module):
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
-            print(
+            logging.info(
                 "Accuracy of the network on the {} test images: {} %".format(
                     len(self.test_loader), 100 * correct / total
                 )
             )
+
+        accuracy=100 * correct / total
+        return accuracy
 
     def predict(self, image_path: str) -> int:
         """
