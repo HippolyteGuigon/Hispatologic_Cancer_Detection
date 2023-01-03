@@ -9,3 +9,5 @@ dropout: 0.25
 weight_decay: 0.005
 
 early_stopping: True
+
+betas: (0.9, 0.999)
