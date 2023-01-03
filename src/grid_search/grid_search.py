@@ -22,13 +22,23 @@ formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
 main_params = load_conf("configs/main.yml", include=True)
 
-def train_model(config):
-    #A réécrire (le path)
-    os.chdir("/Users/hippodouche/Desktop/histopathologic-cancer-detection")
-    model=ConvNeuralNet(main_params["num_classes"],learning_rate=config["learning_rate"],weight_decay=config["weight_decay"])
-    model.fit()
-    acc=model.evaluate()
-    tune.report(accuracy=acc)
+def train_model(config)->None:
+  """
+  The goal of this function is to launch the Grid Search 
+  on the CNN model 
+
+  Arguments:
+    None 
+
+  Returns:
+    None
+  """
+  #A réécrire (le path)
+  os.chdir("/Users/hippodouche/Desktop/histopathologic-cancer-detection")
+  model=ConvNeuralNet(main_params["num_classes"],learning_rate=config["learning_rate"],weight_decay=config["weight_decay"])
+  model.fit()
+  acc=model.evaluate()
+  tune.report(accuracy=acc)
 
 if __name__=="__main__":
     main()
@@ -37,4 +47,5 @@ if __name__=="__main__":
   "betas": tune.grid_search([(0.5, 0.5), (0.9, 0.999), (0.3, 0.8)])})
     df = analysis.dataframe()
     df.to_csv("result_analysis_gridsearch.csv")
+    logging.warning("The Grid Search has just finished running !")
     print("Best config: ", analysis.get_best_config(metric="accuracy"))
