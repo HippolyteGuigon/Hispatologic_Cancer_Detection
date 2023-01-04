@@ -1,14 +1,10 @@
-# To be coded
-
-# https://stackoverflow.com/questions/44260217/hyperparameter-optimization-for-pytorch-model
-
-# https://stackoverflow.com/questions/44260217/hyperparameter-optimization-for-pytorch-model
-
 import torch.optim as optim
 import pandas as pd
+import ray
 from ray import tune
 import sys
 import os
+import numpy as np
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
@@ -21,6 +17,9 @@ logger.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
 main_params = load_conf("configs/main.yml", include=True)
+grid_search_params = load_conf("configs/grid_search.yml")
+ray.init(configure_logging=False, log_to_driver=False)
+os.system("export PYTHONPATH='$PWD/src/model'")
 
 def train_model(config)->None:
   """
@@ -33,9 +32,13 @@ def train_model(config)->None:
   Returns:
     None
   """
-  #A réécrire (le path)
-  os.chdir("/Users/hippodouche/Desktop/histopathologic-cancer-detection")
-  model=ConvNeuralNet(main_params["num_classes"],learning_rate=config["learning_rate"],weight_decay=config["weight_decay"])
+
+  current_dir_path=os.getcwd()
+  while current_dir_path.split("/")[-1] != "histopathologic-cancer-detection":
+    current_dir_path=os.path.dirname(current_dir_path)
+
+  os.chdir(current_dir_path)
+  model=ConvNeuralNet(main_params["num_classes"],weight_decay=config["weight_decay"])
   model.fit()
   acc=model.evaluate()
   tune.report(accuracy=acc)
@@ -43,9 +46,10 @@ def train_model(config)->None:
 if __name__=="__main__":
     main()
     analysis = tune.run(
-  train_model, config={"learning_rate": tune.grid_search([0.001, 0.0001, 0.005]),"weight_decay":tune.grid_search([0.005,0.01]),
-  "betas": tune.grid_search([(0.5, 0.5), (0.9, 0.999), (0.3, 0.8)])})
+  train_model, config={"weight_decay":tune.grid_search(grid_search_params["cnn"]["weight_decay_grid"]),
+  "learning_rate":tune.grid_search(grid_search_params["cnn"]["learning_rate_grid"]),
+  "betas_grid":tune.grid_search(grid_search_params["cnn"]["betas_grid"])})
     df = analysis.dataframe()
     df.to_csv("result_analysis_gridsearch.csv")
-    logging.warning("The Grid Search has just finished running !")
-    print("Best config: ", analysis.get_best_config(metric="accuracy"))
+    best_result=np.round(df["accuracy"].max(),2)
+    logging.warning(f"The Grid Search has just finished running ! The best result is {best_result}%")
