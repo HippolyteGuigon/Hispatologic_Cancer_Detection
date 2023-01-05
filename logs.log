@@ -1,0 +1,102 @@
+2022-12-30 07:50:54,126 | INFO | You launched the model iteration Hippolyte_reconquest
+2022-12-30 07:50:54,126 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2022-12-30 08:10:54,506 | INFO | Epoch [1/10], Loss: 0.51. Accuracy of the network on the test set: 73.55 %
+2022-12-30 08:32:33,056 | INFO | Epoch [2/10], Loss: 0.506. Accuracy of the network on the test set: 73.905 %
+2022-12-30 08:59:02,824 | INFO | Epoch [3/10], Loss: 0.503. Accuracy of the network on the test set: 74.159 %
+2022-12-30 09:31:52,544 | INFO | Epoch [4/10], Loss: 0.506. Accuracy of the network on the test set: 74.45 %
+2022-12-30 10:16:22,406 | INFO | Epoch [5/10], Loss: 0.514. Accuracy of the network on the test set: 74.35 %
+2022-12-30 11:03:57,339 | INFO | Epoch [6/10], Loss: 0.532. Accuracy of the network on the test set: 75.886 %
+2022-12-30 11:48:31,573 | INFO | Epoch [7/10], Loss: 0.502. Accuracy of the network on the test set: 76.45 %
+2022-12-30 12:39:13,027 | INFO | Epoch [8/10], Loss: 0.507. Accuracy of the network on the test set: 76.659 %
+2022-12-30 13:27:48,164 | INFO | Epoch [9/10], Loss: 0.494. Accuracy of the network on the test set: 77.813 %
+2022-12-30 14:14:26,107 | INFO | Epoch [10/10], Loss: 0.516. Accuracy of the network on the test set: 77.077 %
+2022-12-30 14:16:24,813 | WARNING | The model has finished training Hippolyte_reconquest
+2023-01-01 09:24:07,489 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 09:24:07,490 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 09:24:34,199 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 09:24:34,200 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 09:45:16,412 | INFO | Epoch [1/10], Loss: 0.689. Accuracy of the network on the test set: 59.503 %
+2023-01-01 09:55:19,773 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 09:55:19,773 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 10:10:38,657 | INFO | Epoch [1/10], Loss: 0.692. Accuracy of the network on the test set: 59.513 %
+2023-01-01 10:26:01,444 | INFO | Epoch [2/10], Loss: 0.692. Accuracy of the network on the test set: 59.513 %
+2023-01-01 10:26:01,478 | WARNING | The model training has stopped at epoch 2 due to the early stopping criterion
+2023-01-01 10:41:08,120 | WARNING | The model has finished training Hippolyte_reconquest
+2023-01-01 10:52:39,922 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 10:52:39,922 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 10:53:03,836 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 10:53:03,837 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 10:53:30,293 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 10:53:30,293 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 11:11:11,132 | INFO | Epoch [1/10], Loss: 0.451. Accuracy of the network on the test set: 59.526 %
+2023-01-01 11:27:44,948 | INFO | Epoch [2/10], Loss: 0.532. Accuracy of the network on the test set: 72.359 %
+2023-01-01 11:44:07,910 | INFO | Epoch [3/10], Loss: 0.508. Accuracy of the network on the test set: 72.047 %
+2023-01-01 11:44:07,921 | WARNING | The model training has stopped at epoch 3 due to the early stopping criterion
+2023-01-01 11:58:21,870 | WARNING | The model has finished training Hippolyte_reconquest
+2023-01-01 12:55:00,941 | INFO | You launched the model iteration Hippolyte_reconquest
+2023-01-01 12:55:00,943 | INFO | You have chosen the model cnn Hippolyte_reconquest
+2023-01-01 13:14:09,915 | INFO | Epoch [1/10], Loss: 0.921. Accuracy of the network on the test set: 59.463 %
+2023-01-02 00:13:43,559 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:15:45,154 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:19:02,800 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:30:43,270 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:40:18,643 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:45:33,805 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:49:58,436 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 00:55:55,921 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 01:00:25,102 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 01:03:24,334 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 01:04:14,404 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-02 13:27:36,714 | INFO | Model parameters initialization has begun
+2023-01-02 13:28:38,308 | INFO | Model parameters initialization has begun
+2023-01-02 13:28:59,107 | INFO | Model parameters initialization has begun
+2023-01-02 13:29:00,995 | INFO | Grid Search has started !
+2023-01-03 01:17:55,039 | INFO | Model parameters initialization has begun
+2023-01-03 01:21:42,123 | INFO | Model parameters initialization has begun
+2023-01-03 01:22:11,321 | INFO | Model parameters initialization has begun
+2023-01-03 01:24:14,010 | INFO | Model parameters initialization has begun
+2023-01-03 01:24:15,691 | INFO | Grid Search has started !
+2023-01-03 01:32:51,249 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:35:03,192 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:40:16,303 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:43:20,182 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:45:27,403 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:46:49,879 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:49:04,745 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:50:20,444 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 01:52:47,490 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 02:01:17,475 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 02:02:44,200 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 02:04:05,301 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 02:15:04,886 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 02:19:48,947 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 06:22:53,300 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 06:24:00,201 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 06:25:29,537 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-03 17:51:06,078 | WARNING | The Grid Search has just finished running !
+2023-01-05 08:21:42,513 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 08:21:43,993 | ERROR | Trials did not complete: [train_model_eaf4a_00000, train_model_eaf4a_00001, train_model_eaf4a_00002, train_model_eaf4a_00003, train_model_eaf4a_00004, train_model_eaf4a_00005, train_model_eaf4a_00006, train_model_eaf4a_00007, train_model_eaf4a_00008, train_model_eaf4a_00009, train_model_eaf4a_00010, train_model_eaf4a_00011, train_model_eaf4a_00012, train_model_eaf4a_00013, train_model_eaf4a_00014, train_model_eaf4a_00015, train_model_eaf4a_00016, train_model_eaf4a_00017, train_model_eaf4a_00018, train_model_eaf4a_00019]
+2023-01-05 08:21:43,994 | INFO | Total run time: 82759.22 seconds (82758.69 seconds for the tuning loop).
+2023-01-05 08:21:43,995 | WARNING | Experiment has been interrupted, but the most recent state was saved. You can continue running this experiment by passing `resume=True` to `tune.run()`
+2023-01-05 08:21:44,062 | WARNING | Couldn't read config from 16 paths
+2023-01-05 08:23:30,259 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-05 08:26:05,490 | INFO | Initializing Ray automatically.For cluster usage or custom Ray initialization, call `ray.init(...)` before `tune.run`.
+2023-01-05 08:29:30,525 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 08:31:26,733 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 08:31:27,019 | ERROR | Trials did not complete: [train_model_c3609_00000, train_model_c3609_00001, train_model_c3609_00002, train_model_c3609_00003]
+2023-01-05 08:31:27,019 | INFO | Total run time: 86.30 seconds (85.90 seconds for the tuning loop).
+2023-01-05 08:31:27,021 | WARNING | Experiment has been interrupted, but the most recent state was saved. You can continue running this experiment by passing `resume=True` to `tune.run()`
+2023-01-05 11:29:06,247 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 11:34:52,575 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 11:39:49,185 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 11:41:47,828 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 11:57:50,461 | INFO | Model parameters initialization has begun
+2023-01-05 11:57:52,215 | INFO | Model parameters initialization has begun
+2023-01-05 11:57:53,550 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.7), ('resize', 32), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-05 11:58:02,145 | INFO | Model parameters initialization has begun
+2023-01-05 11:58:03,577 | INFO | Model parameters initialization has begun
+2023-01-05 11:58:05,197 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.7), ('resize', 32), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-05 12:00:02,550 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-05 12:00:02,801 | ERROR | Trials did not complete: [train_model_c5697_00000, train_model_c5697_00001]
+2023-01-05 12:00:02,801 | INFO | Total run time: 143.25 seconds (142.89 seconds for the tuning loop).
+2023-01-05 12:00:02,801 | WARNING | Experiment has been interrupted, but the most recent state was saved. You can continue running this experiment by passing `resume=True` to `tune.run()`

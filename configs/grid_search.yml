@@ -1,0 +1,6 @@
+cnn:
+  learning_rate_grid: [0.0001,0.001]
+  weight_decay_grid: [0.005]
+  random_flip_grid: ["TBA"]
+
+transformers:
