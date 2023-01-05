@@ -8,9 +8,11 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/github"))
 from logs import *
 from confs import *
 from cnn import *
+from github import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -36,6 +38,27 @@ def train_model(config)->None:
   Returns:
     None
   """
+  def push_to_git()->None:
+    """
+    The goal of this function is to push automatically
+    the files to github
+    
+    Arguments:
+        None 
+        
+    Returns:
+        None
+    """
+
+    os.system("git status")
+    time.sleep(5)
+    os.system("git add --a")
+    time.sleep(5)
+    os.system("git commit -m 'automatic_github_push' --no-verify")
+    time.sleep(8)
+    os.system("git push")
+    time.sleep(10)
+
   logger = logging.getLogger()
   logger.setLevel(logging.INFO)
   formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
@@ -53,6 +76,8 @@ def train_model(config)->None:
   logger.addHandler(stdout_handler)
   
   os.chdir(current_dir_path)
+  push_to_git()
+  
   model=ConvNeuralNet(main_params["num_classes"],weight_decay=config["weight_decay"])
   model.fit()
   acc=model.evaluate()
