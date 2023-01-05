@@ -18,8 +18,12 @@ formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
 main_params = load_conf("configs/main.yml", include=True)
 grid_search_params = load_conf("configs/grid_search.yml")
-ray.init(configure_logging=False, log_to_driver=False)
+ray.init(configure_logging=False)
 os.system("export PYTHONPATH='$PWD/src/model'")
+
+current_dir_path=os.getcwd()
+while current_dir_path.split("/")[-1] != "histopathologic-cancer-detection":
+  current_dir_path=os.path.dirname(current_dir_path)
 
 def train_model(config)->None:
   """
@@ -32,11 +36,22 @@ def train_model(config)->None:
   Returns:
     None
   """
+  logger = logging.getLogger()
+  logger.setLevel(logging.INFO)
+  formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
-  current_dir_path=os.getcwd()
-  while current_dir_path.split("/")[-1] != "histopathologic-cancer-detection":
-    current_dir_path=os.path.dirname(current_dir_path)
+  stdout_handler = logging.StreamHandler(sys.stdout)
+  stdout_handler.setLevel(logging.DEBUG)
+  stdout_handler.setFormatter(formatter)
 
+  log_path = os.path.join(current_dir, "logs.log")
+  file_handler = logging.FileHandler(log_path)
+  file_handler.setLevel(logging.DEBUG)
+  file_handler.setFormatter(formatter)
+
+  logger.addHandler(file_handler)
+  logger.addHandler(stdout_handler)
+  
   os.chdir(current_dir_path)
   model=ConvNeuralNet(main_params["num_classes"],weight_decay=config["weight_decay"])
   model.fit()
@@ -47,8 +62,7 @@ if __name__=="__main__":
     main()
     analysis = tune.run(
   train_model, config={"weight_decay":tune.grid_search(grid_search_params["cnn"]["weight_decay_grid"]),
-  "learning_rate":tune.grid_search(grid_search_params["cnn"]["learning_rate_grid"]),
-  "betas_grid":tune.grid_search(grid_search_params["cnn"]["betas_grid"])})
+  "learning_rate":tune.grid_search(grid_search_params["cnn"]["learning_rate_grid"])})
     df = analysis.dataframe()
     df.to_csv("result_analysis_gridsearch.csv")
     best_result=np.round(df["accuracy"].max(),2)
