@@ -8,9 +8,11 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.getcwd(), "src/model"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
 sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
+sys.path.insert(0, os.path.join(os.getcwd(), "src/github"))
 from logs import *
 from confs import *
 from cnn import *
+from github import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -36,23 +38,13 @@ def train_model(config)->None:
   Returns:
     None
   """
-  logger = logging.getLogger()
-  logger.setLevel(logging.INFO)
-  formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
-  stdout_handler = logging.StreamHandler(sys.stdout)
-  stdout_handler.setLevel(logging.DEBUG)
-  stdout_handler.setFormatter(formatter)
-
-  log_path = os.path.join(current_dir, "logs.log")
-  file_handler = logging.FileHandler(log_path)
-  file_handler.setLevel(logging.DEBUG)
-  file_handler.setFormatter(formatter)
-
-  logger.addHandler(file_handler)
-  logger.addHandler(stdout_handler)
-  
   os.chdir(current_dir_path)
+  from src.github.github import push_to_git
+  from src.logs.logs import main
+  main()
+  push_to_git()
+  
   model=ConvNeuralNet(main_params["num_classes"],weight_decay=config["weight_decay"])
   model.fit()
   acc=model.evaluate()
