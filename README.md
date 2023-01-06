@@ -21,6 +21,7 @@ The all project was coded under PEP-8 (https://peps.python.org/pep-0008/) and fl
 
 * To install all necessary libraries, run the following code: ```pip install -r requirements.txt```
 
+* This project has its own package that is used. To get it, run the following command: ```python install setup.py```
 
 ## Screenshot 
 
