@@ -12,19 +12,12 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/model_save_load"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/metrics"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/early_stopping"))
-
-from confs import *
-from model_save_load import *
-from transform import transform
-from metrics import *
-from logs import *
-from early_stopping import *
+from Hispatologic_cancer_detection.configs.confs import *
+from Hispatologic_cancer_detection.model_save_load.model_save_load import *
+from Hispatologic_cancer_detection.transforms.transform import *
+from Hispatologic_cancer_detection.metrics.metrics import *
+from Hispatologic_cancer_detection.logs.logs import *
+from Hispatologic_cancer_detection.early_stopping.early_stopping import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

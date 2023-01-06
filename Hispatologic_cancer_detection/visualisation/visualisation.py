@@ -5,9 +5,7 @@ import numpy as np
 from PIL import Image
 import sys 
 
-sys.path.insert(0,"src/transforms")
-
-from transform import *
+from Hispatologic_cancer_detection.transforms.transform import *
 
 def image_visualisation(
     image="a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif", flag=-1, keep=True

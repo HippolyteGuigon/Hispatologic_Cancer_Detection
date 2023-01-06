@@ -1,8 +1,8 @@
 import unittest
 import os
-from src.visualisation.visualisation import *
-from src.transforms.transform import *
-from src.configs.confs import *
+from Hispatologic_cancer_detection.visualisation.visualisation import *
+from Hispatologic_cancer_detection.transforms.transform import *
+from Hispatologic_cancer_detection.configs.confs import *
 from PIL import Image
 
 main_params = load_conf("configs/main.yml", include=True)
@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
             None
         """
         try:
-            os.system("python src/model/model.py")
+            os.system("python Hispatologic_cancer_detection/model/model.py")
         except:
             self.fail("Error: There has been a problem in training the pipeline")
 

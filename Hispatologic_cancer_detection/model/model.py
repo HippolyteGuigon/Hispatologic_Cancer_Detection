@@ -1,11 +1,13 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/model"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/transforms"))
-from confs import *
-from cnn import *
+from Hispatologic_cancer_detection.configs.confs import *
+from Hispatologic_cancer_detection.model.cnn import *
+from Hispatologic_cancer_detection.model_save_load.model_save_load import *
+from Hispatologic_cancer_detection.transforms.transform import *
+from Hispatologic_cancer_detection.metrics.metrics import *
+from Hispatologic_cancer_detection.logs.logs import *
+from Hispatologic_cancer_detection.early_stopping.early_stopping import *
 
 main_params = load_conf("configs/main.yml", include=True)
 
