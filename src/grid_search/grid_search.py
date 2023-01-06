@@ -5,14 +5,12 @@ from ray import tune
 import sys
 import os
 import numpy as np
-sys.path.insert(0, os.path.join(os.getcwd(), "src/model"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/logs"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/github"))
-from logs import *
-from confs import *
-from cnn import *
-from github import *
+
+from src.configs.confs import *
+from src.logs.logs import *
+from src.github.github import *
+from src.model.cnn import *
+
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
