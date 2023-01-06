@@ -3,9 +3,10 @@ import os
 import random
 import numpy as np
 from PIL import Image
-import sys 
+import sys
 
 from Hispatologic_cancer_detection.transforms.transform import *
+
 
 def image_visualisation(
     image="a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif", flag=-1, keep=True
@@ -37,6 +38,7 @@ def image_visualisation(
     if keep:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+
 
 def visualize_transformation(image: str, keep=True) -> None:
     """

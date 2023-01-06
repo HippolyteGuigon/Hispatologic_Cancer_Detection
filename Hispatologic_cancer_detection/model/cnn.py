@@ -155,7 +155,9 @@ class ConvNeuralNet(nn.Module):
 
         # We use the pre-defined number of epochs to
         # determine how many iterations to train the network on
-        logging.warning(f"Fitting of the model has begun, the params are :{main_params.items()}")
+        logging.warning(
+            f"Fitting of the model has begun, the params are :{main_params.items()}"
+        )
         for epoch in range(num_epochs):
             # Load in the data in batches using the train_loader object
             for i, (images, labels) in enumerate(self.train_loader):
@@ -216,7 +218,7 @@ class ConvNeuralNet(nn.Module):
 
         save_model(self.model)
 
-    def evaluate(self)->float:
+    def evaluate(self) -> float:
         """
         The goal of this function is, once the model has
         been trained, to evaluate it by printing its
@@ -224,7 +226,7 @@ class ConvNeuralNet(nn.Module):
         Arguments:
             None
         Returns:
-            -accuracy: float: The accuracy of the model 
+            -accuracy: float: The accuracy of the model
             computed
         """
         self.model = load_model()
@@ -245,7 +247,7 @@ class ConvNeuralNet(nn.Module):
                 )
             )
 
-        accuracy=100 * correct / total
+        accuracy = 100 * correct / total
         return accuracy
 
     def predict(self, image_path: str) -> int:

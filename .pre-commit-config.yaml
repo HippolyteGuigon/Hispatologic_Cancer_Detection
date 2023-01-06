@@ -1,14 +1,13 @@
 repos:
 - repo: local
   hooks:
-    - id: update
-      name: updating_setup
+    - id: updating_setup
+      name: updating_setup.py
       entry: bash -c "python setup.py install"
       language: system
       types: [python]
       pass_filenames: false
 
-repos:
 - repo: local
   hooks:
     - id: update_requirements

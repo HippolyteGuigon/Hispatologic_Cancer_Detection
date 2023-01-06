@@ -21,39 +21,54 @@ grid_search_params = load_conf("configs/grid_search.yml")
 ray.init(configure_logging=False)
 os.system("export PYTHONPATH='$PWD/Hispatologic_cancer_detection/model'")
 
-current_dir_path=os.getcwd()
+current_dir_path = os.getcwd()
 while current_dir_path.split("/")[-1] != "histopathologic-cancer-detection":
-  current_dir_path=os.path.dirname(current_dir_path)
+    current_dir_path = os.path.dirname(current_dir_path)
 
-def train_model(config)->None:
-  """
-  The goal of this function is to launch the Grid Search 
-  on the CNN model 
 
-  Arguments:
-    None 
+def train_model(config) -> None:
+    """
+    The goal of this function is to launch the Grid Search
+    on the CNN model
 
-  Returns:
-    None
-  """
+    Arguments:
+      None
 
-  os.chdir(current_dir_path)
-  from Hispatologic_cancer_detection.github.github import push_to_git
-  from Hispatologic_cancer_detection.logs.logs import main
-  main()
-  push_to_git()
-  
-  model=ConvNeuralNet(main_params["num_classes"],weight_decay=config["weight_decay"])
-  model.fit()
-  acc=model.evaluate()
-  tune.report(accuracy=acc)
+    Returns:
+      None
+    """
 
-if __name__=="__main__":
+    os.chdir(current_dir_path)
+    from Hispatologic_cancer_detection.github.github import push_to_git
+    from Hispatologic_cancer_detection.logs.logs import main
+
+    main()
+    push_to_git()
+
+    model = ConvNeuralNet(
+        main_params["num_classes"], weight_decay=config["weight_decay"]
+    )
+    model.fit()
+    acc = model.evaluate()
+    tune.report(accuracy=acc)
+
+
+if __name__ == "__main__":
     main()
     analysis = tune.run(
-  train_model, config={"weight_decay":tune.grid_search(grid_search_params["cnn"]["weight_decay_grid"]),
-  "learning_rate":tune.grid_search(grid_search_params["cnn"]["learning_rate_grid"])})
+        train_model,
+        config={
+            "weight_decay": tune.grid_search(
+                grid_search_params["cnn"]["weight_decay_grid"]
+            ),
+            "learning_rate": tune.grid_search(
+                grid_search_params["cnn"]["learning_rate_grid"]
+            ),
+        },
+    )
     df = analysis.dataframe()
     df.to_csv("result_analysis_gridsearch.csv")
-    best_result=np.round(df["accuracy"].max(),2)
-    logging.warning(f"The Grid Search has just finished running ! The best result is {best_result}%")
+    best_result = np.round(df["accuracy"].max(), 2)
+    logging.warning(
+        f"The Grid Search has just finished running ! The best result is {best_result}%"
+    )
