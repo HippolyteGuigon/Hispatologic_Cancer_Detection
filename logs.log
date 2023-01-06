@@ -117,3 +117,22 @@
 2023-01-05 12:36:51,824 | INFO | Model parameters initialization has begun
 2023-01-05 12:36:53,428 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.7), ('resize', 32), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
 2023-01-05 12:37:02,290 | INFO | Model parameters initialization has begun
+2023-01-05 12:37:04,220 | INFO | Model parameters initialization has begun
+2023-01-05 12:37:06,634 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.7), ('resize', 32), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-05 12:37:13,896 | INFO | Model parameters initialization has begun
+2023-01-05 12:37:16,534 | INFO | Model parameters initialization has begun
+2023-01-05 12:37:18,520 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.7), ('resize', 32), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-05 12:37:28,726 | INFO | Model parameters initialization has begun
+2023-01-05 12:37:33,612 | INFO | Model parameters initialization has begun
+2023-01-05 12:37:37,161 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.1), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.7), ('resize', 32), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-05 13:20:58,077 | INFO | Epoch [1/10], Loss: 0.502. Accuracy of the network on the test set: 73.78 %
+2023-01-05 13:21:07,001 | INFO | Epoch [1/10], Loss: 0.528. Accuracy of the network on the test set: 73.627 %
+2023-01-05 13:21:20,860 | INFO | Epoch [1/10], Loss: 0.55. Accuracy of the network on the test set: 73.043 %
+2023-01-05 13:21:48,397 | INFO | Epoch [1/10], Loss: 0.625. Accuracy of the network on the test set: 74.056 %
+2023-01-05 13:57:09,402 | INFO | Epoch [2/10], Loss: 0.534. Accuracy of the network on the test set: 74.121 %
+2023-01-05 14:00:28,261 | INFO | Epoch [2/10], Loss: 0.517. Accuracy of the network on the test set: 74.183 %
+2023-01-05 14:03:43,906 | INFO | Epoch [2/10], Loss: 0.557. Accuracy of the network on the test set: 73.329 %
+2023-01-05 14:10:34,099 | INFO | Epoch [2/10], Loss: 0.625. Accuracy of the network on the test set: 74.326 %
+2023-01-05 21:40:57,877 | INFO | Epoch [3/10], Loss: 0.508. Accuracy of the network on the test set: 74.293 %
+2023-01-06 05:09:44,677 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+2023-01-06 05:51:44,046 | WARNING | Stop signal received (e.g. via SIGINT/Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C (or send SIGINT/SIGKILL/SIGTERM) to skip. 
