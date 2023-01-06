@@ -1,8 +1,8 @@
-from src.logs.logs import *
-from src.configs.confs import *
+from Hispatologic_cancer_detection.logs.logs import *
+from Hispatologic_cancer_detection.configs.confs import *
 import argparse
-from src.model.model import *
-from src.model_save_load.model_save_load import *
+from Hispatologic_cancer_detection.model.model import *
+from Hispatologic_cancer_detection.model_save_load.model_save_load import *
 from tqdm import tqdm
 
 tqdm.pandas()

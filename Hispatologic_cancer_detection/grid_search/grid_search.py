@@ -6,10 +6,10 @@ import sys
 import os
 import numpy as np
 
-from src.configs.confs import *
-from src.logs.logs import *
-from src.github.github import *
-from src.model.cnn import *
+from Hispatologic_cancer_detection.configs.confs import *
+from Hispatologic_cancer_detection.logs.logs import *
+from Hispatologic_cancer_detection.github.github import *
+from Hispatologic_cancer_detection.model.cnn import *
 
 
 logger = logging.getLogger()
@@ -19,7 +19,7 @@ formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 main_params = load_conf("configs/main.yml", include=True)
 grid_search_params = load_conf("configs/grid_search.yml")
 ray.init(configure_logging=False)
-os.system("export PYTHONPATH='$PWD/src/model'")
+os.system("export PYTHONPATH='$PWD/Hispatologic_cancer_detection/model'")
 
 current_dir_path=os.getcwd()
 while current_dir_path.split("/")[-1] != "histopathologic-cancer-detection":
@@ -38,8 +38,8 @@ def train_model(config)->None:
   """
 
   os.chdir(current_dir_path)
-  from src.github.github import push_to_git
-  from src.logs.logs import main
+  from Hispatologic_cancer_detection.github.github import push_to_git
+  from Hispatologic_cancer_detection.logs.logs import main
   main()
   push_to_git()
   

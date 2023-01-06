@@ -2,10 +2,8 @@ import torchvision.transforms as transforms
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.getcwd(), "src/configs"))
-sys.path.insert(0, os.path.join(os.getcwd(), "src/visualisation"))
-from confs import *
-from visualisation import *
+from Hispatologic_cancer_detection.visualisation.visualisation import *
+from Hispatologic_cancer_detection.configs.confs import *
 
 main_params = load_conf("configs/main.yml", include=True)
 
