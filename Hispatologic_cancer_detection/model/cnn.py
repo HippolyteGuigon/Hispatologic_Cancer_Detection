@@ -304,7 +304,7 @@ class ConvNeuralNet(nn.Module):
 
         return y_true, y_pred
 
-    def global_predict(self, df=pd.read_csv("train_labels.csv")) -> np.array:
+    def global_predict(self) -> np.array:
         """
         The goal of this function is, given a global
         DataFrame, to predict the labels for each image
@@ -317,8 +317,7 @@ class ConvNeuralNet(nn.Module):
             labels
             -y_true: np.array: The array with the real labels
         """
-
-        df = df.loc[:500, :]
+        df=pd.read_csv("train_labels.csv")
         df["id"] = df["id"].apply(lambda x: x + str(".tif"))
 
         def predict_label(image_name: str) -> str:
