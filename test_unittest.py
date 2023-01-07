@@ -4,7 +4,7 @@ import random
 from Hispatologic_cancer_detection.visualisation.visualisation import *
 from Hispatologic_cancer_detection.transforms.transform import *
 from Hispatologic_cancer_detection.configs.confs import *
-from Hispatologic_cancer_detection.model.model import *
+from Hispatologic_cancer_detection.model.model import ConvNeuralNet
 from PIL import Image
 
 main_params = load_conf("configs/main.yml", include=True)
