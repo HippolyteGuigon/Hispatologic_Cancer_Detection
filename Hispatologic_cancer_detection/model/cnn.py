@@ -264,7 +264,7 @@ class ConvNeuralNet(nn.Module):
         if load_model:
             model = load_model()
         else:
-            self.model.fit()
+            self.fit()
 
         transformer = transform()
         image = Image.open(image_path)
