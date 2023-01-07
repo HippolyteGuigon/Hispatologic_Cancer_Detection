@@ -250,7 +250,7 @@ class ConvNeuralNet(nn.Module):
         accuracy = 100 * correct / total
         return accuracy
 
-    def predict(self, image_path: str) -> int:
+    def predict(self, image_path: str, load_model=True) -> int:
         """
         The goal of this function is, after having received an image,
         to predict the associated label
@@ -261,7 +261,11 @@ class ConvNeuralNet(nn.Module):
             -label: int: The predicted label of the image
         """
 
-        model = load_model()
+        if load_model:
+            model = load_model()
+        else:
+            self.model.fit()
+            
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
