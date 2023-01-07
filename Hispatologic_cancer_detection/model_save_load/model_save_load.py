@@ -3,7 +3,9 @@
 import torch
 
 
-def save_model(model, path="Hispatologic_cancer_detection/model_save_load/model_save.pt") -> None:
+def save_model(
+    model, path="Hispatologic_cancer_detection/model_save_load/model_save.pt"
+) -> None:
     """
     The goal of this function is to save the model once
     it has been trained.
@@ -18,7 +20,9 @@ def save_model(model, path="Hispatologic_cancer_detection/model_save_load/model_
     torch.save(model, path)
 
 
-def load_model(path="Hispatologic_cancer_detection/model_save_load/model_save.pt") -> torch:
+def load_model(
+    path="Hispatologic_cancer_detection/model_save_load/model_save.pt",
+) -> torch:
     """
     The goal of this function is to load the saved model
 

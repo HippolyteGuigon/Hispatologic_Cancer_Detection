@@ -1,14 +1,15 @@
 import time
 import os
 
-def push_to_git()->None:
+
+def push_to_git() -> None:
     """
     The goal of this function is to push automatically
     the files to github
-    
+
     Arguments:
-        None 
-        
+        None
+
     Returns:
         None
     """
@@ -22,5 +23,6 @@ def push_to_git()->None:
     os.system("git push")
     time.sleep(10)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     push_to_git()

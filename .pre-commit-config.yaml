@@ -1,6 +1,15 @@
 repos:
 - repo: local
   hooks:
+    - id: updating_setup
+      name: updating_setup.py
+      entry: bash -c "python setup.py install"
+      language: system
+      types: [python]
+      pass_filenames: false
+
+- repo: local
+  hooks:
     - id: update_requirements
       name: updating_requirements.txt
       entry: bash -c "python3 -m  pipreqs.pipreqs . --force"
@@ -25,11 +34,13 @@ repos:
       language: system
       types: [python]
       pass_filenames: false
+
 -   repo: https://github.com/psf/black
     rev: stable
     hooks:
     - id: black
       language_version: python3.9
+
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:

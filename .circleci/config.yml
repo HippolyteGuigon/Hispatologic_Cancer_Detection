@@ -1,0 +1,32 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.8"
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip install --upgrade pip  
+            pip install -r requirements.txt 
+            python test_unittest.py
+  test:
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.8"
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip install --upgrade pip
+            pip install -r requirements.txt 
+            python test_unittest.py
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
