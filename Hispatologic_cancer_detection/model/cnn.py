@@ -266,8 +266,11 @@ class ConvNeuralNet(nn.Module):
         else:
             self.fit()
             self.save()
-            model=load_model()
-            logging.info("Model has been loaded for prediction")
+            logging.info("Model has been saved for prediction")
+            try:
+                model=load_model()
+            except:
+                logging.warning("Failed to load model")
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
