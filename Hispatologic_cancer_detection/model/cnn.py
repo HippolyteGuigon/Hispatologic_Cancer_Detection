@@ -271,7 +271,7 @@ class ConvNeuralNet(nn.Module):
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
-        input = input.view(1, 3, 32, 32)
+        input = input.view(1, 3, 64, 64)
         if load_model:
             output = model(input)
         else:
