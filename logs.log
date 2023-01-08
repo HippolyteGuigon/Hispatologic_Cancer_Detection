@@ -159,3 +159,81 @@
 2023-01-08 02:19:16,212 | INFO | Model parameters initialization has begun
 2023-01-08 02:19:18,011 | INFO | Model parameters initialization has begun
 2023-01-08 02:19:20,490 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.98), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-08 02:19:47,900 | INFO | Model parameters initialization has begun
+2023-01-08 02:19:49,612 | INFO | Model parameters initialization has begun
+2023-01-08 02:19:51,222 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.98), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-08 02:19:53,303 | ERROR | Trial train_model_42655_00001: Error processing event.
+ray.exceptions.RayTaskError(RuntimeError): [36mray::ImplicitFunc.train()[39m (pid=23334, ip=127.0.0.1, repr=train_model)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 367, in train
+    raise skipped from exception_cause(skipped)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/function_trainable.py", line 335, in entrypoint
+    return self._trainable_func(
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/function_trainable.py", line 652, in _trainable_func
+    output = fn()
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/grid_search/grid_search.py", line 51, in train_model
+    model.fit()
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/model/cnn.py", line 168, in fit
+    outputs = self.model(images)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/model/cnn.py", line 133, in forward
+    x = self.fc(x)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/container.py", line 204, in forward
+    input = module(input)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (100x4608 and 512x256)
+2023-01-08 02:19:53,494 | ERROR | Trial train_model_42655_00000: Error processing event.
+ray.exceptions.RayTaskError(RuntimeError): [36mray::ImplicitFunc.train()[39m (pid=23316, ip=127.0.0.1, repr=train_model)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 367, in train
+    raise skipped from exception_cause(skipped)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/function_trainable.py", line 335, in entrypoint
+    return self._trainable_func(
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/function_trainable.py", line 652, in _trainable_func
+    output = fn()
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/grid_search/grid_search.py", line 51, in train_model
+    model.fit()
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/model/cnn.py", line 168, in fit
+    outputs = self.model(images)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/model/cnn.py", line 133, in forward
+    x = self.fc(x)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/container.py", line 204, in forward
+    input = module(input)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (100x4608 and 512x256)
+2023-01-08 02:19:54,615 | ERROR | Trial train_model_42655_00002: Error processing event.
+ray.exceptions.RayTaskError(RuntimeError): [36mray::ImplicitFunc.train()[39m (pid=23422, ip=127.0.0.1, repr=train_model)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 367, in train
+    raise skipped from exception_cause(skipped)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/function_trainable.py", line 335, in entrypoint
+    return self._trainable_func(
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/ray/tune/trainable/function_trainable.py", line 652, in _trainable_func
+    output = fn()
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/grid_search/grid_search.py", line 51, in train_model
+    model.fit()
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/model/cnn.py", line 168, in fit
+    outputs = self.model(images)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/Desktop/histopathologic-cancer-detection/Hispatologic_cancer_detection/model/cnn.py", line 133, in forward
+    x = self.fc(x)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/container.py", line 204, in forward
+    input = module(input)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (100x4608 and 512x256)
