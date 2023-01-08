@@ -265,12 +265,15 @@ class ConvNeuralNet(nn.Module):
             model = load_model()
         else:
             self.fit()
-            self.save()
-            logging.info("Model has been saved for prediction")
-            try:
-                model=load_model()
-            except:
-                logging.warning("Failed to load model")
+            logging.info("Model has been fitted for prediction")
+            transformer = transform()
+            image = Image.open(image_path)
+            input = transformer(image)
+            input = input.view(1, 3, 32, 32)
+            output = self.model(input)
+            _, predicted = torch.max(output.data, 1)
+            return predicted
+            
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
