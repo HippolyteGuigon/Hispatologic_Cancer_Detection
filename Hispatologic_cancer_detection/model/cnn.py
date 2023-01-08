@@ -277,7 +277,8 @@ class ConvNeuralNet(nn.Module):
         else:
             output = self.model(input)
         _, predicted = torch.max(output.data, 1)
-        predicted=predicted.item(0)
+        predicted=predicted.item()
+        
         return predicted
 
     def get_pred(self) -> np.array:
