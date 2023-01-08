@@ -266,20 +266,18 @@ class ConvNeuralNet(nn.Module):
         else:
             self.fit()
             logging.info("Model has been fitted for prediction")
-            transformer = transform()
-            image = Image.open(image_path)
-            input = transformer(image)
-            input = input.view(1, 3, 32, 32)
-            output = self.model(input)
-            _, predicted = torch.max(output.data, 1)
-            return predicted
-            
+
+
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
         input = input.view(1, 3, 32, 32)
-        output = model(input)
+        if load_model:
+            output = model(input)
+        else:
+            output = self.model(input)
         _, predicted = torch.max(output.data, 1)
+        predicted=predicted.item(0)
         return predicted
 
     def get_pred(self) -> np.array:
