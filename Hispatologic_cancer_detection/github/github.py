@@ -48,4 +48,4 @@ def continuous_push_to_git(seconds_to_wait=300, number_iteration=300)->None:
 
 
 if __name__ == "__main__":
-    push_to_git()
+    continuous_push_to_git()
