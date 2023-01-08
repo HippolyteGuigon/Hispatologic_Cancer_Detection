@@ -58,7 +58,7 @@ def main():
         test_set, batch_size=batch_size, shuffle=False
     )
 
-    model=MyVit((1,28,28),n_patches=7,n_blocks=2,hidden_d=8,n_heads=2,out_d=2).to(device)
+    model=MyVit((1,96,96),n_patches=8,n_blocks=2,hidden_d=8,n_heads=2,out_d=2).to(device)
     criterion = nn.CrossEntropyLoss()
 
     # Set optimizer with optimizer
