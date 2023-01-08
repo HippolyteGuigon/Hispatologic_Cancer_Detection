@@ -250,7 +250,7 @@ class ConvNeuralNet(nn.Module):
         accuracy = 100 * correct / total
         return accuracy
 
-    def predict(self, image_path: str) -> int:
+    def predict(self, image_path: str, load_model=True) -> int:
         """
         The goal of this function is, after having received an image,
         to predict the associated label
@@ -261,13 +261,24 @@ class ConvNeuralNet(nn.Module):
             -label: int: The predicted label of the image
         """
 
-        model = load_model()
+        if load_model:
+            model = load_model()
+        else:
+            self.fit()
+            logging.info("Model has been fitted for prediction")
+
+
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
         input = input.view(1, 3, 32, 32)
-        output = model(input)
+        if load_model:
+            output = model(input)
+        else:
+            output = self.model(input)
         _, predicted = torch.max(output.data, 1)
+        predicted=predicted.item()
+        
         return predicted
 
     def get_pred(self) -> np.array:
@@ -300,7 +311,7 @@ class ConvNeuralNet(nn.Module):
 
         return y_true, y_pred
 
-    def global_predict(self, df=pd.read_csv("train_labels.csv")) -> np.array:
+    def global_predict(self) -> np.array:
         """
         The goal of this function is, given a global
         DataFrame, to predict the labels for each image
@@ -313,8 +324,7 @@ class ConvNeuralNet(nn.Module):
             labels
             -y_true: np.array: The array with the real labels
         """
-
-        df = df.loc[:500, :]
+        df=pd.read_csv("train_labels.csv")
         df["id"] = df["id"].apply(lambda x: x + str(".tif"))
 
         def predict_label(image_name: str) -> str:
@@ -341,4 +351,3 @@ class ConvNeuralNet(nn.Module):
 
 if __name__ == "__main__":
     model = ConvNeuralNet(num_classes)
-    model.get_pred()

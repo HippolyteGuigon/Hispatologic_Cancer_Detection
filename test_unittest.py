@@ -1,8 +1,10 @@
 import unittest
 import os
+import random
 from Hispatologic_cancer_detection.visualisation.visualisation import *
 from Hispatologic_cancer_detection.transforms.transform import *
 from Hispatologic_cancer_detection.configs.confs import *
+from Hispatologic_cancer_detection.model.model import ConvNeuralNet
 from PIL import Image
 
 main_params = load_conf("configs/main.yml", include=True)
@@ -65,6 +67,34 @@ class Test(unittest.TestCase):
         except:
             self.fail("Error, failed to achieve the main pipeline ")
 
+    def test_prediction(self)->int:
+        """
+        The goal of this function is to check if the 
+        prediction returned by the model is coherent,
+        that is that it returns 0 or 1
+
+        Arguments:
+            None
+        
+        Returns:
+            None
+        """
+
+        all_images=os.listdir("train/0. non_cancerous")+os.listdir("train/1. cancerous")
+        image_chosen=random.choice(all_images)
+
+        if os.path.exists(os.path.join("train/1. cancerous", image_chosen)):
+            path = os.path.join("train/1. cancerous", image_chosen)
+        elif os.path.exists(os.path.join("train/0. non_cancerous", image_chosen)):
+            path = os.path.join("train/0. non_cancerous", image_chosen)
+        model=ConvNeuralNet(main_params["num_classes"])
+        prediction=model.predict(image_path=path,load_model=False)
+
+        if prediction==0 or prediction==1:
+            message_predict="Succes"
+        else:
+            message_predict="Failed"
+        self.assertEqual(message_predict,"Succes") 
 
 if __name__ == "__main__":
     unittest.main()
