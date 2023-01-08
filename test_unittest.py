@@ -90,11 +90,9 @@ class Test(unittest.TestCase):
         model=ConvNeuralNet(main_params["num_classes"])
         prediction=model.predict(image_path=path,load_model=False)
 
-        if prediction==0 or prediction==1:
-            message_predict="Succes"
-        else:
-            message_predict="Failed"
-        self.assertEqual(message_predict,"Succes") 
+        coherent_prediction=(prediction==0 or prediction==1)
+
+        self.assertTrue(coherent_prediction)
 
 if __name__ == "__main__":
     unittest.main()
