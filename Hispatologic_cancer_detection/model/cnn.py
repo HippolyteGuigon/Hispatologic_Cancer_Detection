@@ -109,7 +109,7 @@ class ConvNeuralNet(nn.Module):
 
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(512, 256),
+            nn.Linear(4608, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
@@ -278,7 +278,7 @@ class ConvNeuralNet(nn.Module):
             output = self.model(input)
         _, predicted = torch.max(output.data, 1)
         predicted=predicted.item()
-        
+
         return predicted
 
     def get_pred(self) -> np.array:
