@@ -174,3 +174,6 @@
 2023-01-08 02:25:43,062 | INFO | Model parameters initialization has begun
 2023-01-08 02:25:45,970 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.1), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.98), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
 2023-01-08 04:56:37,524 | INFO | Epoch [1/10], Loss: 0.571. Accuracy of the network on the test set: 74.074 %
+2023-01-08 04:59:08,565 | INFO | Epoch [1/10], Loss: 0.539. Accuracy of the network on the test set: 73.052 %
+2023-01-08 04:59:59,085 | INFO | Epoch [1/10], Loss: 0.68. Accuracy of the network on the test set: 75.392 %
+2023-01-08 05:01:43,318 | INFO | Epoch [1/10], Loss: 0.65. Accuracy of the network on the test set: 73.551 %
