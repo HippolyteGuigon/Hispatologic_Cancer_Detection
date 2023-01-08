@@ -80,13 +80,13 @@ class Test(unittest.TestCase):
             None
         """
 
-        all_images=os.listdir("train/0. non_cancerous")+os.listdir("train/1. cancerous")
+        all_images=os.listdir(main_params["non_cancerous_image_path"])+os.listdir(main_params["cancerous_image_path"])
         image_chosen=random.choice(all_images)
 
-        if os.path.exists(os.path.join("train/1. cancerous", image_chosen)):
-            path = os.path.join("train/1. cancerous", image_chosen)
-        elif os.path.exists(os.path.join("train/0. non_cancerous", image_chosen)):
-            path = os.path.join("train/0. non_cancerous", image_chosen)
+        if os.path.exists(os.path.join(main_params["cancerous_image_path"], image_chosen)):
+            path = os.path.join(main_params["cancerous_image_path"], image_chosen)
+        elif os.path.exists(os.path.join(main_params["non_cancerous_image_path"], image_chosen)):
+            path = os.path.join(main_params["non_cancerous_image_path"], image_chosen)
         model=ConvNeuralNet(main_params["num_classes"])
         prediction=model.predict(image_path=path,load_model=False)
 

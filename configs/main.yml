@@ -1,5 +1,7 @@
 model_chosen: cnn
 num_classes: 2
+cancerous_image_path: "train/1. cancerous"
+non_cancerous_image_path: "train/0. non_cancerous"
 cnn_params: !include cnn_params.yml
 pipeline_params: !include pipeline_params.yml
 grid_search_params: !include grid_search.yml
