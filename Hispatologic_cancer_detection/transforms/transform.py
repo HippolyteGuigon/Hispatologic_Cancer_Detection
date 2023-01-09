@@ -26,7 +26,6 @@ def transform(size=main_params["pipeline_params"]["resize"]):
             transforms.Resize(size),
             transforms.RandomHorizontalFlip(),
             transforms.RandomRotation(25),
-            transforms.Grayscale(num_output_channels=1),
             transforms.ToTensor(),
         ]
     )
