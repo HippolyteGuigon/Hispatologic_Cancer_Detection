@@ -357,3 +357,6 @@ ray.exceptions.RayTaskError(RuntimeError): [36mray::ImplicitFunc.train()[39m (
   File "/Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 459, in _conv_forward
     return F.conv2d(input, weight, bias, self.stride,
 RuntimeError: Given groups=1, weight of size [32, 3, 3, 3], expected input[100, 1, 64, 64] to have 3 channels, but got 1 channels instead
+2023-01-09 01:03:06,007 | INFO | Model parameters initialization has begun
+2023-01-09 01:03:07,706 | INFO | Model parameters initialization has begun
+2023-01-09 01:03:09,184 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.99), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
