@@ -198,3 +198,6 @@
 2023-01-09 04:21:19,788 | WARNING | The `on_step_begin` operation took 0.659 s, which may be a performance bottleneck.
 2023-01-09 04:24:58,024 | WARNING | The `on_step_begin` operation took 1.206 s, which may be a performance bottleneck.
 2023-01-09 04:27:49,442 | WARNING | The `on_step_begin` operation took 0.738 s, which may be a performance bottleneck.
+2023-01-09 05:48:50,318 | WARNING | The `on_step_begin` operation took 0.876 s, which may be a performance bottleneck.
+2023-01-09 05:52:13,625 | WARNING | The `on_step_begin` operation took 0.584 s, which may be a performance bottleneck.
+2023-01-09 05:54:37,349 | WARNING | The `on_step_begin` operation took 3.489 s, which may be a performance bottleneck.
