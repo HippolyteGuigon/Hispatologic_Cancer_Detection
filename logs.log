@@ -193,3 +193,4 @@
 2023-01-09 01:03:46,146 | INFO | Model parameters initialization has begun
 2023-01-09 01:03:50,767 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.1), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.99), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
 2023-01-09 03:00:48,281 | WARNING | The `on_step_begin` operation took 2.581 s, which may be a performance bottleneck.
+2023-01-09 04:12:59,314 | WARNING | The `on_step_end` operation took 0.630 s, which may be a performance bottleneck.
