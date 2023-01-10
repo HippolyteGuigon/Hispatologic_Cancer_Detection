@@ -234,3 +234,4 @@
 2023-01-10 03:24:41,150 | INFO | Epoch [1/10], Loss: 0.45. Accuracy of the network on the test set: 79.292 %
 2023-01-10 05:52:39,587 | INFO | Epoch [2/10], Loss: 0.428. Accuracy of the network on the test set: 82.925 %
 2023-01-10 11:39:03,713 | INFO | Epoch [3/10], Loss: 0.44. Accuracy of the network on the test set: 84.015 %
+2023-01-10 18:17:28,559 | INFO | Epoch [4/10], Loss: 0.428. Accuracy of the network on the test set: 83.651 %
