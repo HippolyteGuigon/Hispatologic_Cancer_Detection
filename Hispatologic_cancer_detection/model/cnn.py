@@ -273,7 +273,7 @@ class ConvNeuralNet(nn.Module):
         image = Image.open(image_path)
         input = transformer(image)
         input = input.view(1, 3, main_params["resize"], main_params["resize"])
-        if load_model:
+        if loading_model:
             output = model(input)
         else:
             output = self.model(input)
