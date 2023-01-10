@@ -40,7 +40,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Use transforms.compose method to reformat images for modeling,
 # and save to variable all_transforms for later use
 all_transforms = transform()
-early_stopping_model = EarlyStopper(patience=3)
+early_stopping_model = EarlyStopper(patience=10)
 
 # Creating a CNN class
 class ConvNeuralNet(nn.Module):
@@ -93,6 +93,7 @@ class ConvNeuralNet(nn.Module):
             nn.Dropout(dropout),
             nn.MaxPool2d(2, 2),
         )
+
         self.conv2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=(1, 1)),
             nn.ReLU(),
@@ -109,7 +110,7 @@ class ConvNeuralNet(nn.Module):
 
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(4608, 256),
+            nn.Linear(12800, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
@@ -250,7 +251,7 @@ class ConvNeuralNet(nn.Module):
         accuracy = 100 * correct / total
         return accuracy
 
-    def predict(self, image_path: str, load_model=True) -> int:
+    def predict(self, image_path: str, loading_model=True) -> int:
         """
         The goal of this function is, after having received an image,
         to predict the associated label
@@ -261,7 +262,7 @@ class ConvNeuralNet(nn.Module):
             -label: int: The predicted label of the image
         """
 
-        if load_model:
+        if loading_model:
             model = load_model()
         else:
             self.fit()

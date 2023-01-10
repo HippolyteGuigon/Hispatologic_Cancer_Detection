@@ -2,6 +2,7 @@ from Hispatologic_cancer_detection.logs.logs import *
 from Hispatologic_cancer_detection.configs.confs import *
 import argparse
 from Hispatologic_cancer_detection.model.model import *
+from Hispatologic_cancer_detection.model.cnn import *
 from Hispatologic_cancer_detection.model_save_load.model_save_load import *
 from tqdm import tqdm
 
@@ -57,7 +58,6 @@ def launch_pipeline() -> None:
     Returns:
         None
     """
-
     chosen_model = main_params["model_chosen"]
     logging.info(f"You launched the model iteration {args.Name}")
     logging.info(f"You have chosen the model {chosen_model} {args.Name}")

@@ -1,7 +1,7 @@
 # The goal of this file is to save the model and load it for further utilisation
 
 import torch
-
+from Hispatologic_cancer_detection.model.cnn import *
 
 def save_model(
     model, path="Hispatologic_cancer_detection/model_save_load/model_save.pt"

@@ -205,3 +205,29 @@
 2023-01-09 06:39:28,677 | WARNING | The `on_step_begin` operation took 2.765 s, which may be a performance bottleneck.
 2023-01-09 06:41:50,032 | WARNING | The `on_step_begin` operation took 0.536 s, which may be a performance bottleneck.
 2023-01-09 06:52:04,776 | WARNING | The `on_step_begin` operation took 24.677 s, which may be a performance bottleneck.
+2023-01-09 07:43:05,260 | INFO | EGSF
+2023-01-09 07:43:40,717 | INFO | EGSF
+2023-01-09 07:45:38,343 | INFO | EGSF2
+2023-01-09 07:47:09,202 | INFO | You launched the model iteration Hippolyte
+2023-01-09 07:47:09,202 | INFO | You have chosen the model cnn Hippolyte
+2023-01-09 07:47:09,202 | INFO | Model parameters initialization has begun
+2023-01-09 07:47:10,537 | INFO | Model parameters initialization has begun
+2023-01-09 07:47:11,708 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.995), ('resize', 96), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-09 07:51:43,668 | INFO | You launched the model iteration Hippolyte
+2023-01-09 07:51:43,669 | INFO | You have chosen the model cnn Hippolyte
+2023-01-09 07:51:43,669 | INFO | Model parameters initialization has begun
+2023-01-09 07:51:45,034 | INFO | Model parameters initialization has begun
+2023-01-09 07:51:46,288 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.995), ('resize', 96), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
+2023-01-09 09:50:27,979 | INFO | Epoch [1/10], Loss: 0.551. Accuracy of the network on the test set: 78.02 %
+2023-01-09 12:59:58,835 | INFO | Epoch [2/10], Loss: 0.478. Accuracy of the network on the test set: 79.837 %
+2023-01-09 17:01:52,930 | INFO | Epoch [3/10], Loss: 0.464. Accuracy of the network on the test set: 81.108 %
+2023-01-09 22:23:48,369 | INFO | Epoch [4/10], Loss: 0.456. Accuracy of the network on the test set: 82.289 %
+2023-01-09 22:23:48,377 | WARNING | The model training has stopped at epoch 4 due to the early stopping criterion
+2023-01-09 22:25:33,432 | INFO | Accuracy of the network on the 12 test images: 81.92552225249773 %
+2023-01-09 22:25:36,222 | WARNING | The model has finished training Hippolyte
+2023-01-09 22:25:38,350 | INFO | Model parameters initialization has begun
+2023-01-10 01:36:08,118 | INFO | You launched the model iteration Hippolyte
+2023-01-10 01:36:08,119 | INFO | You have chosen the model cnn Hippolyte
+2023-01-10 01:36:08,119 | INFO | Model parameters initialization has begun
+2023-01-10 01:36:09,662 | INFO | Model parameters initialization has begun
+2023-01-10 01:36:11,229 | WARNING | Fitting of the model has begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 100), ('learning_rate', 0.0001), ('num_epochs', 10), ('dropout', 0.25), ('weight_decay', 0.005), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.995), ('resize', 96), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None)])
