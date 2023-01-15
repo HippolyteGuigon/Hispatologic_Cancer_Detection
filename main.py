@@ -80,7 +80,7 @@ def predict_test_file() -> None:
     df_test["id"] = df_test["id"].apply(lambda x: x + str(".tif"))
     predictor = ConvNeuralNet(2)
     df_test["label"] = df_test["id"].progress_apply(
-        lambda image: predictor.predict("test/" + image).item()
+        lambda image: predictor.predict("test/" + image)
     )
     df_test["id"] = df_test["id"].apply(lambda x: x.replace(".tif", ""))
     df_test.to_csv("sample_submission.csv", index=False)

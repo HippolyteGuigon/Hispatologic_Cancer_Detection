@@ -1,235 +1,293 @@
-import torch
-import torch.nn as nn
-import torchvision
-from torch.utils.data import random_split
-import sys
-import os
-from PIL import Image
-from tqdm import tqdm
-import pandas as pd
 import numpy as np
-import warnings
-
-warnings.filterwarnings("ignore")
-
-from Hispatologic_cancer_detection.configs.confs import *
-from Hispatologic_cancer_detection.model_save_load.model_save_load import *
-from Hispatologic_cancer_detection.transforms.transform import *
-from Hispatologic_cancer_detection.metrics.metrics import *
+import pandas as pd
+import tensorflow as tf
+import tensorflow.keras.layers as L
+import tensorflow_addons as tfa
+import glob, random, os, warnings
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, classification_report
+import seaborn as sns
 from Hispatologic_cancer_detection.logs.logs import *
-from Hispatologic_cancer_detection.early_stopping.early_stopping import *
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
-tqdm.pandas()
+main()
 
-main_params = load_conf("configs/main.yml", include=True)
-main_params = clean_params(main_params)
-batch_size = main_params["batch_size"]
-num_classes = main_params["num_classes"]
-learning_rate = main_params["learning_rate"]
-num_epochs = main_params["num_epochs"]
-dropout = main_params["dropout"]
-weight_decay = main_params["weight_decay"]
-early_stopping = main_params["early_stopping"]
+print('TensorFlow Version ' + tf.__version__)
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+def seed_everything(seed = 0):
+    random.seed(seed)
+    np.random.seed(seed)
+    tf.random.set_seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    os.environ['TF_DETERMINISTIC_OPS'] = '1'
 
-all_transforms = transform()
+seed_everything()
+warnings.filterwarnings('ignore')
 
-def main():
+image_size = 32
+batch_size = 32
+n_classes = 2
 
-    data = torchvision.datasets.ImageFolder(
-        root="train", transform=all_transforms
-    )
+df_train=pd.read_csv("train_labels.csv", dtype = 'str')
+logging.info("Loading data...")
 
-    p = main_params["train_size"]
-    train_set, test_set = random_split(
-        data,
-        (int(p * len(data)), len(data) - int(p * len(data))),
-    )
-    train_loader = torch.utils.data.DataLoader(
-        train_set, batch_size=batch_size, shuffle=False
-    )
+image_generator = tf.keras.preprocessing.image.ImageDataGenerator(validation_split=0.2)
+train_data_gen = image_generator.flow_from_directory(directory='train',
+                                                     subset='training')
 
-    test_loader = torch.utils.data.DataLoader(
-        test_set, batch_size=batch_size, shuffle=False
-    )
 
-    model=MyVit((1,96,96),n_patches=8,n_blocks=2,hidden_d=8,n_heads=2,out_d=2).to(device)
-    criterion = nn.CrossEntropyLoss()
 
-    # Set optimizer with optimizer
-    optimizer = torch.optim.Adam(
-        model.parameters(), lr=learning_rate, weight_decay=weight_decay
-    )
+val_data_gen = image_generator.flow_from_directory(directory='train',
+                                                   subset='validation')
 
-    # We use the pre-defined number of epochs to
-    # determine how many iterations to train the network on
-    logging.warning(
-        "Fitting of the model has begun"
-    )
-    for epoch in range(num_epochs):
-        # Load in the data in batches using the train_loader object
-        for i, (images, labels) in enumerate(train_loader):
-            # Move tensors to the configured device
-            images = images.to(device)
-            labels = labels.to(device)
-            # Forward pass
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            # Backward and optimize
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+df_label=pd.read_csv("train_labels.csv")
+df_train=pd.DataFrame(train_data_gen.filenames, columns = ['image_path'])
+df_train["image_name"]=df_train.image_path.apply(lambda x:x.replace(".tif","").replace("0. non_cancerous/","").replace("1. cancerous/",""))
+df_test=pd.DataFrame(val_data_gen.filenames, columns = ['image_path'])
+df_test["image_name"]=df_test.image_path.apply(lambda x:x.replace(".tif","").replace("0. non_cancerous/","").replace("1. cancerous/",""))
 
-        with torch.no_grad():
-            correct_test = 0
-            total_test = 0
-            for images, labels in test_loader:
-                images = images.to(device)
-                labels = labels.to(device)
-                outputs = model(images)
-                test_loss = criterion(outputs, labels)
-                _, predicted = torch.max(outputs.data, 1)
-                total_test += labels.size(0)
-                correct_test += (predicted == labels).sum().item()
+df_train=df_train.merge(df_label,left_on="image_name",right_on="id")
+df_test=df_test.merge(df_label,left_on="image_name",right_on="id")
+df_train=df_train[["image_path","label"]]
+df_test=df_test[["image_path","label"]]
+df_train.label, df_test.label = df_train.label.astype(str), df_test.label.astype(str)
 
-            logging.info(
-                f"Epoch [{epoch + 1}/{num_epochs}], Loss: {np.round(loss.item(),3)}. Accuracy of the network on the test set: {np.round(100 * correct_test / total_test,3)} %"
-            )
+logging.info("Data Loaded !")
+classes = {0 : "Non cancerous",
+           1 : "Cancerous"}
 
-def patchify(images,n_patches):
-    n,c,h,w=images.shape
-    assert h==w, "Patchify method is implemented for square images only"
+def data_augment(image):
+    p_spatial = tf.random.uniform([], 0, 1.0, dtype = tf.float32)
+    p_rotate = tf.random.uniform([], 0, 1.0, dtype = tf.float32)
+ 
+    image = tf.image.random_flip_left_right(image)
+    image = tf.image.random_flip_up_down(image)
+    
+    if p_spatial > .75:
+        image = tf.image.transpose(image)
+        
+    # Rotates
+    if p_rotate > .75:
+        image = tf.image.rot90(image, k = 3) # rotate 270º
+    elif p_rotate > .5:
+        image = tf.image.rot90(image, k = 2) # rotate 180º
+    elif p_rotate > .25:
+        image = tf.image.rot90(image, k = 1) # rotate 90º
+        
+    return image
 
-    patches=torch.zeros(n,n_patches**2,h*w//n_patches ** 2)
-    patch_size=h//n_patches
+datagen = tf.keras.preprocessing.image.ImageDataGenerator(samplewise_center = True,
+                                                          samplewise_std_normalization = True,
+                                                          validation_split = 0.2,
+                                                          preprocessing_function = data_augment)
 
-    for idx, image in enumerate(images):
-        for i in range(n_patches):
-            for j in range(n_patches):
-                patch=image[:, i*patch_size:(i+1)*patch_size, j*patch_size: (j+1)*patch_size]
-                patches[idx, i*n_patches + j] = patch.flatten()
-    return patches
+train_gen = datagen.flow_from_dataframe(dataframe = df_train,
+                                        directory = "train",
+                                        x_col = 'image_path',
+                                        y_col = 'label',
+                                        subset = 'training',
+                                        batch_size = batch_size,
+                                        seed = 1,
+                                        color_mode = 'rgb',
+                                        shuffle = True,
+                                        class_mode = 'categorical',
+                                        target_size = (image_size, image_size))
 
-def get_positional_embeddings(sequence_length, d):
-    result=torch.ones(sequence_length,d)
+valid_gen = datagen.flow_from_dataframe(dataframe = df_train,
+                                        directory = "train",
+                                        x_col = 'image_path',
+                                        y_col = 'label',
+                                        subset = 'validation',
+                                        batch_size = batch_size,
+                                        seed = 1,
+                                        color_mode = 'rgb',
+                                        shuffle = False,
+                                        class_mode = 'categorical',
+                                        target_size = (image_size, image_size))
 
-    for i in range(sequence_length):
-        for j in range(d):
-            result[i][j]=np.sin(i/(10000**(j/d))) if j%2==0 else np.cos(i/(10000**(j-1)/d))
-    return result
+test_gen = datagen.flow_from_dataframe(dataframe = df_test,
+                                       x_col = 'image_path',
+                                       y_col = None,
+                                       batch_size = batch_size,
+                                       seed = 1,
+                                       color_mode = 'rgb',
+                                       shuffle = False,
+                                       class_mode = None,
+                                       target_size = (image_size, image_size))
 
-class MyMSA(nn.Module):
-    def __init__(self,d,n,n_heads=2):
-        super(MyMSA,self).__init__()
-        self.d=d
-        self.n_heads=n_heads
+learning_rate = 0.001
+weight_decay = 0.0001
+num_epochs = 1
 
-        assert d%n_heads==0, f"Can't divide dimension {d} into {n_heads} heads"
+patch_size = 7  # Size of the patches to be extract from the input images
+num_patches = (image_size // patch_size) ** 2
+projection_dim = 64
+num_heads = 4
+transformer_units = [
+    projection_dim * 2,
+    projection_dim,
+]  # Size of the transformer layers
+transformer_layers = 8
+mlp_head_units = [56, 28]  # Size of the dense layers of the final classifier
 
-        d_head=int(d/n_heads)
 
-        self.q_mappings=nn.ModuleList([nn.Linear(d_head,d_head) for _ in range(self.n_heads)])
-        self.k_mappings=nn.ModuleList([nn.Linear(d_head,d_head) for _ in range(self.n_heads)])
-        self.v_mappings=nn.ModuleList([nn.Linear(d_head,d_head) for _ in range(self.n_heads)])
+def mlp(x, hidden_units, dropout_rate):
+    for units in hidden_units:
+        x = L.Dense(units, activation = tf.nn.gelu)(x)
+        x = L.Dropout(dropout_rate)(x)
+    return x
 
-        self.d_head=d_head
-        self.softmax=nn.Softmax(dim=-1)
 
-    def forward(self,sequences):
-        result=[]
+class Patches(L.Layer):
+    def __init__(self, patch_size):
+        super(Patches, self).__init__()
+        self.patch_size = patch_size
 
-        for sequence in sequences:
-            seq_result=[]
-            for head in range(self.n_heads):
-                q_mapping=self.q_mappings[head]
-                k_mapping=self.k_mappings[head]
-                v_mapping=self.v_mappings[head]
+    def call(self, images):
+        batch_size = tf.shape(images)[0]
+        patches = tf.image.extract_patches(
+            images = images,
+            sizes = [1, self.patch_size, self.patch_size, 1],
+            strides = [1, self.patch_size, self.patch_size, 1],
+            rates = [1, 1, 1, 1],
+            padding = 'VALID',
+        )
+        patch_dims = patches.shape[-1]
+        patches = tf.reshape(patches, [batch_size, -1, patch_dims])
+        return patches
 
-                seq=sequence[:,head*self.d_head: (head+1)*self.d_head]
-                q,k,v=q_mapping(seq),k_mapping(seq),v_mapping(seq)
+plt.figure(figsize=(4, 4))
 
-                attention=self.softmax(q@k.T/(self.d_head**0.5))
-                seq_result.append(attention@v)
-            result.append(torch.hstack(seq_result))
-        return torch.cat([torch.unsqueeze(r,dim=0) for r in result])
+x = train_gen.next()
+image = x[0][0]
 
-class MyViTBlock(nn.Module):
-    def __init__(self,hidden_d,n_heads,mlp_ratio=4):
-        super(MyViTBlock,self).__init__()
+plt.imshow(image.astype('uint8'))
+plt.axis('off')
 
-        self.hidden_d=hidden_d
-        self.n_heads=n_heads
+resized_image = tf.image.resize(
+    tf.convert_to_tensor([image]), size = (image_size, image_size)
+)
 
-        self.norm1=nn.LayerNorm(hidden_d)
-        self.mhsa=MyMSA(hidden_d,n_heads)
-        self.norm2=nn.LayerNorm(hidden_d)
-        self.mlp=nn.Sequential(
-            nn.Linear(hidden_d,mlp_ratio*hidden_d),
-            nn.GELU(),
-            nn.Linear(mlp_ratio*hidden_d,hidden_d)
+patches = Patches(patch_size)(resized_image)
+print(f'Image size: {image_size} X {image_size}')
+print(f'Patch size: {patch_size} X {patch_size}')
+print(f'Patches per image: {patches.shape[1]}')
+print(f'Elements per patch: {patches.shape[-1]}')
+
+n = int(np.sqrt(patches.shape[1]))
+plt.figure(figsize=(4, 4))
+
+for i, patch in enumerate(patches[0]):
+    ax = plt.subplot(n, n, i + 1)
+    patch_img = tf.reshape(patch, (patch_size, patch_size, 3))
+    plt.imshow(patch_img.numpy().astype('uint8'))
+    plt.axis('off')
+
+
+class PatchEncoder(L.Layer):
+    def __init__(self, num_patches, projection_dim):
+        super(PatchEncoder, self).__init__()
+        self.num_patches = num_patches
+        self.projection = L.Dense(units = projection_dim)
+        self.position_embedding = L.Embedding(
+            input_dim = num_patches, output_dim = projection_dim
         )
 
-    def forward(self,x):
-        out=x+self.mhsa(self.norm1(x))
-        out=out+self.mlp(self.norm2(out))
-        return out
+    def call(self, patch):
+        positions = tf.range(start = 0, limit = self.num_patches, delta = 1)
+        encoded = self.projection(patch) + self.position_embedding(positions)
+        return encoded
 
-class MyVit(nn.Module):
-    def __init__(self, chw=(1,28,28),n_patches=7, hidden_d=8,n_blocks=2,n_heads=2, out_d=2):
-        super(MyVit,self).__init__()
+def vision_transformer():
+    inputs = L.Input(shape = (image_size, image_size, 3))
+    
+    # Create patches.
+    patches = Patches(patch_size)(inputs)
+    
+    # Encode patches.
+    encoded_patches = PatchEncoder(num_patches, projection_dim)(patches)
 
-        #Attributes
+    # Create multiple layers of the Transformer block.
+    for _ in range(transformer_layers):
+        
+        # Layer normalization 1.
+        x1 = L.LayerNormalization(epsilon = 1e-6)(encoded_patches)
+        
+        # Create a multi-head attention layer.
+        attention_output = L.MultiHeadAttention(
+            num_heads = num_heads, key_dim = projection_dim, dropout = 0.1
+        )(x1, x1)
+        
+        # Skip connection 1.
+        x2 = L.Add()([attention_output, encoded_patches])
+        
+        # Layer normalization 2.
+        x3 = L.LayerNormalization(epsilon = 1e-6)(x2)
+        
+        # MLP.
+        x3 = mlp(x3, hidden_units = transformer_units, dropout_rate = 0.1)
+        
+        # Skip connection 2.
+        encoded_patches = L.Add()([x3, x2])
 
-        self.chw = chw
-        self.n_patches=n_patches
-        self.hidden_d=hidden_d
-        self.n_blocks=n_blocks
-        self.n_heads=n_heads
+    # Create a [batch_size, projection_dim] tensor.
+    representation = L.LayerNormalization(epsilon = 1e-6)(encoded_patches)
+    representation = L.Flatten()(representation)
+    representation = L.Dropout(0.5)(representation)
+    
+    # Add MLP.
+    features = mlp(representation, hidden_units = mlp_head_units, dropout_rate = 0.5)
+    
+    # Classify outputs.
+    logits = L.Dense(n_classes)(features)
+    
+    # Create the model.
+    model = tf.keras.Model(inputs = inputs, outputs = logits)
+    
+    return model
+
+decay_steps = train_gen.n // train_gen.batch_size
+initial_learning_rate = learning_rate
+
+lr_decayed_fn = tf.keras.experimental.CosineDecay(initial_learning_rate, decay_steps)
+
+lr_scheduler = tf.keras.callbacks.LearningRateScheduler(lr_decayed_fn)
 
 
-        assert chw[1]%n_patches==0, "Input shape not entirely divisible by n_patches"
-        assert chw[2]%n_patches==0, "Input shape not entirely divisible by n_patches"
-        self.patch_size=(chw[1]/n_patches,chw[2]/n_patches)
+optimizer = tf.keras.optimizers.Adam(learning_rate = learning_rate)
 
-        #1) Linear mapper
+model = vision_transformer()
+    
+model.compile(optimizer = optimizer, 
+              loss = tf.keras.losses.CategoricalCrossentropy(label_smoothing = 0.1), 
+              metrics = ['accuracy'])
 
-        self.input_d=int(chw[0]*self.patch_size[0]*self.patch_size[1])
-        self.linear_mapper=nn.Linear(self.input_d,self.hidden_d)
 
-        self.class_token=nn.Parameter(torch.rand(1,self.hidden_d))
+STEP_SIZE_TRAIN = train_gen.n // train_gen.batch_size
+STEP_SIZE_VALID = valid_gen.n // valid_gen.batch_size
 
-        self.pos_embed=nn.Parameter(torch.tensor(get_positional_embeddings(self.n_patches**2 + 1, self.hidden_d)))
-        self.pos_embed.requires_grad=False
+earlystopping = tf.keras.callbacks.EarlyStopping(monitor = 'val_accuracy',
+                                                 min_delta = 1e-4,
+                                                 patience = 5,
+                                                 mode = 'max',
+                                                 restore_best_weights = True,
+                                                 verbose = 1)
 
-        self.blocks=nn.ModuleList([MyViTBlock(hidden_d,n_heads) for _ in range(n_blocks)])
+checkpointer = tf.keras.callbacks.ModelCheckpoint(filepath = './model.hdf5',
+                                                  monitor = 'val_accuracy', 
+                                                  verbose = 1, 
+                                                  save_best_only = True,
+                                                  save_weights_only = True,
+                                                  mode = 'max')
 
-        self.mlp=nn.Sequential(
-            nn.Linear(self.hidden_d,out_d),
-            nn.Softmax(dim=-1)
-        )
-    def forward(self,images):
-        n, c, h, w= images.shape
-        patches=patchify(images,self.n_patches)
-        tokens=self.linear_mapper(patches)
+callbacks = [earlystopping, lr_scheduler, checkpointer]
 
-        #Adding classification token to the tokens
-
-        tokens=torch.stack([torch.vstack((self.class_token,tokens[i])) for i in range(len(tokens))])
-
-        pos_embed=self.pos_embed.repeat(n,1,1)
-        out=tokens+pos_embed
-
-        for block in self.blocks:
-            out=block(out)
-
-        out=out[:,0]
-
-        return self.mlp(out)
-
-if __name__=="__main__":
-    main()
+model.fit(x = train_gen,
+          steps_per_epoch = STEP_SIZE_TRAIN,
+          validation_data = valid_gen,
+          validation_steps = STEP_SIZE_VALID,
+          epochs = num_epochs,
+          callbacks = callbacks)
