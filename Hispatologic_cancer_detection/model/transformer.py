@@ -3,6 +3,7 @@ import pandas as pd
 import tensorflow as tf
 import tensorflow.keras.layers as L
 import tensorflow_addons as tfa
+import argparse
 import glob, random, os, warnings
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
@@ -12,6 +13,17 @@ from Hispatologic_cancer_detection.configs.confs import *
 from keras import backend as K
 from tqdm.keras import TqdmCallback
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "model_training",
+    help="Binary argument to decide model fitting should be launched or not",
+    nargs="?",
+    const="no_model_fit",
+    type=str,
+)
+
+args = parser.parse_args()
 
 def recall_m(y_true, y_pred):
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
@@ -361,5 +373,6 @@ class Transformer:
 
 if __name__ == "__main__":
     main()
-    model = Transformer()
-    model.fit()
+    if args.model_training=="model_fit":
+        model = Transformer()
+        model.fit()
