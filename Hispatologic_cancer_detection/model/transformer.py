@@ -13,17 +13,6 @@ from Hispatologic_cancer_detection.configs.confs import *
 from keras import backend as K
 from tqdm.keras import TqdmCallback
 
-parser = argparse.ArgumentParser()
-
-parser.add_argument(
-    "model_training",
-    help="Binary argument to decide model fitting should be launched or not",
-    nargs="?",
-    const="no_model_fit",
-    type=str,
-)
-
-args = parser.parse_args()
 
 def recall_m(y_true, y_pred):
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
@@ -57,8 +46,6 @@ image_size = main_params["transformer_params"]["image_size"]
 batch_size = main_params["transformer_params"]["batch_size"]
 n_classes = main_params["transformer_params"]["n_classes"]
 
-df_train = pd.read_csv("train_labels.csv", dtype="str")
-logging.info("Loading data...")
 
 image_generator = tf.keras.preprocessing.image.ImageDataGenerator(validation_split=0.01)
 train_data_gen = image_generator.flow_from_directory(
@@ -181,6 +168,8 @@ class Transformer:
         Returns:
             None 
         """
+        logging.info("Loading data...")
+
         df_label = pd.read_csv("train_labels.csv")
         df_train = pd.DataFrame(train_data_gen.filenames, columns=["image_path"])
         df_train["image_name"] = df_train.image_path.apply(
@@ -373,6 +362,5 @@ class Transformer:
 
 if __name__ == "__main__":
     main()
-    if args.model_training=="model_fit":
-        model = Transformer()
-        model.fit()
+    model = Transformer()
+    model.fit()
