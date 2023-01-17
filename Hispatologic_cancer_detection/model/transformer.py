@@ -62,28 +62,6 @@ val_data_gen = image_generator.flow_from_directory(
     directory="train", subset="validation", class_mode="binary", shuffle=True
 )
 
-df_label = pd.read_csv("train_labels.csv")
-df_train = pd.DataFrame(train_data_gen.filenames, columns=["image_path"])
-df_train["image_name"] = df_train.image_path.apply(
-    lambda x: x.replace(".tif", "")
-    .replace("0. non_cancerous/", "")
-    .replace("1. cancerous/", "")
-)
-df_test = pd.DataFrame(val_data_gen.filenames, columns=["image_path"])
-df_test["image_name"] = df_test.image_path.apply(
-    lambda x: x.replace(".tif", "")
-    .replace("0. non_cancerous/", "")
-    .replace("1. cancerous/", "")
-)
-
-df_train = df_train.merge(df_label, left_on="image_name", right_on="id")
-df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
-df_train = df_train[["image_path", "label"]]
-df_test = df_test[["image_path", "label"]]
-df_train.label, df_test.label = df_train.label.astype(str), df_test.label.astype(str)
-
-logging.info("Data Loaded !")
-classes = {0: "Non cancerous", 1: "Cancerous"}
 
 
 def data_augment(image):
@@ -107,52 +85,7 @@ def data_augment(image):
     return image
 
 
-datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    samplewise_center=True,
-    samplewise_std_normalization=True,
-    validation_split=0.2,
-    preprocessing_function=data_augment,
-)
 
-train_gen = datagen.flow_from_dataframe(
-    dataframe=df_train,
-    directory="train",
-    x_col="image_path",
-    y_col="label",
-    subset="training",
-    batch_size=batch_size,
-    seed=1,
-    color_mode="rgb",
-    shuffle=True,
-    class_mode="categorical",
-    target_size=(image_size, image_size),
-)
-
-valid_gen = datagen.flow_from_dataframe(
-    dataframe=df_train,
-    directory="train",
-    x_col="image_path",
-    y_col="label",
-    subset="validation",
-    batch_size=batch_size,
-    seed=1,
-    color_mode="rgb",
-    shuffle=True,
-    class_mode="categorical",
-    target_size=(image_size, image_size),
-)
-
-test_gen = datagen.flow_from_dataframe(
-    dataframe=df_test,
-    x_col="image_path",
-    y_col=None,
-    batch_size=batch_size,
-    seed=1,
-    color_mode="rgb",
-    shuffle=True,
-    class_mode=None,
-    target_size=(image_size, image_size),
-)
 
 learning_rate = main_params["transformer_params"]["learning_rate"]
 weight_decay = main_params["transformer_params"]["weight_decay"]
@@ -224,6 +157,88 @@ class Transformer:
     def __init__(self):
         pass
 
+    def loading_data(self)->None:
+
+        """
+        The goal of this function is loading 
+        appropriate data for transformer training
+        
+        Arguments:
+            None 
+
+        Returns:
+            None 
+        """
+        df_label = pd.read_csv("train_labels.csv")
+        df_train = pd.DataFrame(train_data_gen.filenames, columns=["image_path"])
+        df_train["image_name"] = df_train.image_path.apply(
+            lambda x: x.replace(".tif", "")
+            .replace("0. non_cancerous/", "")
+            .replace("1. cancerous/", "")
+        )
+        df_test = pd.DataFrame(val_data_gen.filenames, columns=["image_path"])
+        df_test["image_name"] = df_test.image_path.apply(
+            lambda x: x.replace(".tif", "")
+            .replace("0. non_cancerous/", "")
+            .replace("1. cancerous/", "")
+        )
+
+        df_train = df_train.merge(df_label, left_on="image_name", right_on="id")
+        df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
+        df_train = df_train[["image_path", "label"]]
+        df_test = df_test[["image_path", "label"]]
+        df_train.label, df_test.label = df_train.label.astype(str), df_test.label.astype(str)
+
+        logging.info("Data Loaded !")
+        classes = {0: "Non cancerous", 1: "Cancerous"}
+
+        self.datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+        samplewise_center=True,
+        samplewise_std_normalization=True,
+        validation_split=0.2,
+        preprocessing_function=data_augment,
+    )
+
+        self.train_gen = self.datagen.flow_from_dataframe(
+            dataframe=df_train,
+            directory="train",
+            x_col="image_path",
+            y_col="label",
+            subset="training",
+            batch_size=batch_size,
+            seed=1,
+            color_mode="rgb",
+            shuffle=True,
+            class_mode="categorical",
+            target_size=(image_size, image_size),
+        )
+
+        self.valid_gen = self.datagen.flow_from_dataframe(
+            dataframe=df_train,
+            directory="train",
+            x_col="image_path",
+            y_col="label",
+            subset="validation",
+            batch_size=batch_size,
+            seed=1,
+            color_mode="rgb",
+            shuffle=True,
+            class_mode="categorical",
+            target_size=(image_size, image_size),
+        )
+
+        self.test_gen = self.datagen.flow_from_dataframe(
+            dataframe=df_test,
+            x_col="image_path",
+            y_col=None,
+            batch_size=batch_size,
+            seed=1,
+            color_mode="rgb",
+            shuffle=True,
+            class_mode=None,
+            target_size=(image_size, image_size),
+        )
+
     def vision_transformer(self):
         inputs = L.Input(shape=(image_size, image_size, 3))
 
@@ -281,8 +296,9 @@ class Transformer:
         Returns:
             None
         """
+        self.loading_data()
 
-        decay_steps = train_gen.n // train_gen.batch_size
+        decay_steps = self.train_gen.n // self.train_gen.batch_size
         initial_learning_rate = learning_rate
 
         lr_decayed_fn = tf.keras.experimental.CosineDecay(
@@ -307,8 +323,8 @@ class Transformer:
             metrics=["accuracy", recall_m, precision_m, f1_m],
         )
 
-        STEP_SIZE_TRAIN = train_gen.n // train_gen.batch_size
-        STEP_SIZE_VALID = valid_gen.n // valid_gen.batch_size
+        STEP_SIZE_TRAIN = self.train_gen.n // self.train_gen.batch_size
+        STEP_SIZE_VALID = self.valid_gen.n // self.valid_gen.batch_size
 
         earlystopping = tf.keras.callbacks.EarlyStopping(
             monitor="val_accuracy",
@@ -333,9 +349,9 @@ class Transformer:
         logging.warning("Fitting of the transformer model has begun")
 
         model.fit(
-            x=train_gen,
+            x=self.train_gen,
             steps_per_epoch=STEP_SIZE_TRAIN,
-            validation_data=valid_gen,
+            validation_data=self.valid_gen,
             validation_steps=STEP_SIZE_VALID,
             epochs=num_epochs,
             callbacks=callbacks,
