@@ -9,6 +9,7 @@
 *.icloud
 *.pt
 *.zip
+*.hdf5
 train/*
 !train/0. non_cancerous
 train/0. non_cancerous/*
