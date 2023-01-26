@@ -3,32 +3,69 @@ import pandas as pd
 import tensorflow as tf
 import tensorflow.keras.layers as L
 import tensorflow_addons as tfa
+import torch
 import argparse
 import glob, random, os, warnings
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
+from PIL import Image
 import seaborn as sns
 from Hispatologic_cancer_detection.logs.logs import *
 from Hispatologic_cancer_detection.configs.confs import *
+from Hispatologic_cancer_detection.transforms.transform import *
 from keras import backend as K
+from keras.models import load_model
 from tqdm.keras import TqdmCallback
 
 
-def recall_m(y_true, y_pred):
+def recall_m(y_true, y_pred)->float:
+    """
+    The goal of this function is to calculate the recall metric
+    as the model is being fitted
+    
+    Arguments:
+        -y_true: The true labels of the test class
+        -y_pred: The predicted labels of the test class
+        
+    Returns:
+        -recall: float: The computed recall of the model
+    """
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
     recall = true_positives / (possible_positives + K.epsilon())
     return recall
 
 
-def precision_m(y_true, y_pred):
+def precision_m(y_true, y_pred)->float:
+    """
+    The goal of this function is to calculate the precision metrics
+    as the model is being fitted
+    
+    Arguments:
+        -y_true: The true labels of the test class
+        -y_pred: The predicted labels of the test class
+        
+    Returns:
+        -precision: float: The computed recall of the model
+    """
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
     precision = true_positives / (predicted_positives + K.epsilon())
     return precision
 
 
-def f1_m(y_true, y_pred):
+def f1_m(y_true, y_pred)->float:
+    """
+    The goal of this function is to calculate the precision metrics
+    as the model is being fitted
+    
+    Arguments:
+        -y_true: The true labels of the test class
+        -y_pred: The predicted labels of the test class
+        
+    Returns:
+        -precision: float: The computed recall of the model
+    """
     precision = precision_m(y_true, y_pred)
     recall = recall_m(y_true, y_pred)
     return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
@@ -332,7 +369,7 @@ class Transformer:
             min_delta=1e-4,
             patience=5,
             mode="max",
-            restore_best_weights=True,
+            restore_best_weights=False,
             verbose=1,
         )
 
@@ -341,7 +378,7 @@ class Transformer:
             monitor="val_accuracy",
             verbose=1,
             save_best_only=True,
-            save_weights_only=True,
+            save_weights_only=False,
             mode="max",
         )
 
@@ -357,10 +394,45 @@ class Transformer:
             epochs=num_epochs,
             callbacks=callbacks,
         )
-        logging.warning("Fitting of the transformer model has just finished")
 
+        logging.warning("Fitting of the transformer model has just finished")
+        logging.warning("Saving model...")
+        model.save(os.path.join(os.getcwd(),main_params["transformer_params"]["save_model_path"]))
+        logging.warning("Model successfuly saved !")
+
+    def predict(self, image_path: str, loading_model=True) -> int:
+        """
+        The goal of this function is, after having received an image,
+        to predict the associated label
+        Arguments:
+            -image_path: str: The path of the
+            image which label has to be predicted
+        Returns:
+            -label: int: The predicted label of the image
+        """
+
+        if loading_model:
+            model= load_model(os.path.join(os.getcwd(),main_params["transformer_params"]["save_model_path"]))
+        else:
+            self.fit()
+            logging.info("Model has been fitted for prediction")
+
+
+        transformer = transform()
+        image = Image.open(image_path)
+        input = transformer(image)
+        input = input.view(1, 3, main_params["resize"], main_params["resize"])
+        if loading_model:
+            output = model(input)
+        else:
+            output = self.model(input)
+        _, predicted = torch.max(output.data, 1)
+        predicted=predicted.item()
+        print(predicted)
+        return predicted
 
 if __name__ == "__main__":
     main()
     model = Transformer()
     model.fit()
+    model.predict("train/0. non_cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif")
