@@ -424,6 +424,11 @@ class Transformer:
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train.to_csv("train_labels.csv",index=False)
 
+                model.fit()
+                predicted = self.model.predict_label(img)
+                predicted = np.argmax(predicted)
+                return predicted
+                
             model.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
