@@ -219,7 +219,7 @@ class Transformer:
         df_train.label, df_test.label = df_train.label.astype(
             str
         ), df_test.label.astype(str)
-
+        print("df_train !!!!!!", df_train)
         logging.info("Data Loaded !")
 
         self.datagen = tf.keras.preprocessing.image.ImageDataGenerator(
@@ -421,7 +421,7 @@ class Transformer:
                 df_train["label"]=1
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train.to_csv("train_labels.csv",index=False)
-                
+
             self.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
