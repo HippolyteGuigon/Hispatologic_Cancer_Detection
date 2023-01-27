@@ -448,4 +448,3 @@ class Transformer:
 if __name__ == "__main__":
     main()
     model = Transformer()
-    model.predict("train/0. non_cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif")
