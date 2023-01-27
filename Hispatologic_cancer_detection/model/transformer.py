@@ -410,8 +410,9 @@ class Transformer:
             -label: int: The predicted label of the image
         """
 
+        model = self.vision_transformer()
+
         if loading_model:
-            model = self.vision_transformer()
             model.load_weights(
                 os.path.join(
                     os.getcwd(), main_params["transformer_params"]["save_model_path"]
