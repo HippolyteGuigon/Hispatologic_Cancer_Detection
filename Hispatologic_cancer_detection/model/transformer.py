@@ -434,7 +434,7 @@ class Transformer:
             )
         )
         img = np.expand_dims(img, axis=0)
-
+        logging.info("SO FAR SO GOOD")
         if loading_model:
             predicted = model.predict_label(img)
             predicted = np.argmax(predicted)
