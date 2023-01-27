@@ -205,7 +205,7 @@ class Transformer:
             .replace("0. non_cancerous/", "")
             .replace("1. cancerous/", "")
         )
-        print("df_train !!!!!!", df_train)
+        
         df_test = pd.DataFrame(val_data_gen.filenames, columns=["image_path"])
         df_test["image_name"] = df_test.image_path.apply(
             lambda x: x.replace(".tif", "")
@@ -214,6 +214,7 @@ class Transformer:
         )
 
         df_train = df_train.merge(df_label, left_on="image_name", right_on="id")
+        print("df_label !!!!!!", df_label)
         df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
         df_train = df_train[["image_path", "label"]]
         df_test = df_test[["image_path", "label"]]
