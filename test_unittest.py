@@ -115,7 +115,7 @@ class Test(unittest.TestCase):
         elif os.path.exists(os.path.join(main_params["non_cancerous_image_path"], image_chosen)):
             path = os.path.join(main_params["non_cancerous_image_path"], image_chosen)
         model=Transformer()
-        prediction=model.predict(image_path=path,loading_model=False)
+        prediction=model.predict_label(image_path=path,loading_model=False)
 
         coherent_prediction=(prediction==0 or prediction==1)
 

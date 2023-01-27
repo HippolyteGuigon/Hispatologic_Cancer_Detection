@@ -399,7 +399,7 @@ class Transformer:
         )
         logging.warning("Model successfuly saved !")
 
-    def predict(self, image_path: str, loading_model=True) -> int:
+    def predict_label(self, image_path: str, loading_model=True) -> int:
         """
         The goal of this function is, after having received an image,
         to predict the associated label
@@ -425,7 +425,7 @@ class Transformer:
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train.to_csv("train_labels.csv",index=False)
 
-            self.fit()
+            model.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
         img = img.resize(
@@ -437,7 +437,7 @@ class Transformer:
         img = np.expand_dims(img, axis=0)
 
         if loading_model:
-            predicted = model.predict(img)
+            predicted = model.predict_label(img)
             predicted = np.argmax(predicted)
         else:
             predicted = self.model.predict(img)
