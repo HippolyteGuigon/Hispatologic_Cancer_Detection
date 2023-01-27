@@ -10,12 +10,14 @@
 *.pt
 *.zip
 *.hdf5
+*.h5
 train/*
 !train/0. non_cancerous
 train/0. non_cancerous/*
 test/*
 !train/1. cancerous
 train/1. cancerous/*
+model.hdf5
 
 #Except these files
 

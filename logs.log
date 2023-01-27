@@ -313,3 +313,16 @@
 2023-01-26 14:40:13,233 | INFO | Loading data...
 2023-01-26 14:40:14,400 | INFO | Data Loaded !
 2023-01-26 14:41:40,047 | WARNING | Fitting of the transformer model has begun
+2023-01-26 14:54:23,054 | INFO | Loading data...
+2023-01-26 14:54:24,074 | INFO | Data Loaded !
+2023-01-26 14:55:29,987 | WARNING | Fitting of the transformer model has begun
+2023-01-26 15:23:36,914 | WARNING | Fitting of the transformer model has just finished
+2023-01-26 15:23:36,949 | WARNING | Saving model...
+2023-01-26 15:23:37,350 | WARNING | Model successfuly saved !
+2023-01-26 15:43:45,538 | WARNING | Keras is training/fitting/evaluating on array-like data. Keras may not be optimized for this format, so if your input data format is supported by TensorFlow I/O (https://github.com/tensorflow/io) we recommend using that to load a Dataset instead.
+2023-01-27 09:39:08,499 | INFO | Loading data...
+2023-01-27 09:39:09,737 | INFO | Data Loaded !
+2023-01-27 09:39:20,377 | WARNING | Fitting of the transformer model has begun
+2023-01-27 09:45:30,736 | WARNING | Fitting of the transformer model has just finished
+2023-01-27 09:45:30,751 | WARNING | Saving model...
+2023-01-27 09:45:31,301 | WARNING | Model successfuly saved !

@@ -2,31 +2,24 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import tensorflow.keras.layers as L
-import tensorflow_addons as tfa
-import torch
-import argparse
-import glob, random, os, warnings
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, classification_report
+import os
+import warnings
 from PIL import Image
-import seaborn as sns
 from Hispatologic_cancer_detection.logs.logs import *
 from Hispatologic_cancer_detection.configs.confs import *
 from Hispatologic_cancer_detection.transforms.transform import *
 from keras import backend as K
-from keras.models import load_model
-from tqdm.keras import TqdmCallback
 
 
-def recall_m(y_true, y_pred)->float:
+def recall_m(y_true, y_pred) -> float:
     """
     The goal of this function is to calculate the recall metric
     as the model is being fitted
-    
+
     Arguments:
         -y_true: The true labels of the test class
         -y_pred: The predicted labels of the test class
-        
+
     Returns:
         -recall: float: The computed recall of the model
     """
@@ -36,15 +29,15 @@ def recall_m(y_true, y_pred)->float:
     return recall
 
 
-def precision_m(y_true, y_pred)->float:
+def precision_m(y_true, y_pred) -> float:
     """
     The goal of this function is to calculate the precision metrics
     as the model is being fitted
-    
+
     Arguments:
         -y_true: The true labels of the test class
         -y_pred: The predicted labels of the test class
-        
+
     Returns:
         -precision: float: The computed recall of the model
     """
@@ -54,15 +47,15 @@ def precision_m(y_true, y_pred)->float:
     return precision
 
 
-def f1_m(y_true, y_pred)->float:
+def f1_m(y_true, y_pred) -> float:
     """
     The goal of this function is to calculate the precision metrics
     as the model is being fitted
-    
+
     Arguments:
         -y_true: The true labels of the test class
         -y_pred: The predicted labels of the test class
-        
+
     Returns:
         -precision: float: The computed recall of the model
     """
@@ -82,9 +75,11 @@ warnings.filterwarnings("ignore")
 image_size = main_params["transformer_params"]["image_size"]
 batch_size = main_params["transformer_params"]["batch_size"]
 n_classes = main_params["transformer_params"]["n_classes"]
+validation_split = 1 - main_params["pipeline_params"]["train_size"]
 
-
-image_generator = tf.keras.preprocessing.image.ImageDataGenerator(validation_split=0.01)
+image_generator = tf.keras.preprocessing.image.ImageDataGenerator(
+    validation_split=validation_split
+)
 train_data_gen = image_generator.flow_from_directory(
     directory="train",
     subset="training",
@@ -97,7 +92,6 @@ train_data_gen = image_generator.flow_from_directory(
 val_data_gen = image_generator.flow_from_directory(
     directory="train", subset="validation", class_mode="binary", shuffle=True
 )
-
 
 
 def data_augment(image):
@@ -119,8 +113,6 @@ def data_augment(image):
         image = tf.image.rot90(image, k=1)  # rotate 90º
 
     return image
-
-
 
 
 learning_rate = main_params["transformer_params"]["learning_rate"]
@@ -193,17 +185,17 @@ class Transformer:
     def __init__(self):
         pass
 
-    def loading_data(self)->None:
+    def loading_data(self) -> None:
 
         """
-        The goal of this function is loading 
+        The goal of this function is loading
         appropriate data for transformer training
-        
+
         Arguments:
-            None 
+            None
 
         Returns:
-            None 
+            None
         """
         logging.info("Loading data...")
 
@@ -225,17 +217,18 @@ class Transformer:
         df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
         df_train = df_train[["image_path", "label"]]
         df_test = df_test[["image_path", "label"]]
-        df_train.label, df_test.label = df_train.label.astype(str), df_test.label.astype(str)
+        df_train.label, df_test.label = df_train.label.astype(
+            str
+        ), df_test.label.astype(str)
 
         logging.info("Data Loaded !")
-        classes = {0: "Non cancerous", 1: "Cancerous"}
 
         self.datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-        samplewise_center=True,
-        samplewise_std_normalization=True,
-        validation_split=0.2,
-        preprocessing_function=data_augment,
-    )
+            samplewise_center=True,
+            samplewise_std_normalization=True,
+            validation_split=validation_split,
+            preprocessing_function=data_augment,
+        )
 
         self.train_gen = self.datagen.flow_from_dataframe(
             dataframe=df_train,
@@ -397,7 +390,11 @@ class Transformer:
 
         logging.warning("Fitting of the transformer model has just finished")
         logging.warning("Saving model...")
-        model.save(os.path.join(os.getcwd(),main_params["transformer_params"]["save_model_path"]))
+        model.save(
+            os.path.join(
+                os.getcwd(), main_params["transformer_params"]["save_model_path"]
+            )
+        )
         logging.warning("Model successfuly saved !")
 
     def predict(self, image_path: str, loading_model=True) -> int:
@@ -412,27 +409,34 @@ class Transformer:
         """
 
         if loading_model:
-            model= load_model(os.path.join(os.getcwd(),main_params["transformer_params"]["save_model_path"]))
+            model = self.vision_transformer()
+            model.load_weights(
+                os.path.join(
+                    os.getcwd(), main_params["transformer_params"]["save_model_path"]
+                )
+            )
         else:
             self.fit()
             logging.info("Model has been fitted for prediction")
+        img = Image.open(image_path)
+        img = img.resize(
+            (
+                main_params["pipeline_params"]["resize"],
+                main_params["pipeline_params"]["resize"],
+            )
+        )
+        img = np.expand_dims(img, axis=0)
 
-
-        transformer = transform()
-        image = Image.open(image_path)
-        input = transformer(image)
-        input = input.view(1, 3, main_params["resize"], main_params["resize"])
         if loading_model:
-            output = model(input)
+            predicted = model.predict(img)
+            predicted = np.argmax(predicted)
         else:
-            output = self.model(input)
-        _, predicted = torch.max(output.data, 1)
-        predicted=predicted.item()
-        print(predicted)
+            predicted = self.model.predict(img)
+            predicted = np.argmax(predicted)
         return predicted
+
 
 if __name__ == "__main__":
     main()
     model = Transformer()
-    model.fit()
     model.predict("train/0. non_cancerous/f0c2a0b8ef3024f407fa97d852d49be0215cafe0.tif")

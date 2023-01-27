@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torchvision
 from torch.utils.data import random_split
-import sys
 import os
 from PIL import Image
 from tqdm import tqdm
@@ -110,7 +109,7 @@ class ConvNeuralNet(nn.Module):
 
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(12800, 256),
+            nn.Linear(512, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
@@ -268,7 +267,6 @@ class ConvNeuralNet(nn.Module):
             self.fit()
             logging.info("Model has been fitted for prediction")
 
-
         transformer = transform()
         image = Image.open(image_path)
         input = transformer(image)
@@ -278,7 +276,7 @@ class ConvNeuralNet(nn.Module):
         else:
             output = self.model(input)
         _, predicted = torch.max(output.data, 1)
-        predicted=predicted.item()
+        predicted = predicted.item()
 
         return predicted
 
@@ -325,7 +323,7 @@ class ConvNeuralNet(nn.Module):
             labels
             -y_true: np.array: The array with the real labels
         """
-        df=pd.read_csv("train_labels.csv")
+        df = pd.read_csv("train_labels.csv")
         df["id"] = df["id"].apply(lambda x: x + str(".tif"))
 
         def predict_label(image_name: str) -> str:

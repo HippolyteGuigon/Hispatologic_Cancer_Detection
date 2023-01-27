@@ -30,7 +30,7 @@ repos:
   hooks:
     - id: updating_environment_file
       name: update_conda_environment
-      entry: bash -c "conda env update --prefix ./env --file hispatologic_cancer_environment.yml  --prune"
+      entry: bash -c "conda env update --prefix ./env --file hispathologic_cancer_environment.yml  --prune"
       language: system
       types: [python]
       pass_filenames: false
