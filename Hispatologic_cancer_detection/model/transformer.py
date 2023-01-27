@@ -212,9 +212,7 @@ class Transformer:
             .replace("0. non_cancerous/", "")
             .replace("1. cancerous/", "")
         )
-        print("df_train !!!!!!", df_train)
         df_train = df_train.merge(df_label, left_on="image_name", right_on="id")
-        print("df_label !!!!!!", df_label)
 
         df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
         df_train = df_train[["image_path", "label"]]
@@ -425,7 +423,19 @@ class Transformer:
                 df_train["label"]=1
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train.to_csv("train_labels.csv",index=False)
-
+                
+            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+            model.compile(
+            optimizer=optimizer,
+            loss=tf.keras.losses.BinaryCrossentropy(
+                from_logits=True,
+                label_smoothing=0.0,
+                axis=-1,
+                reduction="auto",
+                name="binary_crossentropy",
+            ),
+            metrics=["accuracy", recall_m, precision_m, f1_m],
+        )
             model.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
@@ -441,7 +451,7 @@ class Transformer:
             predicted = model.predict_label(img)
             predicted = np.argmax(predicted)
         else:
-            predicted = self.model.predict(img)
+            predicted = self.model.predict_label(img)
             predicted = np.argmax(predicted)
         return predicted
 
