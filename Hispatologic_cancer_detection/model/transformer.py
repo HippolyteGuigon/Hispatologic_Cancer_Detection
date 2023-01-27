@@ -10,7 +10,6 @@ from Hispatologic_cancer_detection.configs.confs import *
 from Hispatologic_cancer_detection.transforms.transform import *
 from keras import backend as K
 
-
 def recall_m(y_true, y_pred) -> float:
     """
     The goal of this function is to calculate the recall metric
@@ -416,6 +415,13 @@ class Transformer:
                 )
             )
         else:
+            if "train_labels.csv" not in os.listdir():
+                liste_image=os.listdir("train/0. non_cancerous")+os.listdir("train/1. cancerous")
+                df_train=pd.DataFrame(liste_image,columns=["id"])
+                df_train["label"]=1
+                df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
+                df_train.to_csv("train_labels.csv",index=False)
+                
             self.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
