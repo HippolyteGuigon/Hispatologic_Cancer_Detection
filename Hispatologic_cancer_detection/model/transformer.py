@@ -205,6 +205,7 @@ class Transformer:
             .replace("0. non_cancerous/", "")
             .replace("1. cancerous/", "")
         )
+        print("df_train !!!!!!", df_train)
         df_test = pd.DataFrame(val_data_gen.filenames, columns=["image_path"])
         df_test["image_name"] = df_test.image_path.apply(
             lambda x: x.replace(".tif", "")
@@ -219,7 +220,7 @@ class Transformer:
         df_train.label, df_test.label = df_train.label.astype(
             str
         ), df_test.label.astype(str)
-        print("df_train !!!!!!", df_train)
+        
         logging.info("Data Loaded !")
 
         self.datagen = tf.keras.preprocessing.image.ImageDataGenerator(
