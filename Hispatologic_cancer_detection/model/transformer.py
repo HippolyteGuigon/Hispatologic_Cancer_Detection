@@ -408,7 +408,7 @@ class Transformer:
             -label: int: The predicted label of the image
         """
 
-        model = self.vision_transformer()
+        model = Transformer()
 
         if loading_model:
             model.load_weights(
@@ -423,19 +423,7 @@ class Transformer:
                 df_train["label"]=1
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train.to_csv("train_labels.csv",index=False)
-                
-            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
-            model.compile(
-            optimizer=optimizer,
-            loss=tf.keras.losses.BinaryCrossentropy(
-                from_logits=True,
-                label_smoothing=0.0,
-                axis=-1,
-                reduction="auto",
-                name="binary_crossentropy",
-            ),
-            metrics=["accuracy", recall_m, precision_m, f1_m],
-        )
+
             model.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
