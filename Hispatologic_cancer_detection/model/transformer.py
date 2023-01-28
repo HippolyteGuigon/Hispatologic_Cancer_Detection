@@ -446,8 +446,8 @@ class Transformer:
         )
             STEP_SIZE_TRAIN = self.train_gen.n // self.train_gen.batch_size
             STEP_SIZE_VALID = self.valid_gen.n // self.valid_gen.batch_size
-            print("STEP_SIZE_TRAIN",STEP_SIZE_TRAIN)
-            print("STEP_SIZE_VALID",STEP_SIZE_VALID)
+            if STEP_SIZE_TRAIN==0 or STEP_SIZE_VALID==0:
+                STEP_SIZE_TRAIN, STEP_SIZE_VALID = 1, 1
 
             logging.info("Fitting model...")
             
