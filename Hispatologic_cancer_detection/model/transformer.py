@@ -423,9 +423,9 @@ class Transformer:
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train["id"]=df_train["id"].apply(lambda x: x.replace(".tif",""))
                 df_train.to_csv("train_labels.csv",index=False)
-
-        model.fit()
-        logging.info("Model has been fitted for prediction")
+            logging.info("Fitting model...")
+            model.fit()
+            logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
         img = img.resize(
             (
@@ -435,12 +435,9 @@ class Transformer:
         )
         img = np.expand_dims(img, axis=0)
         logging.info("SO FAR SO GOOD")
-        if loading_model:
-            predicted = model.predict_label(img)
-            predicted = np.argmax(predicted)
-        else:
-            predicted = self.predict_label(img)
-            predicted = np.argmax(predicted)
+        predicted = model.predict_classes(img)
+        predicted = np.argmax(predicted)
+
         return predicted
 
 
