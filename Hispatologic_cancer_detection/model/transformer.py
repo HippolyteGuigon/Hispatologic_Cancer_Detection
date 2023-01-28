@@ -213,7 +213,6 @@ class Transformer:
             .replace("1. cancerous/", "")
         )
         df_train = df_train.merge(df_label, left_on="image_name", right_on="id")
-        print("df_train !!!!!",df_train)
         df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
         df_train = df_train[["image_path", "label"]]
         df_test = df_test[["image_path", "label"]]
@@ -422,13 +421,9 @@ class Transformer:
                 df_train=pd.DataFrame(liste_image,columns=["id"])
                 df_train["label"]=1
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
+                df_train["id"]=df_train["id"].apply(lambda x: x.replace(".tif",""))
                 df_train.to_csv("train_labels.csv",index=False)
 
-                model.fit()
-                predicted = self.model.predict_label(img)
-                predicted = np.argmax(predicted)
-                return predicted
-                
             model.fit()
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
@@ -444,7 +439,7 @@ class Transformer:
             predicted = model.predict_label(img)
             predicted = np.argmax(predicted)
         else:
-            predicted = self.model.predict_label(img)
+            predicted = self.predict_label(img)
             predicted = np.argmax(predicted)
         return predicted
 
