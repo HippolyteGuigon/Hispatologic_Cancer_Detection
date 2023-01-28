@@ -439,8 +439,7 @@ class Transformer:
                 label_smoothing=0.0,
                 axis=-1,
                 reduction="auto",
-                name="binary_crossentropy",
-                run_eagerly=True
+                name="binary_crossentropy"
             ),
             metrics=["accuracy", recall_m, precision_m, f1_m],
         )
@@ -458,6 +457,7 @@ class Transformer:
             epochs=num_epochs
         )
             logging.info("Model has been fitted for prediction")
+        logging.info("Resizing image")
         img = Image.open(image_path)
         img = img.resize(
             (
