@@ -423,8 +423,59 @@ class Transformer:
                 df_train.loc[:len(os.listdir("train/0. non_cancerous")),"label"]=0
                 df_train["id"]=df_train["id"].apply(lambda x: x.replace(".tif",""))
                 df_train.to_csv("train_labels.csv",index=False)
+            self.loading_data()
+            decay_steps = self.train_gen.n // self.train_gen.batch_size
+            initial_learning_rate = learning_rate
+
+            lr_decayed_fn = tf.keras.experimental.CosineDecay(
+                initial_learning_rate, decay_steps
+            )
+
+            lr_scheduler = tf.keras.callbacks.LearningRateScheduler(lr_decayed_fn)
+            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+            model.compile(
+            optimizer=optimizer,
+            loss=tf.keras.losses.BinaryCrossentropy(
+                from_logits=True,
+                label_smoothing=0.0,
+                axis=-1,
+                reduction="auto",
+                name="binary_crossentropy",
+            ),
+            metrics=["accuracy", recall_m, precision_m, f1_m],
+        )
+            STEP_SIZE_TRAIN = self.train_gen.n // self.train_gen.batch_size
+            STEP_SIZE_VALID = self.valid_gen.n // self.valid_gen.batch_size
+
+            earlystopping = tf.keras.callbacks.EarlyStopping(
+                monitor="val_accuracy",
+                min_delta=1e-4,
+                patience=5,
+                mode="max",
+                restore_best_weights=False,
+                verbose=1,
+            )
+
+            checkpointer = tf.keras.callbacks.ModelCheckpoint(
+                filepath="./model.hdf5",
+                monitor="val_accuracy",
+                verbose=1,
+                save_best_only=True,
+                save_weights_only=False,
+                mode="max",
+            )
+
+            callbacks = [earlystopping, lr_scheduler, checkpointer]
             logging.info("Fitting model...")
-            model.fit()
+            
+            model.fit(
+            x=self.train_gen,
+            steps_per_epoch=STEP_SIZE_TRAIN,
+            validation_data=self.valid_gen,
+            validation_steps=STEP_SIZE_VALID,
+            epochs=num_epochs,
+            callbacks=callbacks,
+        )
             logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
         img = img.resize(
