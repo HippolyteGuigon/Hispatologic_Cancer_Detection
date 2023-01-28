@@ -457,6 +457,7 @@ class Transformer:
             validation_steps=STEP_SIZE_VALID,
             epochs=num_epochs
         )
+            logging.info("Model has been fitted for prediction")
             model.save(
                 os.path.join(
                     os.getcwd(), main_params["transformer_params"]["save_model_path"]
@@ -468,7 +469,8 @@ class Transformer:
                     os.getcwd(), main_params["transformer_params"]["save_model_path"]
                 )
             )
-            logging.info("Model has been fitted for prediction")
+            logging.info("Model loaded")
+            
         img = Image.open(image_path)
         img = img.resize(
             (
