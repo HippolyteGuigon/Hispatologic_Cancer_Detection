@@ -213,6 +213,7 @@ class Transformer:
             .replace("1. cancerous/", "")
         )
         df_train = df_train.merge(df_label, left_on="image_name", right_on="id")
+        print("df_train !!!!!",df_train)
         df_test = df_test.merge(df_label, left_on="image_name", right_on="id")
         df_train = df_train[["image_path", "label"]]
         df_test = df_test[["image_path", "label"]]
@@ -457,7 +458,6 @@ class Transformer:
             epochs=num_epochs
         )
             logging.info("Model has been fitted for prediction")
-        logging.info("Resizing image")
         img = Image.open(image_path)
         img = img.resize(
             (
