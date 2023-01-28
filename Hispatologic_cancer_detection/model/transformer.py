@@ -431,7 +431,7 @@ class Transformer:
             lr_decayed_fn = tf.keras.experimental.CosineDecay(
                 initial_learning_rate, decay_steps
             )
-
+            tf.config.run_functions_eagerly(True)
             optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
             model.compile(
             optimizer=optimizer,
