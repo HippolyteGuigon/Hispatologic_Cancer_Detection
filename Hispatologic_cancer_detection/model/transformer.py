@@ -424,8 +424,8 @@ class Transformer:
                 df_train["id"]=df_train["id"].apply(lambda x: x.replace(".tif",""))
                 df_train.to_csv("train_labels.csv",index=False)
 
-            model.fit()
-            logging.info("Model has been fitted for prediction")
+        model.fit()
+        logging.info("Model has been fitted for prediction")
         img = Image.open(image_path)
         img = img.resize(
             (
