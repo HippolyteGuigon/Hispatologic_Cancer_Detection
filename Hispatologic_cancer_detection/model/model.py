@@ -8,6 +8,7 @@ from Hispatologic_cancer_detection.transforms.transform import *
 from Hispatologic_cancer_detection.metrics.metrics import *
 from Hispatologic_cancer_detection.logs.logs import *
 from Hispatologic_cancer_detection.early_stopping.early_stopping import *
+from Hispatologic_cancer_detection.model.transformer import *
 
 main_params = load_conf("configs/main.yml", include=True)
 
@@ -29,6 +30,11 @@ def launch_model() -> None:
         model.fit()
         model.save()
         model.evaluate()
+        
+    elif model_chosen=="transformer":
+        model = Transformer()
+        model.fit()
+
 
 
 if __name__ == "__main__":
