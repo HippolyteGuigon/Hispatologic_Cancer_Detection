@@ -440,6 +440,7 @@ class Transformer:
                 axis=-1,
                 reduction="auto",
                 name="binary_crossentropy",
+                run_eagerly=True
             ),
             metrics=["accuracy", recall_m, precision_m, f1_m],
         )
