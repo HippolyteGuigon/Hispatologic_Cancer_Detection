@@ -407,7 +407,7 @@ class Transformer:
             -label: int: The predicted label of the image
         """
 
-        model = Transformer()
+        model = self.vision_transformer()
 
         if loading_model:
             model.load_weights(
@@ -435,7 +435,7 @@ class Transformer:
         )
         img = np.expand_dims(img, axis=0)
         logging.info("SO FAR SO GOOD")
-        predicted = model.predict_classes(img)
+        predicted = model.predict(img)
         predicted = np.argmax(predicted)
 
         return predicted
