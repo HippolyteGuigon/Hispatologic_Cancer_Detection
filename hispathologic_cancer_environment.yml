@@ -75,4 +75,3 @@ dependencies:
     - pipreqs==0.4.11
     - yarg==0.1.9
 prefix: /Users/hippodouche/opt/anaconda3/envs/hispatologic_cancer_detection_environment
-Footer

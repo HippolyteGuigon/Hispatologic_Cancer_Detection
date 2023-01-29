@@ -79,22 +79,23 @@ def predict_test_file() -> None:
     chosen_model = main_params["model_chosen"]
     df_test = pd.read_csv("sample_submission.csv")
     df_test["id"] = df_test["id"].apply(lambda x: x + str(".tif"))
-    if chosen_model=="cnn":
+    if chosen_model == "cnn":
         predictor = ConvNeuralNet(main_params["num_classes"])
         df_test["label"] = df_test["id"].progress_apply(
-        lambda image: predictor.predict("test/" + image)
-    )
+            lambda image: predictor.predict("test/" + image)
+        )
 
-    elif chosen_model=="transformer":
+    elif chosen_model == "transformer":
         predictor = Transformer.vision_transformer()
         predictor.load_weights(
-                os.path.join(
-                    os.getcwd(), main_params["transformer_params"]["save_model_path"]
-                )
+            os.path.join(
+                os.getcwd(), main_params["transformer_params"]["save_model_path"]
             )
+        )
+
         df_test["label"] = df_test["id"].progress_apply(
-        lambda image: predictor.predict_label("test/" + image)
-    )
+            lambda image: predictor.predict_label("test/" + image)
+        )
 
     df_test["id"] = df_test["id"].apply(lambda x: x.replace(".tif", ""))
     df_test.to_csv("sample_submission.csv", index=False)
@@ -105,14 +106,14 @@ if __name__ == "__main__":
     chosen_model = main_params["model_chosen"]
     if args.Model == "model_train":
         launch_pipeline()
-    if chosen_model=="cnn":
+    if chosen_model == "cnn":
         model = load_model()
-    elif chosen_model=="transformer":
+    elif chosen_model == "transformer":
         predictor = Transformer.vision_transformer()
         predictor.load_weights(
-                os.path.join(
-                    os.getcwd(), main_params["transformer_params"]["save_model_path"]
-                )
+            os.path.join(
+                os.getcwd(), main_params["transformer_params"]["save_model_path"]
             )
+        )
     if args.Test_predict == "predict":
         predict_test_file()
