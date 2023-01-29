@@ -68,6 +68,24 @@ class Test(unittest.TestCase):
         except:
             self.fail("Error, failed to achieve the main pipeline ")
 
+    def testing_main_transformer(self) -> bool:
+        """
+        The goal of this self function is to check if the
+        main.py file works when to be used with Transformer 
+        model 
+
+        Arguments:
+            None
+
+        Returns:
+            None
+        """
+
+        try:
+            os.system("python main.py Hippolyte transformer")
+        except:
+            self.fail("Error, failed to achieve the main pipeline ")
+
     def test_prediction_cnn(self)->int:
         """
         The goal of this function is to check if the prediction returned by 
