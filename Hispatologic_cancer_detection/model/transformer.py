@@ -71,7 +71,7 @@ main_params = load_conf("configs/main.yml", include=True)
 
 warnings.filterwarnings("ignore")
 
-image_size = main_params["transformer_params"]["image_size"]
+image_size = main_params["resize"]
 batch_size = main_params["transformer_params"]["batch_size"]
 n_classes = main_params["transformer_params"]["n_classes"]
 validation_split = 1 - main_params["pipeline_params"]["train_size"]
