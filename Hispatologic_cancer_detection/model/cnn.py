@@ -107,9 +107,21 @@ class ConvNeuralNet(nn.Module):
             nn.MaxPool2d(2, 2),
         )
 
+        #Here, we compute the appropriate size of the fully-connected layer
+
+        transformer = transform()
+        image = Image.open(main_params["test_image_path"])
+        input = transformer(image)
+        input = input.view(1, 3, main_params["resize"], main_params["resize"])
+
+        input=self.conv1(input)
+        input=self.conv2(input)
+        input=self.conv3(input)
+        final_input_size=np.prod(list(input.shape))
+
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(512, 256),
+            nn.Linear(final_input_size, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),

@@ -468,7 +468,6 @@ class Transformer:
             )
         )
         img = np.expand_dims(img, axis=0)
-        logging.info("SO FAR SO GOOD")
         predicted = model.predict(img)
         predicted = np.argmax(predicted)
 
