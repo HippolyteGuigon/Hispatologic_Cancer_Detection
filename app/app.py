@@ -16,9 +16,8 @@ def home_page():
         if request.form.get('action1') == 'IMPORT IMAGE':
             return render_template("image_uploading.html")
         elif  request.form.get('action2') == 'LAUNCH MODEL PIPELINE':
-            pass # do something else
-        else:
-            pass # unknown
+            models=["Convolutional Neural Network", "Transformers"]
+            return render_template("model_choosing.html",models=models)
     elif request.method == 'GET':
         return render_template('home.html', form=request.form)
     return render_template("home.html")
@@ -45,6 +44,11 @@ def show_image():
     os.remove(full_filename)
     full_filename=os.listdir(app.config['UPLOAD_FOLDER'])[0]
     return render_template("image_display.html", user_image = full_filename)
+
+@app.route('/training', methods = ['POST'])
+def training():
+    dropdownval = request.form.get('model') 
+    return f"You have chosen the model {dropdownval}"
 
 if __name__ == '__main__':
    app.run(debug = True)
