@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <h3>Choose the model you wish to use</h3>
+<head>
+    <meta charset="UTF-8">
+    <title>Choose the model you wish to use</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <form method="POST" action="/training">
+    <select name="model">
+        {% for model in models %}
+            <option value="{{model}}" SELECTED>{{model}}</option>"
+        {% endfor %}
+    </select>
+    <input type="submit" value ="Valider">
+</form>
+</body>
+</html>
