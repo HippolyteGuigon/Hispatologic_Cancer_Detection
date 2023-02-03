@@ -177,6 +177,8 @@ class Test(unittest.TestCase):
         url = '/'
 
         response = client.get(url)
+        html = response.data.decode()
+        assert "Hispatologic Cancer Detection application" in html
         assert response.status_code == 200
 
 
