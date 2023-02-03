@@ -154,19 +154,22 @@ class Test(unittest.TestCase):
 
         self.assertTrue(coherent_prediction)
 
-    @pytest.fixture
     def client(self):
-        """Configures the app for testing
+        """
+        The goal of this function is to check wheter 
+        the application is set for testing 
 
-        Sets app config variable ``TESTING`` to ``True``
+        Arguments:
+            None 
 
-        :return: App for testing
+        Returns: 
+            None
         """
 
-        # app.config['TESTING'] = True
+        app.testing = True
         client = app.test_client()
 
-        self.assertTrue(client)
+        self.assertTrue(app.config['TESTING'])
 
 
 if __name__ == "__main__":
