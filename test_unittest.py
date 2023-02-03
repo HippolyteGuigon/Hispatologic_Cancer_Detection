@@ -7,7 +7,7 @@ from Hispatologic_cancer_detection.configs.confs import *
 from Hispatologic_cancer_detection.model.transformer import *
 from PIL import Image
 from Hispatologic_cancer_detection.model.model import ConvNeuralNet
-import flask_
+import flask
 import pytest
 from app import app
 
