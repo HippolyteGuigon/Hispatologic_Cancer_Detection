@@ -7,6 +7,9 @@ from Hispatologic_cancer_detection.configs.confs import *
 from Hispatologic_cancer_detection.model.transformer import *
 from PIL import Image
 from Hispatologic_cancer_detection.model.model import ConvNeuralNet
+import flask_
+import pytest
+from app import app
 
 main_params = load_conf("configs/main.yml", include=True)
 
@@ -71,8 +74,8 @@ class Test(unittest.TestCase):
     def testing_main_transformer(self) -> bool:
         """
         The goal of this self function is to check if the
-        main.py file works when to be used with Transformer 
-        model 
+        main.py file works when to be used with Transformer
+        model
 
         Arguments:
             None
@@ -86,58 +89,85 @@ class Test(unittest.TestCase):
         except:
             self.fail("Error, failed to achieve the main pipeline ")
 
-    def test_prediction_cnn(self)->int:
+    def test_prediction_cnn(self) -> int:
         """
-        The goal of this function is to check if the prediction returned by 
+        The goal of this function is to check if the prediction returned by
         the CNN model is coherent, that is that it returns 0 or 1
 
         Arguments:
             None
-        
+
         Returns:
             None
         """
 
-        all_images=os.listdir(main_params["non_cancerous_image_path"])+os.listdir(main_params["cancerous_image_path"])
-        image_chosen=random.choice(all_images)
+        all_images = os.listdir(main_params["non_cancerous_image_path"]) + os.listdir(
+            main_params["cancerous_image_path"]
+        )
+        image_chosen = random.choice(all_images)
 
-        if os.path.exists(os.path.join(main_params["cancerous_image_path"], image_chosen)):
+        if os.path.exists(
+            os.path.join(main_params["cancerous_image_path"], image_chosen)
+        ):
             path = os.path.join(main_params["cancerous_image_path"], image_chosen)
-        elif os.path.exists(os.path.join(main_params["non_cancerous_image_path"], image_chosen)):
+        elif os.path.exists(
+            os.path.join(main_params["non_cancerous_image_path"], image_chosen)
+        ):
             path = os.path.join(main_params["non_cancerous_image_path"], image_chosen)
-        model=ConvNeuralNet(main_params["num_classes"])
-        prediction=model.predict(image_path=path,loading_model=False)
+        model = ConvNeuralNet(main_params["num_classes"])
+        prediction = model.predict(image_path=path, loading_model=False)
 
-        coherent_prediction=(prediction==0 or prediction==1)
+        coherent_prediction = prediction == 0 or prediction == 1
 
         self.assertTrue(coherent_prediction)
 
-    def test_prediction_transformer(self)->int:
+    def test_prediction_transformer(self) -> int:
         """
-        The goal of this function is to check if the prediction 
-        returned by the Transformer model is coherent, that is that it 
+        The goal of this function is to check if the prediction
+        returned by the Transformer model is coherent, that is that it
         returns 0 or 1
 
         Arguments:
             None
-        
+
         Returns:
             None
         """
 
-        all_images=os.listdir(main_params["non_cancerous_image_path"])+os.listdir(main_params["cancerous_image_path"])
-        image_chosen=random.choice(all_images)
+        all_images = os.listdir(main_params["non_cancerous_image_path"]) + os.listdir(
+            main_params["cancerous_image_path"]
+        )
+        image_chosen = random.choice(all_images)
 
-        if os.path.exists(os.path.join(main_params["cancerous_image_path"], image_chosen)):
+        if os.path.exists(
+            os.path.join(main_params["cancerous_image_path"], image_chosen)
+        ):
             path = os.path.join(main_params["cancerous_image_path"], image_chosen)
-        elif os.path.exists(os.path.join(main_params["non_cancerous_image_path"], image_chosen)):
+        elif os.path.exists(
+            os.path.join(main_params["non_cancerous_image_path"], image_chosen)
+        ):
             path = os.path.join(main_params["non_cancerous_image_path"], image_chosen)
-        model=Transformer()
-        prediction=model.predict_label(image_path=path,loading_model=False)
+        model = Transformer()
+        prediction = model.predict_label(image_path=path, loading_model=False)
 
-        coherent_prediction=(prediction==0 or prediction==1)
+        coherent_prediction = prediction == 0 or prediction == 1
 
         self.assertTrue(coherent_prediction)
+
+    @pytest.fixture
+    def client():
+        """Configures the app for testing
+
+        Sets app config variable ``TESTING`` to ``True``
+
+        :return: App for testing
+        """
+
+        # app.config['TESTING'] = True
+        client = app.test_client()
+
+        yield client
+
 
 if __name__ == "__main__":
     unittest.main()
