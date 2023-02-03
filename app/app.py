@@ -4,6 +4,7 @@ from Hispatologic_cancer_detection.configs.confs import *
 import os 
 from PIL import Image
 
+
 app_params=load_conf("configs/app_params.yml")
 
 app = Flask(__name__)

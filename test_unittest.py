@@ -9,7 +9,7 @@ from PIL import Image
 from Hispatologic_cancer_detection.model.model import ConvNeuralNet
 import flask
 import pytest
-from app import app
+from app.app import *
 
 main_params = load_conf("configs/main.yml", include=True)
 
@@ -154,22 +154,24 @@ class Test(unittest.TestCase):
 
         self.assertTrue(coherent_prediction)
 
-    def client(self):
+    def test_base_route(self)->bool:
         """
-        The goal of this function is to check wheter 
-        the application is set for testing 
-
+        The goal of this first function is to 
+        check whether the application is correctly
+        launched
+        
         Arguments:
-            None 
-
-        Returns: 
+            None
+        
+        Returns:
             None
         """
-
-        app.testing = True
         client = app.test_client()
+        url = '/'
 
-        self.assertTrue(app.config['TESTING'])
+        response = client.get(url)
+        assert response.status_code == 200
+
 
 
 if __name__ == "__main__":
