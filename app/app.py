@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from Hispatologic_cancer_detection.configs.confs import *
+from Hispatologic_cancer_detection.model.cnn import *
+#from Hispatologic_cancer_detection.model.transformer import *
 import os 
 from PIL import Image
 
 
 app_params=load_conf("configs/app_params.yml")
+main_params = load_conf("configs/main.yml", include=True)
+main_params = clean_params(main_params)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']=app_params["upload_folder_path"]
@@ -47,9 +51,32 @@ def show_image():
     return render_template("image_display.html", user_image = full_filename)
 
 @app.route('/training', methods = ['POST'])
-def training():
+def get_params():
     dropdownval = request.form.get('model') 
-    return f"You have chosen the model {dropdownval}"
+    if request.method=='POST':
+        if dropdownval=="Convolutional Neural Network":
+            num_classes=main_params["num_classes"]
+            learning_rate=request.form.get("lr")
+            num_epochs=request.form.get("epochs")
+            batch_size=request.form.get("batch_size")
+            dropout=request.form.get("dropout")
+            weight_decay=request.form.get("weight_decay")
+            
+            
+            if request.form.get("model_fit")=="Launch training":
+                model=ConvNeuralNet(num_classes=num_classes,learning_rate=learning_rate,num_epochs=num_epochs,
+                batch_size=batch_size,dropout=dropout,weight_decay=weight_decay)
+                flash('Model fitting has begun...')
+                model.fit()
+                flash('Model fitting is over !')
+            return render_template("cnn_training.html")
+
+        else:
+            model=Transformer()
+            lr=request.form.get("lr")
+            return render_template("transformer_training.html")
+
+
 
 if __name__ == '__main__':
    app.run(debug = True)

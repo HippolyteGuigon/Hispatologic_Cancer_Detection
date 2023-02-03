@@ -1,0 +1,22 @@
+<head>
+<h1>You have chosen the Convolutional Neural Network model</h1>
+<h2>Choose now your hyperparameters before launching fitting part</h2>
+</head>
+
+<body>
+    <form method="POST" action="/training">
+    <select name="early_stopping">
+        <optgroup label = "Early Stopping">
+        {% for el in [True, False] %}
+            <option value="{{el}}" SELECTED>{{el}}</option>"
+        {% endfor %}
+    </select>
+    <p>Number of epochs <input type = "number" step=1 name = "epochs" /></p>
+    <p>Learning rate <input type = "number" step=10e-10 name = "lr" /></p>
+    <p>Batch size <input type = "number" step=1 name = "batch_size" /></p>
+    <p>Dropout rate <input type = "number" step=10e-5 name = "dropout" /></p>
+    <p>Weight decay <input type = "number" step=10e-5 name = "weight_decay" /></p>
+    <p><input type = "submit" name="model_fit" value = "Launch training" /></p>
+</form>
+
+</body>
