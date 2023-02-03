@@ -30,7 +30,8 @@ class Test(unittest.TestCase):
             None
 
         Returns:
-            None
+            bool: Boolean to check wheter the Transformer 
+            function returns tensor with appropriate shape
         """
         transformer = transform()
         img = Image.open(main_params["pipeline_params"]["test_image_path"])
@@ -47,7 +48,8 @@ class Test(unittest.TestCase):
             None
 
         Returns:
-            None
+            bool: Boolean to check wheter the function launched
+            in the model.py file works from the command line 
         """
         try:
             os.system("python Hispatologic_cancer_detection/model/model.py")
@@ -81,7 +83,9 @@ class Test(unittest.TestCase):
             None
 
         Returns:
-            None
+            bool: Boolean to check wheter the function launched
+            in the main.py file works from the command line when 
+            calling transformer model
         """
 
         try:
@@ -89,7 +93,7 @@ class Test(unittest.TestCase):
         except:
             self.fail("Error, failed to achieve the main pipeline ")
 
-    def test_prediction_cnn(self) -> int:
+    def test_prediction_cnn(self) -> bool:
         """
         The goal of this function is to check if the prediction returned by
         the CNN model is coherent, that is that it returns 0 or 1
@@ -98,7 +102,8 @@ class Test(unittest.TestCase):
             None
 
         Returns:
-            None
+            bool: Boolean to check wheter the prediction made by the model 
+            makes sense 
         """
 
         all_images = os.listdir(main_params["non_cancerous_image_path"]) + os.listdir(
@@ -121,7 +126,7 @@ class Test(unittest.TestCase):
 
         self.assertTrue(coherent_prediction)
 
-    def test_prediction_transformer(self) -> int:
+    def test_prediction_transformer(self) -> bool:
         """
         The goal of this function is to check if the prediction
         returned by the Transformer model is coherent, that is that it
@@ -131,7 +136,8 @@ class Test(unittest.TestCase):
             None
 
         Returns:
-            None
+            bool: Boolean to check if the prediction made 
+            by the algorithm makes sense
         """
 
         all_images = os.listdir(main_params["non_cancerous_image_path"]) + os.listdir(
@@ -164,7 +170,8 @@ class Test(unittest.TestCase):
             None
         
         Returns:
-            None
+            bool: Boolean to check if the welcome page
+            was reached
         """
         client = app.test_client()
         url = '/'
