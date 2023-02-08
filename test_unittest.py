@@ -9,7 +9,7 @@ from PIL import Image
 from Hispatologic_cancer_detection.model.model import ConvNeuralNet
 import flask
 import pytest
-from app.app import *
+from Hispatologic_cancer_detection.app.app import *
 
 main_params = load_conf("configs/main.yml", include=True)
 
