@@ -75,13 +75,18 @@ def get_params():
             print("CHECK_SAVE",app.config["model_chosen"])
             model.fit()
             model.save()
-            
-    return render_template("cnn_training.html")
+            logging.warning("Model save has been done")
+            return render_template("cnn_training.html")
 
-        #else:
-        #    model=Transformer()
-        #    lr=request.form.get("lr")
-    #return render_template("transformer_training.html")
+        else:
+            app.config["model_chosen"]="Transformers"
+            if request.form.get("model_fit")=="Launch training":
+                num_epochs=request.form.get("epochs")
+                learning_rate=request.form.get("lr")
+                model=Transformer()
+                model.fit()
+                model.save()
+                return render_template("transformer_training.html")
 
 
 
