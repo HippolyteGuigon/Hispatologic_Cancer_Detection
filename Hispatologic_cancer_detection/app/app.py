@@ -65,6 +65,7 @@ def get_params():
         if request.form.get("model_fit")=="Launch training":
             num_classes=main_params["num_classes"]
             learning_rate=request.form.get("lr")
+            train_size=request.form.get("train_size")
             num_epochs=request.form.get("epochs")
             batch_size=request.form.get("batch_size")
             dropout=request.form.get("dropout")
