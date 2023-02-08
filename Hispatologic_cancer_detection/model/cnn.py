@@ -168,9 +168,10 @@ class ConvNeuralNet(nn.Module):
         # We use the pre-defined number of epochs to
         # determine how many iterations to train the network on
         logging.warning(
-            f"Fitting of the model has begun, the params are :{main_params.items()}"
+            f"Fitting of the model has now begun, the params are :{main_params.items()}"
         )
         for epoch in range(num_epochs):
+            logging.info(f"We are at epoch: {epoch}")
             # Load in the data in batches using the train_loader object
             for i, (images, labels) in enumerate(self.train_loader):
                 # Move tensors to the configured device

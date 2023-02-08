@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from Hispatologic_cancer_detection.configs.confs import *
-from Hispatologic_cancer_detection.model.cnn import *
+import sys 
+import os 
+sys.path.insert(0,os.path.join(os.getcwd(),"Hispatologic_cancer_detection/model"))
+from cnn import *
+#from Hispatologic_cancer_detection.model.cnn import *
 from Hispatologic_cancer_detection.model.transformer import *
 import os 
 from PIL import Image
@@ -56,7 +60,7 @@ def get_params():
     dropdownval = request.form.get('model') 
     if request.method=='POST':
         if dropdownval=="Convolutional Neural Network":
-            pass
+            app.config["model_chosen"]="cnn"
             
         if request.form.get("model_fit")=="Launch training":
             num_classes=main_params["num_classes"]
@@ -67,15 +71,16 @@ def get_params():
             weight_decay=request.form.get("weight_decay")
             model=ConvNeuralNet(num_classes=num_classes,learning_rate=learning_rate,num_epochs=num_epochs,
             batch_size=batch_size,dropout=dropout,weight_decay=weight_decay)
-            flash('Model fitting has begun...')
+            print("CHECK_SAVE",app.config["model_chosen"])
             model.fit()
-            flash('Model fitting is over !')
+            model.save()
+            
     return render_template("cnn_training.html")
 
         #else:
         #    model=Transformer()
         #    lr=request.form.get("lr")
-        #    return render_template("transformer_training.html")
+    #return render_template("transformer_training.html")
 
 
 
