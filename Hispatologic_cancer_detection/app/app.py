@@ -56,12 +56,19 @@ def show_image():
     return render_template("image_display.html", user_image = full_filename)
 
 @app.route('/training', methods = ['GET','POST'])
-def get_params():
+def get_model():
     dropdownval = request.form.get('model') 
     if request.method=='POST':
         if dropdownval=="Convolutional Neural Network":
             app.config["model_chosen"]="cnn"
-            
+            return redirect(url_for("get_params_cnn"))
+        elif dropdownval=="Transformers":
+            app.config["model_chosen"]="Transformers"
+            return redirect(url_for("get_params_transformers"))
+
+@app.route('/training_cnn', methods = ['GET','POST'])
+def get_params_cnn():
+    if request.method=='POST':
         if request.form.get("model_fit")=="Launch training":
             num_classes=main_params["num_classes"]
             learning_rate=request.form.get("lr")
@@ -72,23 +79,21 @@ def get_params():
             weight_decay=request.form.get("weight_decay")
             model=ConvNeuralNet(num_classes=num_classes,learning_rate=learning_rate,num_epochs=num_epochs,
             batch_size=batch_size,dropout=dropout,weight_decay=weight_decay)
-            print("CHECK_SAVE",app.config["model_chosen"])
             model.fit()
             model.save()
             logging.warning("Model save has been done")
             return render_template("cnn_training.html")
-
-        else:
-            app.config["model_chosen"]="Transformers"
-            if request.form.get("model_fit")=="Launch training":
-                num_epochs=request.form.get("epochs")
-                learning_rate=request.form.get("lr")
-                model=Transformer()
-                model.fit()
-                model.save()
-                return render_template("transformer_training.html")
-
-
-
+    return render_template("cnn_training.html")
+@app.route('/training_transformer',methods=["GET","POST"])
+def get_params_transformers():
+    if request.method=='POST':
+        if request.form.get("model_fit")=="Launch training":
+            model=Transformer()
+            model.fit()
+            model.save()
+            logging.warning("The Transformer model has just been fitted and saved")
+            return render_template("transformer_training.html")
+    return render_template("transformer_training.html")
+    
 if __name__ == '__main__':
    app.run(debug = True)
