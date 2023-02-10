@@ -84,16 +84,19 @@ def get_params_cnn():
             logging.warning("Model save has been done")
             return render_template("cnn_training.html")
     return render_template("cnn_training.html")
+
+
 @app.route('/training_transformer',methods=["GET","POST"])
 def get_params_transformers():
     if request.method=='POST':
         if request.form.get("model_fit")=="Launch training":
+            print("Button has been launched well")
             model=Transformer()
             model.fit()
             model.save()
             logging.warning("The Transformer model has just been fitted and saved")
             return render_template("transformer_training.html")
     return render_template("transformer_training.html")
-    
+     
 if __name__ == '__main__':
    app.run(debug = True)
