@@ -7,6 +7,7 @@ sys.path.insert(0,os.path.join(os.getcwd(),"Hispatologic_cancer_detection/model"
 from cnn import *
 #from Hispatologic_cancer_detection.model.cnn import *
 from Hispatologic_cancer_detection.model.transformer import *
+from main import *
 import os 
 from PIL import Image
 
@@ -85,9 +86,10 @@ def get_params_cnn():
             logging.warning("Model save has been done")
             return render_template("cnn_training.html")
         elif request.form.get("begin_analysis")=="Begin Analysis":
+            if not os.path.exists(os.path.join(os.getcwd(),"Hispatologic_cancer_detection/model_save_load/model_save.pt")):
+                return render_template("untrained_model.html")
             return render_template("model_training_over.html")
     return render_template("cnn_training.html")
-
 
 @app.route('/training_transformer',methods=["GET","POST"])
 def get_params_transformers():
@@ -99,6 +101,8 @@ def get_params_transformers():
             logging.warning("The Transformer model has just been fitted and saved")
             return render_template("transformer_training.html")
         elif request.form.get("begin_analysis")=="Begin Analysis":
+            if not os.path.exists(main_params["save_model_path"]):
+                return render_template("untrained_model.html")
             return render_template("model_training_over.html")
     return render_template("transformer_training.html")
      
