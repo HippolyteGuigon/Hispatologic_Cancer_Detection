@@ -31,7 +31,15 @@ Image of metastatic breast cancer cell.
 
 ## How to use ? 
 
-There are two steps to launch the model: 
+There are two ways to run this program:
+
+-The first one is via the Flask application 
+
+* First, run the following command: ```export FLASK_APP=Hispatologic_cancer_detection/app/app.py```
+
+* Then, run ```flask run```
+
+-The second one is to run it via the command line via the following steps
 
 * To run the model, first change the parameters and the configurations you wish to apply in the following path: 
 ```configs/```
