@@ -1,6 +1,7 @@
 import unittest
 import os
 import random
+import json
 from Hispatologic_cancer_detection.visualisation.visualisation import *
 from Hispatologic_cancer_detection.transforms.transform import *
 from Hispatologic_cancer_detection.configs.confs import *
@@ -181,7 +182,35 @@ class Test(unittest.TestCase):
         assert "Hispatologic Cancer Detection application" in html
         assert response.status_code == 200
 
+    def test_cnn_model(self)->bool:
+        """
+        The goal of this function is to check wheter 
+        the cnn model receives the good parameters
+        
+        Arguments:
+            None 
+        Returns:
+            bool: Boolean to check if the good parameters
+            were received
+        """
+        client = app.test_client()
+        url = '/training_cnn'
+        sent={'epochs':3,
+        'train_size':0.8,
+        'lr':10e-5,
+        'batch_size':300,
+        'dropout':0.001,
+        'weight_decay':0.001}
 
+        result = client.post(
+                url,
+                data=sent
+            )
+
+        self.assertEqual(
+                result.data,
+                json.dumps(sent)
+            )
 
 if __name__ == "__main__":
     unittest.main()
