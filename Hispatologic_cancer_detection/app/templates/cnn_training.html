@@ -17,7 +17,20 @@
     <p>Batch size <input type = "number" step=1 name = "batch_size" /></p>
     <p>Dropout rate <input type = "number" step=10e-5 name = "dropout" /></p>
     <p>Weight decay <input type = "number" step=10e-5 name = "weight_decay" /></p>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}       
+  {% endwith %}
+  {% block body %}{% endblock %}
+
     <p><input type = "submit" name="model_fit" value = "Launch training" /></p>
+
 </form>
 
 

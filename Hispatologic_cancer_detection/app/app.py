@@ -79,6 +79,7 @@ def get_params_cnn():
             weight_decay=request.form.get("weight_decay")
             model=ConvNeuralNet(num_classes=num_classes,learning_rate=learning_rate,num_epochs=num_epochs,
             batch_size=batch_size,dropout=dropout,weight_decay=weight_decay)
+            flash('The fitting of the model has begun, lets wait...', 'info')
             model.fit()
             model.save()
             logging.warning("Model save has been done")
