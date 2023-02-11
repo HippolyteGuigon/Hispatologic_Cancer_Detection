@@ -84,6 +84,8 @@ def get_params_cnn():
             model.save()
             logging.warning("Model save has been done")
             return render_template("cnn_training.html")
+        elif request.form.get("begin_analysis")=="Begin Analysis":
+            return render_template("model_training_over.html")
     return render_template("cnn_training.html")
 
 
@@ -91,12 +93,13 @@ def get_params_cnn():
 def get_params_transformers():
     if request.method=='POST':
         if request.form.get("model_fit")=="Launch training":
-            print("Button has been launched well")
             model=Transformer()
             model.fit()
             model.save()
             logging.warning("The Transformer model has just been fitted and saved")
             return render_template("transformer_training.html")
+        elif request.form.get("begin_analysis")=="Begin Analysis":
+            return render_template("model_training_over.html")
     return render_template("transformer_training.html")
      
 if __name__ == '__main__':
