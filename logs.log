@@ -742,3 +742,18 @@
 2023-02-12 10:26:00,637 | INFO | Model parameters initialization has begun
 2023-02-12 10:26:02,033 | INFO | Model parameters initialization has begun
 2023-02-12 10:26:03,211 | WARNING | Fitting of the model has now begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 200), ('learning_rate', 0.0001), ('num_epochs', 1), ('dropout', 0.25), ('weight_decay', 0.0001), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.8), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None), ('n_classes', 2), ('patch_size', 7), ('projection_dim', 64), ('num_heads', 4), ('transformer_layers', 8), ('mlp_head_units', [56, 28]), ('save_model_path', 'Hispatologic_cancer_detection/model_save_load/transformer_model.h5')])
+2023-02-12 10:27:46,923 | INFO | You launched the model iteration user_app
+2023-02-12 10:27:46,923 | INFO | You have chosen the model cnn user_app
+2023-02-12 10:27:46,924 | INFO | Model parameters initialization has begun
+2023-02-12 10:27:48,437 | INFO | Model parameters initialization has begun
+2023-02-12 10:27:49,745 | WARNING | Fitting of the model has now begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 200), ('learning_rate', 0.0001), ('num_epochs', 1), ('dropout', 0.25), ('weight_decay', 0.0001), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.8), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None), ('n_classes', 2), ('patch_size', 7), ('projection_dim', 64), ('num_heads', 4), ('transformer_layers', 8), ('mlp_head_units', [56, 28]), ('save_model_path', 'Hispatologic_cancer_detection/model_save_load/transformer_model.h5')])
+2023-02-12 10:34:36,838 | INFO | You launched the model iteration Hippolyte
+2023-02-12 10:34:36,843 | INFO | You have chosen the model transformer Hippolyte
+2023-02-12 10:34:36,851 | INFO | Loading data...
+2023-02-12 10:34:40,584 | INFO | Data Loaded !
+2023-02-12 10:40:05,106 | WARNING | Fitting of the transformer model has begun
+2023-02-12 14:16:00,926 | INFO | You launched the model iteration user_app
+2023-02-12 14:16:00,927 | INFO | You have chosen the model transformer user_app
+2023-02-12 14:16:00,927 | INFO | Loading data...
+2023-02-12 14:16:02,163 | INFO | Data Loaded !
+2023-02-12 14:16:32,657 | WARNING | Fitting of the transformer model has begun

@@ -1,4 +1,4 @@
-model_chosen: cnn
+model_chosen: "transformer"
 num_classes: 2
 cancerous_image_path: "train/1. cancerous"
 non_cancerous_image_path: "train/0. non_cancerous"

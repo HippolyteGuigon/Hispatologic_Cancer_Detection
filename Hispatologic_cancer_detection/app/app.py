@@ -109,9 +109,9 @@ def analysis():
     if request.method == 'POST':
         if request.form.get("action2") == 'PREDICT THE ALL DATASET FOR KAGGLE COMPETITION':
             if app.config["model_chosen"]=="cnn":
-                os.system("python main.py user_app get_model predict")
+                os.system("python main.py user_app model_train predict")
             else:
-                os.system("python main.py user_app get_model predict")
+                os.system("python main.py user_app model_train predict")
     return render_template("model_training_over.html")
 
 if __name__ == '__main__':
