@@ -4,7 +4,7 @@ The goal of this repository is to participate to the Hispathologic cancer detect
 
 ## Build Status
 
-For the moment, the main pipeline is in place and the user can classify his images, and the user can choose between two models that are Convolutional Neural Network and Transformer
+For the moment, the main pipeline is in place and the user can classify his images, choosing between two models that are Convolutional Neural Network and Transformer
 
 The next objectives of this repositories is only to implement more models (Clustering techniques, other Deep Learning methods) but also developping more options for the user in terms of metrics and visualization possibilities.
 
