@@ -3,9 +3,7 @@ from werkzeug.utils import secure_filename
 from Hispatologic_cancer_detection.configs.confs import *
 import sys 
 import os 
-sys.path.insert(0,os.path.join(os.getcwd(),"Hispatologic_cancer_detection/model"))
-from cnn import *
-#from Hispatologic_cancer_detection.model.cnn import *
+from Hispatologic_cancer_detection.model.cnn import *
 from Hispatologic_cancer_detection.model.transformer import *
 from main import *
 import os 
@@ -88,7 +86,7 @@ def get_params_cnn():
         elif request.form.get("begin_analysis")=="Begin Analysis":
             if not os.path.exists(os.path.join(os.getcwd(),"Hispatologic_cancer_detection/model_save_load/model_save.pt")):
                 return render_template("untrained_model.html")
-            return render_template("model_training_over.html")
+            return redirect(url_for("analysis"))
     return render_template("cnn_training.html")
 
 @app.route('/training_transformer',methods=["GET","POST"])
@@ -103,8 +101,18 @@ def get_params_transformers():
         elif request.form.get("begin_analysis")=="Begin Analysis":
             if not os.path.exists(main_params["save_model_path"]):
                 return render_template("untrained_model.html")
-            return render_template("model_training_over.html")
+            return redirect(url_for("analysis"))
     return render_template("transformer_training.html")
-     
+
+@app.route('/analysis',methods=["GET","POST"])
+def analysis():
+    if request.method == 'POST':
+        if request.form.get("action2") == 'PREDICT THE ALL DATASET FOR KAGGLE COMPETITION':
+            if app.config["model_chosen"]=="cnn":
+                os.system("python main.py user_app get_model predict")
+            else:
+                os.system("python main.py user_app get_model predict")
+    return render_template("model_training_over.html")
+
 if __name__ == '__main__':
    app.run(debug = True)

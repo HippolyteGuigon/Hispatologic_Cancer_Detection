@@ -737,3 +737,8 @@
         [0.5098, 0.4902],
         [0.5109, 0.4891],
         [0.5114, 0.4886]], grad_fn=<SoftmaxBackward0>)
+2023-02-12 10:26:00,636 | INFO | You launched the model iteration user_app
+2023-02-12 10:26:00,637 | INFO | You have chosen the model cnn user_app
+2023-02-12 10:26:00,637 | INFO | Model parameters initialization has begun
+2023-02-12 10:26:02,033 | INFO | Model parameters initialization has begun
+2023-02-12 10:26:03,211 | WARNING | Fitting of the model has now begun, the params are :dict_items([('model_chosen', 'cnn'), ('num_classes', 2), ('cancerous_image_path', 'train/1. cancerous'), ('non_cancerous_image_path', 'train/0. non_cancerous'), ('batch_size', 200), ('learning_rate', 0.0001), ('num_epochs', 1), ('dropout', 0.25), ('weight_decay', 0.0001), ('early_stopping', True), ('betas', '(0.9, 0.999)'), ('train_size', 0.8), ('resize', 64), ('test_image_path', 'train/0. non_cancerous/a6a2f4ed48acf6d66f7cfa1b99060325a021f0d8.tif'), ('transformers', None), ('n_classes', 2), ('patch_size', 7), ('projection_dim', 64), ('num_heads', 4), ('transformer_layers', 8), ('mlp_head_units', [56, 28]), ('save_model_path', 'Hispatologic_cancer_detection/model_save_load/transformer_model.h5')])
